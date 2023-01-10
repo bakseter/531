@@ -1,0 +1,45 @@
+version: '3.9'
+services:
+  backend:
+    build: .
+    image: 'ghcr.io/bakseter/531/backend:latest'
+    # Don't start backend before database is up.
+    depends_on:
+      database:
+        condition: service_healthy
+    links:
+      - database
+    ports:
+      - '${PORT:-8080}:${PORT:-8080}'
+    environment:
+      DATABASE_URL: "postgres://postgres:${DB_PASSWORD:-password}@database/postgres"
+
+  database:
+    image: postgres:15.1-alpine
+    restart: always
+    ports:
+      - '5432:5432'
+    # Check if database is ready.
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_DB: postgres
+
+  caddy:
+    image: caddy:2.6.2-alpine
+    command: ["caddy", "reverse-proxy", "--from", "bakseter.net", "--to", "localhost:8080"]
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
