@@ -32,7 +32,7 @@ services:
 
   caddy:
     image: caddy:2.6.2-alpine
-    command: ["caddy", "reverse-proxy", "--from", "${DROPLET_ADDRESS:?No droplet address set.}", "--to", "localhost:8080"]
+    command: ["caddy", "reverse-proxy", "--from", "api.bakseter.net", "--to", "localhost:8080"]
     ports:
       - "80:80"
       - "443:443"
