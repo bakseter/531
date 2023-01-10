@@ -12,15 +12,19 @@ type BaseWeights = decodeType<typeof baseWeightsDecoder>;
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:8080';
 
 const BaseWeightsAPI = {
-    getBaseWeights: async (): Promise<BaseWeights | null> => {
+    getBaseWeights: async (): Promise<BaseWeights | boolean | null> => {
         try {
             const response = await fetch(`${BACKEND_URL}/base-weights`);
 
-            if (response.status !== 200) return null;
+            if (response.status === 200) {
+                const json = await response.json();
 
-            const json = await response.json();
+                return baseWeightsDecoder(json);
+            }
 
-            return baseWeightsDecoder(json);
+            if (response.status === 404) return true;
+
+            return null;
         } catch (error) {
             // eslint-disable-next-line no-console
             console.error(error);

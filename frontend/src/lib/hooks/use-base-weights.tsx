@@ -28,14 +28,23 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
         const fetchBaseWeights = async () => {
             try {
                 const response = await BaseWeightsAPI.getBaseWeights();
+                setLoading(false);
 
                 if (response === null) {
                     setError('could not get base weights');
-                    setLoading(false);
                     return;
                 }
 
-                setLoading(false);
+                if (response === true) {
+                    setError(null);
+                    return;
+                }
+
+                if (response === false) {
+                    // insert do something on false here
+                    return;
+                }
+
                 setBaseWeights(response);
             } catch (error) {
                 // eslint-disable-next-line no-console
