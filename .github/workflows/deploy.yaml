@@ -58,4 +58,4 @@ jobs:
             cd 531/backend
             git pull
             docker compose -f docker-compose.prod.yaml stop
-            docker compose -f docker-compose.prod.yaml up -d
+            docker compose -f docker-compose.prod.yaml up -d --no-build

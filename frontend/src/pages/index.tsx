@@ -15,7 +15,13 @@ const IndexPage = () => {
     const { status } = useSession();
 
     if (status === 'loading') return <Spinner />;
-    if (status === 'unauthenticated') return <Button onClick={() => signIn()}>Sign in</Button>;
+    if (status === 'unauthenticated') {
+        return (
+            <Center>
+                <Button onClick={() => void signIn()}>Sign in</Button>
+            </Center>
+        );
+    }
 
     return (
         <>
