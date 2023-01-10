@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Center, Spinner, SimpleGrid, Select } from '@chakra-ui/react';
 import { AiFillExclamationCircle } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
@@ -18,33 +18,29 @@ const RepsInput = ({ cycle, week, day }: Props) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    const { handleSubmit, register, watch, setValue } = useForm<FormValues>();
+    const { handleSubmit, register, setValue } = useForm<FormValues>();
 
-    const onSubmit = useCallback(
-        () =>
-            async ({ reps }: FormValues) => {
-                setLoading(true);
-                try {
-                    const workout: Workout = { cycle, week, day, reps };
-                    const result = await WorkoutAPI.putWorkout(workout);
+    const onSubmit = async ({ reps }: FormValues) => {
+        setLoading(true);
+        try {
+            const workout: Workout = { cycle, week, day, reps };
+            const result = await WorkoutAPI.putWorkout(workout);
 
-                    setLoading(false);
+            setLoading(false);
 
-                    if (result === null) {
-                        setError('could not put workout');
-                        return;
-                    }
+            if (result === null) {
+                setError('could not put workout');
+                return;
+            }
 
-                    setValue('reps', reps);
-                } catch (error) {
-                    // eslint-disable-next-line no-console
-                    console.error(error);
-                    setLoading(false);
-                    setError(JSON.stringify(error));
-                }
-            },
-        [cycle, week, day, setValue],
-    );
+            setValue('reps', reps);
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+            setLoading(false);
+            setError(JSON.stringify(error));
+        }
+    };
 
     useEffect(() => {
         const fetchWorkout = async () => {
@@ -75,14 +71,11 @@ const RepsInput = ({ cycle, week, day }: Props) => {
         void fetchWorkout();
     }, [cycle, week, day, setValue]);
 
-    useEffect(() => {
-        const subscription = watch(handleSubmit(onSubmit));
-        return () => subscription.unsubscribe();
-    }, [handleSubmit, watch, onSubmit]);
-
     return (
         <SimpleGrid columns={2}>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            {/* eslint-disable @typescript-eslint/no-misused-promises */}
+            <form onChange={handleSubmit(onSubmit)}>
+                {/* eslint-emable @typescript-eslint/no-misused-promises */}
                 <Select {...register('reps')}>
                     <option value={0}></option>
                     {[...new Array(20).keys()].map((_, index) => (

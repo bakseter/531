@@ -27,7 +27,9 @@ const BaseWeightsForm = () => {
                 <Flex py="4rem">
                     <VStack gap="2">
                         <Heading size="md">Enter base weights:</Heading>
+                        {/* eslint-disable @typescript-eslint/no-misused-promises */}
                         <form onSubmit={handleSubmit(onSubmit)}>
+                            {/* eslint-enable @typescript-eslint/no-misused-promises */}
                             <VStack gap="1" alignItems="start">
                                 {comps.map((value: CompExercise) => (
                                     <>
