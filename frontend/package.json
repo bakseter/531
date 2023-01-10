@@ -1,0 +1,138 @@
+{
+    "name": "531",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint",
+        "format": "prettier -w \"**/*.{ts,tsx,js,jsx,json,md}\""
+    },
+    "prettier": {
+        "semi": true,
+        "trailingComma": "all",
+        "singleQuote": true,
+        "printWidth": 120,
+        "tabWidth": 4
+    },
+    "eslintConfig": {
+        "parser": "@typescript-eslint/parser",
+        "parserOptions": {
+            "ecmaFeatures": {
+                "jsx": true
+            },
+            "ecmaVersion": 2018,
+            "sourceType": "module",
+            "project": "./tsconfig.json"
+        },
+        "extends": [
+            "prettier",
+            "plugin:unicorn/recommended",
+            "plugin:@typescript-eslint/recommended-requiring-type-checking",
+            "plugin:prettier/recommended",
+            "plugin:import/recommended",
+            "plugin:import/typescript",
+            "next/core-web-vitals"
+        ],
+        "env": {
+            "browser": true,
+            "es6": true
+        },
+        "globals": {
+            "Atomics": "readonly",
+            "SharedArrayBuffer": "readonly"
+        },
+        "ignorePatterns": [
+            "node_modules/",
+            "public/",
+            ".next/",
+            "next.config.js"
+        ],
+        "rules": {
+            "no-console": "error",
+            "linebreak-style": "off",
+            "camelcase": "error",
+            "eqeqeq": "error",
+            "no-trailing-spaces": "error",
+            "eol-last": "error",
+            "react/jsx-props-no-spreading": "off",
+            "react/jsx-curly-brace-presence": [
+                "error",
+                {
+                    "props": "never"
+                }
+            ],
+            "import/no-useless-path-segments": "error",
+            "import/order": "error",
+            "import/exports-last": "error",
+            "import/no-unresolved": "error",
+            "import/group-exports": "error",
+            "import/prefer-default-export": "error",
+            "@typescript-eslint/array-type": [
+                "error",
+                {
+                    "default": "generic"
+                }
+            ],
+            "@typescript-eslint/no-unnecessary-boolean-literal-compare": "error",
+            "@typescript-eslint/no-unnecessary-condition": "error",
+            "@typescript-eslint/no-throw-literal": "error",
+            "@typescript-eslint/no-unused-vars": "error",
+            "@typescript-eslint/no-unsafe-argument": "off",
+            "@typescript-eslint/no-unsafe-assignment": "off",
+            "@typescript-eslint/no-unsafe-member-access": "off",
+            "@typescript-eslint/prefer-optional-chain": "error",
+            "@typescript-eslint/prefer-nullish-coalescing": "error",
+            "@typescript-eslint/consistent-type-definitions": "error",
+            "@typescript-eslint/consistent-type-imports": [
+                "error",
+                {
+                    "prefer": "type-imports"
+                }
+            ],
+            "@typescript-eslint/consistent-type-exports": [
+                "error",
+                {
+                    "fixMixedExportsWithInlineTypeSpecifier": true
+                }
+            ],
+            "unicorn/no-null": "off",
+            "unicorn/no-abusive-eslint-disable": "off",
+            "unicorn/prevent-abbreviations": "off",
+            "unicorn/prefer-node-protocol": "off",
+            "unicorn/no-new-array": "off",
+            "unicorn/numeric-separators-style": "off",
+            "unicorn/no-array-reduce": "off",
+            "unicorn/no-array-callback-reference": "off"
+        }
+    },
+    "dependencies": {
+        "@chakra-ui/react": "2.4.6",
+        "@emotion/react": "11.10.5",
+        "@emotion/styled": "11.10.5",
+        "@next/font": "13.1.1",
+        "@supabase/supabase-js": "2.2.3",
+        "@types/node": "18.11.18",
+        "@types/react": "18.0.26",
+        "@types/react-dom": "18.0.10",
+        "eslint": "8.31.0",
+        "eslint-config-next": "13.1.1",
+        "framer-motion": "8.1.7",
+        "next": "13.1.1",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "react-hook-form": "7.41.5",
+        "react-icons": "4.7.1",
+        "typescript": "4.9.4",
+        "typescript-json-decoder": "1.0.11"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "5.48.1",
+        "@typescript-eslint/parser": "5.48.1",
+        "eslint-config-prettier": "8.5.0",
+        "eslint-plugin-prettier": "4.2.1",
+        "eslint-plugin-unicorn": "45.0.2",
+        "prettier": "2.8.1"
+    }
+}
