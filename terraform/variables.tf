@@ -9,3 +9,7 @@ variable "ssh_key_path" {
 variable "ssh_key_name" {
   type = string
 }
+
+variable "vercel_token" {
+  type = string
+}

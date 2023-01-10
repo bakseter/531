@@ -4,8 +4,39 @@ terraform {
       source  = "digitalocean/digitalocean"
       version = "2.25.2"
     }
+    vercel = {
+      source  = "vercel/vercel"
+      version = "0.11.4"
+    }
   }
 }
+
+// Vercel
+
+provider "vercel" {
+  api_token = var.vercel_token
+}
+
+resource "vercel_project" "project" {
+  name                       = "531-frontend"
+  framework                  = "nextjs"
+  root_directory             = "frontend"
+  serverless_function_region = "arn1"
+
+  git_repository = {
+    type = "github"
+    repo = "bakseter/531"
+  }
+}
+
+resource "vercel_project_environment_variable" "backend_url" {
+  project_id = vercel_project.project.id
+  key        = "NEXT_PUBLIC_BACKEND_URL"
+  value      = "http://${digitalocean_droplet.drop.ipv4_address}"
+  target     = ["production"]
+}
+
+// DigitalOcean
 
 provider "digitalocean" {
   token = var.do_token
