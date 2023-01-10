@@ -32,7 +32,7 @@ resource "vercel_project" "project" {
 resource "vercel_project_environment_variable" "backend_url" {
   project_id = vercel_project.project.id
   key        = "NEXT_PUBLIC_BACKEND_URL"
-  value      = "http://api.bakseter.net"
+  value      = "https://api.bakseter.net"
   target     = ["production"]
 }
 
