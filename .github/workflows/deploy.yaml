@@ -56,4 +56,5 @@ jobs:
             docker pull $IMAGE_NAME:latest
             cd 531/backend
             git pull
-            docker compose up
+            docker compose stop
+            docker compose up -d
