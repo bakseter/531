@@ -8,7 +8,7 @@ permissions:
   actions: read
 
 env:
-  IMAGE_NAME: 'ghcr.io/${{ github.repository }}'
+  IMAGE_NAME: 'ghcr.io/${{ github.repository }}/backend'
 
 jobs:
   docker_push:
@@ -28,11 +28,11 @@ jobs:
         run: |
           cd backend
           docker build \
-            --cache-from "$IMAGE_NAME/backend" \
-            -t "$IMAGE_NAME/backend:$TAG" \
+            --cache-from "$IMAGE_NAME" \
+            -t "$IMAGE_NAME:$TAG" \
             --build-arg BUILDKIT_INLINE_CACHE=1 \
             .
-          docker push "$IMAGE_NAME/backend" --all-tags
+          docker push "$IMAGE_NAME" --all-tags
         env:
           DOCKER_BUILDKIT: 1
           TAG: latest
