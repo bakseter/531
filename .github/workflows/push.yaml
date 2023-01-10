@@ -1,0 +1,55 @@
+name: Deploy backend
+on:
+  push:
+    branches: [master]
+
+permissions:
+  packages: write
+  actions: read
+
+env:
+  IMAGE_NAME: 'ghcr.io/${{ github.repository }}'
+
+jobs:
+  docker_push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build backend with cache and push to registry
+        run: |
+          cd backend
+          docker build \
+            --cache-from "$IMAGE_NAME/backend" \
+            -t "$IMAGE_NAME/backend:$TAG" \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            .
+          docker push "$IMAGE_NAME/backend" --all-tags
+        env:
+          DOCKER_BUILDKIT: 1
+          TAG: latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Start containers on droplet
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.DROPLET_ADDRESS }}
+          username: root
+          key: ${{ secrets.KEY }}
+          script: |
+            docker pull $IMAGE_NAME:latest
+            docker run -d $IMAGE_NAME:latest
+            docker run -d postgres:15.1-alpine
