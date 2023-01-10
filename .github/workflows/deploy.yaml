@@ -52,7 +52,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-            export DROPLET_INTERNAL_IP=${{ secrets.DROPLET_INTERNAL_IP }}
+            export DROPLET_INTERNAL_IP=0.0.0.0
             echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u bakseter --password-stdin
             docker pull $IMAGE_NAME:latest
             cd 531/backend
