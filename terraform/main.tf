@@ -32,7 +32,7 @@ resource "vercel_project" "project" {
 resource "vercel_project_environment_variable" "backend_url" {
   project_id = vercel_project.project.id
   key        = "NEXT_PUBLIC_BACKEND_URL"
-  value      = "http://${digitalocean_droplet.drop.ipv4_address}"
+  value      = "http://api.bakseter.net"
   target     = ["production"]
 }
 
@@ -45,7 +45,7 @@ resource "vercel_project_environment_variable" "nextauth_username" {
 
 resource "vercel_project_environment_variable" "nextauth_password" {
   project_id = vercel_project.project.id
-  key        = "NEXTAUTH_USERNAME"
+  key        = "NEXTAUTH_PASSWORD"
   value      = var.nextauth_password
   target     = ["production"]
 }
@@ -91,6 +91,9 @@ resource "digitalocean_project" "project" {
   name        = "531"
   description = "5/3/1 workout plan"
   purpose     = "Web backend"
-  resources   = [digitalocean_droplet.drop.urn]
-  is_default  = true
+  resources = [
+    digitalocean_droplet.drop.urn,
+    "do:domain:bakseter.net"
+  ]
+  is_default = true
 }
