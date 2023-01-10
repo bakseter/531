@@ -1,5 +1,6 @@
 import Head from 'next/head';
-import { Tab, Tabs, TabList, TabPanels, TabPanel, Divider, Heading, Center } from '@chakra-ui/react';
+import { Button, Spinner, Tab, Tabs, TabList, TabPanels, TabPanel, Divider, Heading, Center } from '@chakra-ui/react';
+import { useSession, signIn } from 'next-auth/react';
 import Workout from '@components/workout';
 import type { Week, Day } from '@api/workout';
 import useBaseWeights from '@hooks/use-base-weights';
@@ -11,6 +12,10 @@ const days: Array<Day> = [1, 2, 3, 4];
 
 const IndexPage = () => {
     const { baseWeights } = useBaseWeights();
+    const { status } = useSession();
+
+    if (status === 'loading') return <Spinner />;
+    if (status === 'unauthenticated') return <Button onClick={() => signIn()}>Sign in</Button>;
 
     return (
         <>

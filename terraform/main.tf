@@ -36,6 +36,34 @@ resource "vercel_project_environment_variable" "backend_url" {
   target     = ["production"]
 }
 
+resource "vercel_project_environment_variable" "nextauth_username" {
+  project_id = vercel_project.project.id
+  key        = "NEXTAUTH_USERNAME"
+  value      = var.nextauth_username
+  target     = ["production"]
+}
+
+resource "vercel_project_environment_variable" "nextauth_password" {
+  project_id = vercel_project.project.id
+  key        = "NEXTAUTH_USERNAME"
+  value      = var.nextauth_password
+  target     = ["production"]
+}
+
+resource "vercel_project_environment_variable" "nextauth_secret" {
+  project_id = vercel_project.project.id
+  key        = "NEXTAUTH_SECRET"
+  value      = var.nextauth_secret
+  target     = ["production"]
+}
+
+resource "vercel_project_environment_variable" "admin_key" {
+  project_id = vercel_project.project.id
+  key        = "ADMIN_KEY"
+  value      = var.admin_key
+  target     = ["production"]
+}
+
 // DigitalOcean
 
 provider "digitalocean" {
