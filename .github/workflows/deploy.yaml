@@ -39,6 +39,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    needs: [docker_push]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -50,6 +51,8 @@ jobs:
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u bakseter --password-stdin
             docker pull $IMAGE_NAME:latest
-            docker run -d $IMAGE_NAME:latest
-            docker run -d postgres:15.1-alpine
+            cd 531/backend
+            git pull
+            docker compose up

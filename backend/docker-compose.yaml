@@ -2,7 +2,7 @@ version: '3.9'
 services:
   backend:
     build: .
-    image: '531/backend'
+    image: 'ghcr.io/bakseter/531/backend:latest'
     # Don't start backend before database is up.
     depends_on:
       database:
@@ -12,7 +12,7 @@ services:
     ports:
       - '${PORT:-8080}:${PORT:-8080}'
     environment:
-      DATABASE_URL: postgres://postgres:password@database/postgres
+      DATABASE_URL: "postgres://postgres:${DB_PASSWORD:-password}@database/postgres"
 
   database:
     image: postgres:15.1-alpine
@@ -27,5 +27,5 @@ services:
       retries: 5
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: ${DB_PASSWORD?:-password}
       POSTGRES_DB: postgres
