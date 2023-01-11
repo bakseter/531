@@ -30,6 +30,11 @@ resource "vercel_project" "project" {
   }
 }
 
+resource "vercel_project_domain" "domain" {
+  project_id = vercel_project.project.id
+  domain     = "bakseter.net"
+}
+
 resource "vercel_project_environment_variable" "backend_url" {
   project_id = vercel_project.project.id
   key        = "NEXT_PUBLIC_BACKEND_URL"
@@ -86,6 +91,10 @@ resource "digitalocean_droplet" "drop" {
   region   = "ams3"
   size     = "s-1vcpu-1gb"
   ssh_keys = [digitalocean_ssh_key.ssh.fingerprint]
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "digitalocean_project" "project" {
