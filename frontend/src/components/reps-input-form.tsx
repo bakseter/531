@@ -23,12 +23,12 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
     const onSubmit = async ({ reps }: FormValues) => {
         setLoading(true);
         try {
-            const workout: Workout = { cycle, week, day, reps, joker: null };
+            const workout: Workout = { cycle, week, day, reps };
             const result = await WorkoutAPI.putWorkout(workout);
 
             setLoading(false);
 
-            if (result === null) {
+            if (!result) {
                 setError('could not put workout');
                 return;
             }
