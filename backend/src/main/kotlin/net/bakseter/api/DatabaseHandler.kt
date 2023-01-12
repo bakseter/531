@@ -40,7 +40,7 @@ class DatabaseHandler(
         Database.connect(dataSource())
     }
 
-    fun init(insertTestData: Boolean = true) {
+    fun init() {
         // Need to use connection once to open.
         transaction(conn) {}
 
