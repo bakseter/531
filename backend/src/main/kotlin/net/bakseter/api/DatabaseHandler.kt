@@ -45,7 +45,7 @@ class DatabaseHandler(
     }
 
     private val flyway: Flyway =
-        Flyway.configure().baselineOnMigrate(true).baselineVersion("2").cleanDisabled(false)
+        Flyway.configure().baselineOnMigrate(true).baselineVersion("1").cleanDisabled(false)
             .dataSource(dbUrlStr, dbUsername, dbPassword).load()
 
     private val conn by lazy {
@@ -66,9 +66,5 @@ class DatabaseHandler(
         } catch (e: Exception) {
             System.err.println("Error creating tables, assuming they already exists.")
         }
-
-        flyway.baseline()
-        // Try to migrate as well to confirm we are good.
-        flyway.migrate()
     }
 }
