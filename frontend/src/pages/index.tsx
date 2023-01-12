@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useEffect } from 'react';
-import { Tab, Tabs, TabList, TabPanels, TabPanel, Divider, Heading, Center } from '@chakra-ui/react';
+import { Tab, Tabs, TabList, TabPanels, TabPanel, Divider, Heading, SimpleGrid, GridItem } from '@chakra-ui/react';
 import { useSession, signIn } from 'next-auth/react';
 import Workout from '@components/workout';
 import type { Week, Day } from '@api/workout';
@@ -25,42 +25,44 @@ const IndexPage = () => {
                 <title>5/3/1</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
-            <Center>
-                {!baseWeights && <BaseWeightsForm />}
-                {baseWeights && (
-                    <Tabs>
-                        <TabList>
-                            {weeks.map((week) => (
-                                <Tab key={`tab-${week}`}>{`Week ${week}`}</Tab>
-                            ))}
-                            <Tab>Base weights</Tab>
-                        </TabList>
-                        <TabPanels>
-                            {weeks.map((week: Week, index) => (
-                                <TabPanel m="1rem" key={`tabpanel-${week}`}>
-                                    <Heading my="1rem">{`Week ${index + 1}`}</Heading>
-                                    {days.map((day: Day) => (
-                                        <>
-                                            <Workout
-                                                key={`workout-${week}-${day}`}
-                                                cycle={1}
-                                                week={week}
-                                                day={day}
-                                                baseWeights={baseWeights}
-                                            />
-                                            <Divider key={`divider-${week}-${day}`} />
-                                        </>
-                                    ))}
+            <SimpleGrid columns={3}>
+                <GridItem colSpan={[3, 3, 1]} colStart={[1, 1, 2]}>
+                    {!baseWeights && <BaseWeightsForm />}
+                    {baseWeights && (
+                        <Tabs>
+                            <TabList>
+                                {weeks.map((week) => (
+                                    <Tab key={`tab-${week}`}>{`Week ${week}`}</Tab>
+                                ))}
+                                <Tab>Base weights</Tab>
+                            </TabList>
+                            <TabPanels>
+                                {weeks.map((week: Week, index) => (
+                                    <TabPanel m="1rem" key={`tabpanel-${week}`}>
+                                        <Heading my="1rem">{`Week ${index + 1}`}</Heading>
+                                        {days.map((day: Day) => (
+                                            <>
+                                                <Workout
+                                                    key={`workout-${week}-${day}`}
+                                                    cycle={1}
+                                                    week={week}
+                                                    day={day}
+                                                    baseWeights={baseWeights}
+                                                />
+                                                <Divider key={`divider-${week}-${day}`} />
+                                            </>
+                                        ))}
+                                    </TabPanel>
+                                ))}
+                                <TabPanel>
+                                    <Heading>Base weights</Heading>
+                                    <BaseWeightsForm />
                                 </TabPanel>
-                            ))}
-                            <TabPanel>
-                                <Heading>Base weights</Heading>
-                                <BaseWeightsForm />
-                            </TabPanel>
-                        </TabPanels>
-                    </Tabs>
-                )}
-            </Center>
+                            </TabPanels>
+                        </Tabs>
+                    )}
+                </GridItem>
+            </SimpleGrid>
         </>
     );
 };

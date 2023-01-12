@@ -1,6 +1,6 @@
-import { Heading, TableContainer, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
+import { Text, Heading, TableContainer, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
+import RepsInputForm from '@components/reps-input-form';
 import type { Week, Day } from '@api/workout';
-import RepsInput from '@components/reps-input';
 import {
     weekToSetsReps,
     percentageToText,
@@ -24,13 +24,21 @@ const Workout = ({ baseWeights, cycle, week, day }: Props) => {
                 {exerciseToText(dayToExercise(day))}
             </Heading>
             <TableContainer>
-                <Table variant="striped">
+                <Table variant="striped" size={['sm', null, 'md']}>
                     <Thead>
                         <Tr>
-                            <Th>Sets/reps</Th>
-                            <Th>Percentage</Th>
-                            <Th isNumeric>Weight</Th>
-                            <Th>Reps lifted</Th>
+                            <Th>
+                                <Text fontSize={['xx-small', 'small']}>Sets</Text>
+                            </Th>
+                            <Th>
+                                <Text fontSize={['xx-small', 'small']}>Percent</Text>
+                            </Th>
+                            <Th isNumeric>
+                                <Text fontSize={['xx-small', 'small']}>Weight</Text>
+                            </Th>
+                            <Th>
+                                <Text fontSize={['xx-small', 'small']}>Actual</Text>
+                            </Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -42,9 +50,9 @@ const Workout = ({ baseWeights, cycle, week, day }: Props) => {
                                     <Td>{`1x${reps}${index === 5 ? '+' : ''}`}</Td>
                                     <Td>{percentageToText(percentage)}</Td>
                                     <Td isNumeric>
-                                        {2.5 * Math.ceil((baseWeights[dayToExercise(day)] * percentage) / 2.5)}
+                                        {`${2.5 * Math.ceil((baseWeights[dayToExercise(day)] * percentage) / 2.5)} kg`}
                                     </Td>
-                                    <Td>{index === 5 ? <RepsInput cycle={cycle} week={week} day={day} /> : '-'}</Td>
+                                    <Td>{index === 5 ? <RepsInputForm cycle={cycle} week={week} day={day} /> : '-'}</Td>
                                 </Tr>
                             );
                         })}

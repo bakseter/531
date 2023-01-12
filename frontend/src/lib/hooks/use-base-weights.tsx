@@ -5,18 +5,14 @@ interface HookProps {
     baseWeights: BaseWeights | null;
     setBaseWeights: (baseWeights: BaseWeights) => Promise<void>;
     loading: boolean;
-    setLoading: (l: boolean) => void;
     error: string | null;
-    setError: (e: string | null) => void;
 }
 
 const BaseWeightsContext = createContext<HookProps>({
     baseWeights: null,
     setBaseWeights: async () => {},
     loading: true,
-    setLoading: () => {},
     error: null,
-    setError: () => {},
 });
 
 const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
@@ -78,9 +74,7 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <BaseWeightsContext.Provider
-            value={{ baseWeights, setBaseWeights: setNewBaseWeights, loading, setLoading, error, setError }}
-        >
+        <BaseWeightsContext.Provider value={{ baseWeights, setBaseWeights: setNewBaseWeights, loading, error }}>
             {children}
         </BaseWeightsContext.Provider>
     );

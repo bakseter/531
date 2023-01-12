@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Center, Spinner, SimpleGrid, Select } from '@chakra-ui/react';
+import { GridItem, Center, Spinner, SimpleGrid, Select } from '@chakra-ui/react';
 import { AiFillExclamationCircle } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import WorkoutAPI, { type Workout, type Week, type Day } from '@api/workout';
@@ -14,7 +14,7 @@ interface FormValues {
     reps: number;
 }
 
-const RepsInput = ({ cycle, week, day }: Props) => {
+const RepsInputForm = ({ cycle, week, day }: Props) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -72,25 +72,27 @@ const RepsInput = ({ cycle, week, day }: Props) => {
     }, [cycle, week, day, setValue]);
 
     return (
-        <SimpleGrid columns={2}>
-            {/* eslint-disable @typescript-eslint/no-misused-promises */}
-            <form onChange={handleSubmit(onSubmit)}>
-                {/* eslint-emable @typescript-eslint/no-misused-promises */}
-                <Select {...register('reps', { valueAsNumber: true })}>
-                    <option value={0}></option>
-                    {[...new Array(20).keys()].map((_, index) => (
-                        <option key={`select-option-${index}`} value={index + 1}>
-                            {index + 1}
-                        </option>
-                    ))}
-                </Select>
-            </form>
+        <SimpleGrid columns={4}>
+            <GridItem colSpan={3}>
+                {/* eslint-disable @typescript-eslint/no-misused-promises */}
+                <form onChange={handleSubmit(onSubmit)}>
+                    {/* eslint-emable @typescript-eslint/no-misused-promises */}
+                    <Select size={['xs', null, 'md']} {...register('reps', { valueAsNumber: true })} w="100%">
+                        <option value={0}></option>
+                        {[...new Array(20).keys()].map((_, index) => (
+                            <option key={`select-option-${index}`} value={index + 1}>
+                                {index + 1}
+                            </option>
+                        ))}
+                    </Select>
+                </form>
+            </GridItem>
             <Center>
-                {loading && <Spinner />}
+                {loading && <Spinner size={['sm', null, 'md']} />}
                 {error && <AiFillExclamationCircle color="red" size="2rem" />}
             </Center>
         </SimpleGrid>
     );
 };
 
-export default RepsInput;
+export default RepsInputForm;

@@ -7,7 +7,7 @@ import { type BaseWeights } from '@api/base-weights';
 type FormValues = BaseWeights;
 
 const BaseWeightsForm = () => {
-    const { baseWeights, setBaseWeights, error, loading, setError, setLoading } = useBaseWeights();
+    const { baseWeights, setBaseWeights, error, loading } = useBaseWeights();
     const { register, handleSubmit } = useForm<FormValues>({
         defaultValues: {
             dl: baseWeights?.dl,
@@ -33,7 +33,9 @@ const BaseWeightsForm = () => {
                             <VStack gap="1" alignItems="start">
                                 {comps.map((value: CompExercise) => (
                                     <>
-                                        <Text fontWeight="bold">{exerciseToText(value)}</Text>
+                                        <Text key={`text-${value}`} fontWeight="bold">
+                                            {exerciseToText(value)}
+                                        </Text>
                                         <Input
                                             type="number"
                                             step=".25"
@@ -49,14 +51,6 @@ const BaseWeightsForm = () => {
                     </VStack>
                 </Flex>
             )}
-            <Input
-                type="button"
-                value="Reset"
-                onClick={() => {
-                    setLoading(false);
-                    setError(null);
-                }}
-            />
         </VStack>
     );
 };
