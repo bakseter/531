@@ -53,8 +53,6 @@ jobs:
             export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             export ADMIN_KEY=${{ secrets.ADMIN_KEY }}
             echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u bakseter --password-stdin
-            docker pull $IMAGE_NAME
             cd 531/backend
             git pull
-            docker compose -f docker-compose.prod.yaml stop
             docker compose -f docker-compose.prod.yaml up -d --no-build
