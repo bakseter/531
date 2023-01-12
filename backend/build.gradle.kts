@@ -8,7 +8,7 @@ val postgres_version: String by project
 val hikari_version: String by project
 
 // Needed for Shadow
-project.setProperty("mainClassName", "net.bakseter.ApplicationKt")
+project.setProperty("mainClassName", "net.bakseter.api.ApplicationKt")
 
 plugins {
     application
@@ -23,7 +23,7 @@ group = "net.bakseter"
 version = "0.0.1"
 
 application {
-    mainClass.set("net.bakseter.ApplicationKt")
+    mainClass.set("net.bakseter.api.ApplicationKt")
 }
 
 repositories {
@@ -34,6 +34,7 @@ dependencies {
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-server-auth:$ktor_version")
     implementation("io.ktor:ktor-server-cors:$ktor_version")
     implementation("io.ktor:ktor-server-rate-limit:$ktor_version")
     implementation("io.ktor:ktor-server-swagger:$ktor_version")

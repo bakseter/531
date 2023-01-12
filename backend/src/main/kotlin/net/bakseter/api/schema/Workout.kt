@@ -1,4 +1,4 @@
-package net.bakseter.schema
+package net.bakseter.api.schema
 
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Column
@@ -12,8 +12,8 @@ data class WorkoutJson(
     val reps: Int,
 )
 
-val validWeeks = listOf(1, 2, 3, 4)
-val validDays = listOf(1, 2, 3)
+val validWeeks = listOf(1, 2, 3)
+val validDays = listOf(1, 2, 3, 4)
 
 object Workout : Table("workout") {
     val cycle: Column<Int> = integer("cycle")

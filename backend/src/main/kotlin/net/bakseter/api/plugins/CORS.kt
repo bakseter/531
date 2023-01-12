@@ -1,4 +1,4 @@
-package net.bakseter.plugins
+package net.bakseter.api.plugins
 
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod

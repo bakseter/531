@@ -76,7 +76,7 @@ const RepsInput = ({ cycle, week, day }: Props) => {
             {/* eslint-disable @typescript-eslint/no-misused-promises */}
             <form onChange={handleSubmit(onSubmit)}>
                 {/* eslint-emable @typescript-eslint/no-misused-promises */}
-                <Select {...register('reps')}>
+                <Select {...register('reps', { valueAsNumber: true })}>
                     <option value={0}></option>
                     {[...new Array(20).keys()].map((_, index) => (
                         <option key={`select-option-${index}`} value={index + 1}>

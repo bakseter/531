@@ -1,5 +1,6 @@
 import Head from 'next/head';
-import { Button, Spinner, Tab, Tabs, TabList, TabPanels, TabPanel, Divider, Heading, Center } from '@chakra-ui/react';
+import { useEffect } from 'react';
+import { Tab, Tabs, TabList, TabPanels, TabPanel, Divider, Heading, Center } from '@chakra-ui/react';
 import { useSession, signIn } from 'next-auth/react';
 import Workout from '@components/workout';
 import type { Week, Day } from '@api/workout';
@@ -14,14 +15,9 @@ const IndexPage = () => {
     const { baseWeights } = useBaseWeights();
     const { status } = useSession();
 
-    if (status === 'loading') return <Spinner />;
-    if (status === 'unauthenticated') {
-        return (
-            <Center>
-                <Button onClick={() => void signIn()}>Sign in</Button>
-            </Center>
-        );
-    }
+    useEffect(() => {
+        if (status === 'unauthenticated') void signIn();
+    }, [status]);
 
     return (
         <>

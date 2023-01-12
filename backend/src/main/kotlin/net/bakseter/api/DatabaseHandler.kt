@@ -1,14 +1,14 @@
-package net.bakseter
+package net.bakseter.api
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import net.bakseter.api.schema.BaseWeights
+import net.bakseter.api.schema.Workout
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.net.URI
-import net.bakseter.schema.BaseWeights
-import net.bakseter.schema.Workout
 
 val tables: Array<Table> = arrayOf(
     Workout,

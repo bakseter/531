@@ -9,12 +9,10 @@ const baseWeightsDecoder = record({
 });
 type BaseWeights = decodeType<typeof baseWeightsDecoder>;
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:8080';
-
 const BaseWeightsAPI = {
     getBaseWeights: async (): Promise<BaseWeights | boolean | null> => {
         try {
-            const response = await fetch(`${BACKEND_URL}/base-weights`);
+            const response = await fetch('/api/base-weights');
 
             if (response.status === 200) {
                 const json = await response.json();
@@ -34,7 +32,7 @@ const BaseWeightsAPI = {
 
     putBaseWeights: async (baseWeights: BaseWeights): Promise<boolean | null> => {
         try {
-            const response = await fetch(`${BACKEND_URL}/base-weights`, {
+            const response = await fetch('/api/base-weights', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(baseWeights),

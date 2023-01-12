@@ -20,7 +20,7 @@ const BaseWeightsForm = () => {
     const onSubmit = (data: FormValues) => setBaseWeights(data);
 
     return (
-        <>
+        <VStack>
             {error && <Text>{error}</Text>}
             {loading && <Spinner />}
             {!error && !loading && (
@@ -39,7 +39,7 @@ const BaseWeightsForm = () => {
                                             step=".25"
                                             key={`input-${value}`}
                                             placeholder={exerciseToText(value)}
-                                            {...register(value)}
+                                            {...register(value, { valueAsNumber: true })}
                                         />
                                     </>
                                 ))}
@@ -57,7 +57,7 @@ const BaseWeightsForm = () => {
                     setError(null);
                 }}
             />
-        </>
+        </VStack>
     );
 };
 

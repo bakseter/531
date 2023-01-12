@@ -1,18 +1,17 @@
-package net.bakseter.routes
+package net.bakseter.api.routes
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
+import io.ktor.server.auth.authenticate
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
-import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.put
 import io.ktor.server.routing.routing
-import net.bakseter.schema.Workout
-import net.bakseter.schema.WorkoutJson
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import net.bakseter.api.schema.Workout
+import net.bakseter.api.schema.WorkoutJson
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -21,8 +20,10 @@ import org.jetbrains.exposed.sql.update
 
 fun Application.workoutRoutes() {
     routing {
-        getWorkout()
-        putWorkout()
+        authenticate("auth-admin") {
+            getWorkout()
+            putWorkout()
+        }
     }
 }
 
@@ -48,12 +49,14 @@ fun Route.getWorkout() {
             return@get
         }
 
-        call.respond(WorkoutJson(
-            workout[Workout.cycle],
-            workout[Workout.week],
-            workout[Workout.day],
-            workout[Workout.reps],
-        ))
+        call.respond(
+            WorkoutJson(
+                workout[Workout.cycle],
+                workout[Workout.week],
+                workout[Workout.day],
+                workout[Workout.reps],
+            )
+        )
     }
 }
 

@@ -1,4 +1,4 @@
-package net.bakseter.plugins
+package net.bakseter.api.plugins
 
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application

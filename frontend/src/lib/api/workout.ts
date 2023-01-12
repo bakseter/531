@@ -21,12 +21,10 @@ const workoutDecoder = record({
 });
 type Workout = decodeType<typeof workoutDecoder>;
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:8080';
-
 const WorkoutAPI = {
     getWorkout: async (cycle: number, week: Week, day: Day): Promise<Workout | boolean> => {
         try {
-            const response = await fetch(`${BACKEND_URL}/workout?cycle=${cycle}&week=${week}&day=${day}`);
+            const response = await fetch(`/api/workout?cycle=${cycle}&week=${week}&day=${day}`);
 
             if (response.status === 200) {
                 const workout = await response.json();
@@ -45,9 +43,11 @@ const WorkoutAPI = {
 
     putWorkout: async (workout: Workout): Promise<boolean | null> => {
         try {
-            const response = await fetch(`${BACKEND_URL}/workout`, {
+            const response = await fetch('/api/workout', {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify(workout),
             });
 
@@ -64,4 +64,4 @@ const WorkoutAPI = {
 };
 
 export default WorkoutAPI;
-export type { Week, Day, Workout };
+export { workoutDecoder, type Week, type Day, type Workout };

@@ -1,4 +1,4 @@
-package net.bakseter.plugins
+package net.bakseter.api.plugins
 
 import io.ktor.server.application.Application
 import io.ktor.server.application.install

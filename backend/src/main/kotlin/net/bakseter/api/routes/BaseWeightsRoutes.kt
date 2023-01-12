@@ -1,16 +1,17 @@
-package net.bakseter.routes
+package net.bakseter.api.routes
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
+import io.ktor.server.auth.authenticate
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.put
 import io.ktor.server.routing.routing
-import net.bakseter.schema.BaseWeights
-import net.bakseter.schema.BaseWeightsJson
+import net.bakseter.api.schema.BaseWeights
+import net.bakseter.api.schema.BaseWeightsJson
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -18,8 +19,10 @@ import org.jetbrains.exposed.sql.update
 
 fun Application.baseWeightsRoutes() {
     routing {
-        getBaseWeights()
-        putBaseWeights()
+        authenticate("auth-admin") {
+            getBaseWeights()
+            putBaseWeights()
+        }
     }
 }
 
