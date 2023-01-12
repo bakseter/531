@@ -51,5 +51,4 @@ services:
 
 volumes:
   caddy_data:
-    external: true
   caddy_config:
