@@ -55,4 +55,5 @@ jobs:
             echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u bakseter --password-stdin
             cd 531/backend
             git pull
+            docker compose -f docker-compose.prod.yaml pull
             docker compose -f docker-compose.prod.yaml up -d --no-build
