@@ -32,7 +32,7 @@ jobs:
             -t "$IMAGE" \
             --build-arg BUILDKIT_INLINE_CACHE=1 \
             .
-          docker push "$IMAGE" --all-tags
+          docker push "$IMAGE"
         env:
           DOCKER_BUILDKIT: 1
 
