@@ -49,10 +49,7 @@ const Workout = ({ baseWeights, cycle, week, day }: Props) => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {[
-                            ...weekToPercentages(week),
-                            ...weekToPercentages(week, false).map((value) => value + 0.25),
-                        ].map((percentage, index) => {
+                        {weekToPercentages(week).map((percentage, index) => {
                             const reps = weekToSetsReps(week)[index];
                             const repsField = (index: number) => {
                                 const jokerCutoff = 5;
