@@ -66,16 +66,16 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
     }, [cycle, week, day, num, setChecked]);
 
     return (
-        <SimpleGrid columns={4}>
-            <GridItem colSpan={3}>
+        <SimpleGrid columns={2} justifyItems="center">
+            <GridItem>
                 {/* eslint-disable @typescript-eslint/no-misused-promises */}
                 <Checkbox isChecked={checked} size={['md', null, 'lg']} w="100%" onChange={handleChange} />
                 {/* eslint-enable @typescript-eslint/no-misused-promises */}
             </GridItem>
-            <Center>
+            <GridItem>
                 {loading && <Spinner size={['sm', null, 'md']} />}
                 {error && <AiFillExclamationCircle color="red" size="2rem" />}
-            </Center>
+            </GridItem>
         </SimpleGrid>
     );
 };

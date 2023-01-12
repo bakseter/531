@@ -77,7 +77,7 @@ const weekToSetsReps = (week: Week): Array<number> => {
     }
 };
 
-const percentageToText = (percentage: number): string => `${percentage * 100}%`;
+const percentageToText = (percentage: number): string => `${(percentage * 100).toFixed(0)}%`;
 
 export type { CompExercise, BaseWeights };
 export { comps, dayToExercise, exerciseToText, weekToPercentages, percentageToText, weekToSetsReps };

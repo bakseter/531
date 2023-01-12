@@ -1,4 +1,4 @@
-import { Text, Heading, TableContainer, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
+import { Divider, Box, Center, Text, Heading, TableContainer, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 import JokerInput from '@components/joker-input';
 import RepsInputForm from '@components/reps-input-form';
 import type { Week, Day } from '@api/workout';
@@ -18,13 +18,19 @@ interface Props {
     day: Day;
 }
 
+const indexToHeading = (i: number): string | undefined => {
+    if (i === 0) return 'Warmup';
+    if (i === 3) return 'Main sets';
+    if (i === 6) return 'Joker sets';
+};
+
 const Workout = ({ baseWeights, cycle, week, day }: Props) => {
     return (
         <>
-            <Heading my="1rem" size="md">
+            <Heading my="1rem" size={['md', null, 'lg']}>
                 {exerciseToText(dayToExercise(day))}
             </Heading>
-            <TableContainer>
+            <TableContainer pb="2rem">
                 <Table variant="striped" size={['sm', null, 'md']}>
                     <Thead>
                         <Tr>
@@ -58,18 +64,31 @@ const Workout = ({ baseWeights, cycle, week, day }: Props) => {
                                     return <JokerInput cycle={cycle} week={week} day={day} num={index - jokerCutoff} />;
                                 }
 
-                                return '-';
+                                return (
+                                    <Center>
+                                        <Text color="gray">–</Text>
+                                    </Center>
+                                );
                             };
 
                             return (
-                                <Tr key={`table-row-${index}`}>
-                                    <Td>{`1x${reps}${index === 5 ? '+' : ''}`}</Td>
-                                    <Td>{percentageToText(Math.round(percentage))}</Td>
-                                    <Td isNumeric>
-                                        {`${2.5 * Math.ceil((baseWeights[dayToExercise(day)] * percentage) / 2.5)} kg`}
-                                    </Td>
-                                    <Td>{repsField(index)}</Td>
-                                </Tr>
+                                <>
+                                    {index % 3 === 0 && (
+                                        <Box py="1rem">
+                                            <Heading size={['xs', null, 'sm']}>{indexToHeading(index)}</Heading>
+                                        </Box>
+                                    )}
+                                    <Tr key={`table-row-${index}`}>
+                                        <Td>{`1x${reps}${index === 5 ? '+' : ''}`}</Td>
+                                        <Td>{percentageToText(percentage)}</Td>
+                                        <Td isNumeric>
+                                            {`${
+                                                2.5 * Math.ceil((baseWeights[dayToExercise(day)] * percentage) / 2.5)
+                                            } kg`}
+                                        </Td>
+                                        <Td>{repsField(index)}</Td>
+                                    </Tr>
+                                </>
                             );
                         })}
                     </Tbody>
