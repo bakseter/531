@@ -1,4 +1,4 @@
-import { Divider, Box, Center, Text, Heading, TableContainer, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
+import { Box, Center, Text, Heading, TableContainer, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 import JokerInput from '@components/joker-input';
 import RepsInputForm from '@components/reps-input-form';
 import type { Week, Day } from '@api/workout';

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useBoolean, SimpleGrid, Center, Spinner, GridItem, Checkbox } from '@chakra-ui/react';
+import { useBoolean, SimpleGrid, Spinner, GridItem, Checkbox } from '@chakra-ui/react';
 import { AiFillExclamationCircle } from 'react-icons/ai';
 import { type Week, type Day } from '@api/workout';
 import JokerAPI from '@api/joker';
