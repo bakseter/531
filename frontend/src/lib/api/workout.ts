@@ -26,7 +26,7 @@ const WorkoutAPI = {
         try {
             const response = await fetch(`/api/workout?cycle=${cycle}&week=${week}&day=${day}`);
 
-            if (response.status === 200) {
+            if (response.ok) {
                 const workout = await response.json();
                 return workoutDecoder(workout);
             }
@@ -41,9 +41,9 @@ const WorkoutAPI = {
         }
     },
 
-    putWorkout: async (workout: Workout): Promise<boolean | null> => {
+    putWorkout: async (workout: Workout): Promise<boolean> => {
         try {
-            const response = await fetch('/api/workout', {
+            const { ok } = await fetch('/api/workout', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -51,14 +51,11 @@ const WorkoutAPI = {
                 body: JSON.stringify(workout),
             });
 
-            if (response.status === 200) return true;
-            if (response.status === 202) return false;
-
-            return null;
+            return ok;
         } catch (error) {
             // eslint-disable-next-line no-console
             console.error(error);
-            return null;
+            return false;
         }
     },
 };

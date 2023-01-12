@@ -9,9 +9,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (req.method === 'GET') {
         try {
-            const cycle = req.query.cycle;
-            const week = req.query.week;
-            const day = req.query.day;
+            const { cycle, week, day } = req.query;
 
             if (typeof cycle !== 'string' || typeof week !== 'string' || typeof day !== 'string') {
                 res.status(400).json({ message: 'Missing or invalid query parameters' });
@@ -75,6 +73,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             return;
         }
     }
+
+    res.status(405).json({ message: 'Method not allowed' });
 };
 
 export default handler;

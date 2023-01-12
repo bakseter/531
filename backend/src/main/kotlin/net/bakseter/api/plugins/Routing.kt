@@ -8,6 +8,7 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 import net.bakseter.api.routes.baseWeightsRoutes
+import net.bakseter.api.routes.jokerRoutes
 import net.bakseter.api.routes.workoutRoutes
 
 fun Application.configureRouting() {
@@ -15,6 +16,7 @@ fun Application.configureRouting() {
 
     workoutRoutes()
     baseWeightsRoutes()
+    jokerRoutes()
 }
 
 fun Route.getStatus() {

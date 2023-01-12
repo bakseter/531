@@ -1,4 +1,5 @@
 import { Text, Heading, TableContainer, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
+import JokerInput from '@components/joker-input';
 import RepsInputForm from '@components/reps-input-form';
 import type { Week, Day } from '@api/workout';
 import {
@@ -42,17 +43,32 @@ const Workout = ({ baseWeights, cycle, week, day }: Props) => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {weekToPercentages(week).map((percentage, index) => {
+                        {[
+                            ...weekToPercentages(week),
+                            ...weekToPercentages(week, false).map((value) => value + 0.25),
+                        ].map((percentage, index) => {
                             const reps = weekToSetsReps(week)[index];
+                            const repsField = (index: number) => {
+                                const jokerCutoff = 5;
+                                if (index === jokerCutoff) {
+                                    return <RepsInputForm cycle={cycle} week={week} day={day} />;
+                                }
+
+                                if (index > jokerCutoff) {
+                                    return <JokerInput cycle={cycle} week={week} day={day} num={index - jokerCutoff} />;
+                                }
+
+                                return '-';
+                            };
 
                             return (
                                 <Tr key={`table-row-${index}`}>
                                     <Td>{`1x${reps}${index === 5 ? '+' : ''}`}</Td>
-                                    <Td>{percentageToText(percentage)}</Td>
+                                    <Td>{percentageToText(Math.round(percentage))}</Td>
                                     <Td isNumeric>
                                         {`${2.5 * Math.ceil((baseWeights[dayToExercise(day)] * percentage) / 2.5)} kg`}
                                     </Td>
-                                    <Td>{index === 5 ? <RepsInputForm cycle={cycle} week={week} day={day} /> : '-'}</Td>
+                                    <Td>{repsField(index)}</Td>
                                 </Tr>
                             );
                         })}

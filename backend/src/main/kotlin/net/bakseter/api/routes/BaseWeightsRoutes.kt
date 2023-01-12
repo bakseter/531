@@ -38,6 +38,7 @@ fun Route.getBaseWeights() {
         }
 
         call.respond(
+            HttpStatusCode.OK,
             BaseWeightsJson(
                 baseWeights[BaseWeights.dl],
                 baseWeights[BaseWeights.bp],

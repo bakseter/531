@@ -50,6 +50,7 @@ fun Route.getWorkout() {
         }
 
         call.respond(
+            HttpStatusCode.OK,
             WorkoutJson(
                 workout[Workout.cycle],
                 workout[Workout.week],
@@ -74,10 +75,10 @@ fun Route.putWorkout() {
             if (workout == null) {
                 transaction {
                     Workout.insert {
-                        it[Workout.cycle] = workoutJson.cycle
-                        it[Workout.week] = workoutJson.week
-                        it[Workout.day] = workoutJson.day
-                        it[Workout.reps] = workoutJson.reps
+                        it[cycle] = workoutJson.cycle
+                        it[week] = workoutJson.week
+                        it[day] = workoutJson.day
+                        it[reps] = workoutJson.reps
                     }
                 }
 
@@ -87,7 +88,7 @@ fun Route.putWorkout() {
 
             transaction {
                 Workout.update({ Workout.cycle eq workoutJson.cycle and (Workout.week eq workoutJson.week and (Workout.day eq workoutJson.day)) }) {
-                    it[Workout.reps] = workoutJson.reps
+                    it[reps] = workoutJson.reps
                 }
             }
 

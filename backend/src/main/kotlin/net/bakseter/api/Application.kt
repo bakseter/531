@@ -16,8 +16,10 @@ fun main(args: Array<String>) {
 fun Application.module() {
     val databaseUrl = URI(environment.config.property("ktor.databaseUrl").getString())
     val adminKey = environment.config.property("ktor.adminKey").getString()
+    val migrateDb = environment.config.property("ktor.migrateDb").getString().toBooleanStrict()
 
     DatabaseHandler(
+        migrateDb,
         databaseUrl,
     ).init()
 
