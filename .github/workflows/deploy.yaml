@@ -8,7 +8,7 @@ permissions:
   actions: read
 
 env:
-  IMAGE: 'ghcr.io/${{ github.repository }}/backend:latest'
+  IMAGE_NAME: 'ghcr.io/${{ github.repository }}/backend'
 
 jobs:
   docker_push:
@@ -28,11 +28,11 @@ jobs:
         run: |
           cd backend
           docker build \
-            --cache-from "$IMAGE" \
-            -t "$IMAGE" \
+            --cache-from "$IMAGE_NAME" \
+            -t "$IMAGE_NAME:latest" \
             --build-arg BUILDKIT_INLINE_CACHE=1 \
             .
-          docker push "$IMAGE"
+          docker push "$IMAGE_NAME" --all-tags
         env:
           DOCKER_BUILDKIT: 1
 
@@ -53,7 +53,7 @@ jobs:
             export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             export ADMIN_KEY=${{ secrets.ADMIN_KEY }}
             echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u bakseter --password-stdin
-            docker pull $IMAGE
+            docker pull $IMAGE_NAME:latest
             cd 531/backend
             git pull
             docker compose -f docker-compose.prod.yaml stop
