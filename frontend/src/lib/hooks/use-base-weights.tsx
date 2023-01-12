@@ -22,6 +22,9 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         const fetchBaseWeights = async () => {
+            setError(null);
+            setLoading(true);
+
             try {
                 const response = await BaseWeightsAPI.getBaseWeights();
                 setLoading(false);
@@ -31,15 +34,7 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
                     return;
                 }
 
-                if (response === true) {
-                    setError(null);
-                    return;
-                }
-
-                if (response === false) {
-                    // insert do something on false here
-                    return;
-                }
+                if (typeof response === 'boolean') return;
 
                 setBaseWeights(response);
             } catch (error) {
