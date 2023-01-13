@@ -68,9 +68,7 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
     return (
         <SimpleGrid columns={2} justifyItems="center">
             <GridItem>
-                {/* eslint-disable @typescript-eslint/no-misused-promises */}
                 <Checkbox isChecked={checked} size={['md', null, 'lg']} w="100%" onChange={handleChange} />
-                {/* eslint-enable @typescript-eslint/no-misused-promises */}
             </GridItem>
             <GridItem>
                 {loading && <Spinner size={['sm', null, 'md']} />}

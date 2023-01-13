@@ -22,6 +22,7 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
 
     const onSubmit = async ({ reps }: FormValues) => {
         setLoading(true);
+        setError(null);
         try {
             const workout: Workout = { cycle, week, day, reps };
             const result = await WorkoutAPI.putWorkout(workout);
@@ -32,12 +33,9 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
                 setError('could not put workout');
                 return;
             }
-
-            setValue('reps', reps);
         } catch (error) {
             // eslint-disable-next-line no-console
             console.error(error);
-            setLoading(false);
             setError(JSON.stringify(error));
         }
     };
@@ -64,7 +62,6 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.error(error);
-                setLoading(false);
                 setError(JSON.stringify(error));
             }
         };
@@ -74,9 +71,7 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
     return (
         <SimpleGrid columns={4}>
             <GridItem colSpan={3}>
-                {/* eslint-disable @typescript-eslint/no-misused-promises */}
                 <form onChange={handleSubmit(onSubmit)}>
-                    {/* eslint-emable @typescript-eslint/no-misused-promises */}
                     <Select size={['xs', null, 'md']} {...register('reps', { valueAsNumber: true })} w="100%">
                         <option value={0}></option>
                         {[...new Array(20).keys()].map((_, index) => (

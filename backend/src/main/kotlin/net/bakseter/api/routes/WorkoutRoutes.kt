@@ -10,6 +10,7 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.put
 import io.ktor.server.routing.routing
+import net.bakseter.api.schema.DateJson
 import net.bakseter.api.schema.Workout
 import net.bakseter.api.schema.WorkoutJson
 import org.jetbrains.exposed.sql.and
@@ -17,12 +18,15 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
+import org.joda.time.DateTime
 
 fun Application.workoutRoutes() {
     routing {
         authenticate("auth-admin") {
             getWorkout()
             putWorkout()
+            getDate()
+            putDate()
         }
     }
 }
@@ -97,5 +101,83 @@ fun Route.putWorkout() {
             e.printStackTrace()
             call.respond(HttpStatusCode.InternalServerError)
         }
+    }
+}
+
+fun Route.putDate() {
+    put("/workout/date") {
+        try {
+            val dateJson = call.receive<DateJson>()
+
+            val cycle = call.request.queryParameters["cycle"]?.toIntOrNull()
+            val week = call.request.queryParameters["week"]?.toIntOrNull()
+            val day = call.request.queryParameters["day"]?.toIntOrNull()
+
+            if (cycle == null || week == null || day == null) {
+                call.respond(HttpStatusCode.BadRequest)
+                return@put
+            }
+
+            val workout = transaction {
+                Workout.select {
+                    Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day))
+                }.firstOrNull()
+            }
+
+            if (workout == null) {
+                transaction {
+                    Workout.insert {
+                        it[Workout.cycle] = cycle
+                        it[Workout.week] = week
+                        it[Workout.day] = day
+                    }
+                }
+
+                call.respond(HttpStatusCode.OK)
+                return@put
+            }
+
+            transaction {
+                Workout.update({ Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day)) }) {
+                    it[date] = DateTime(dateJson.date)
+                }
+            }
+
+            call.respond(HttpStatusCode.Accepted)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            call.respond(HttpStatusCode.InternalServerError)
+        }
+    }
+}
+
+fun Route.getDate() {
+    get("/workout/date") {
+        val cycle = call.request.queryParameters["cycle"]?.toIntOrNull()
+        val week = call.request.queryParameters["week"]?.toIntOrNull()
+        val day = call.request.queryParameters["day"]?.toIntOrNull()
+
+        if (cycle == null || week == null || day == null) {
+            call.respond(HttpStatusCode.BadRequest)
+            return@get
+        }
+
+        val workout = transaction {
+            Workout.select {
+                Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day))
+            }.firstOrNull()
+        }
+
+        val date = workout?.get(Workout.date)
+
+        if (date == null) {
+            call.respond(HttpStatusCode.NotFound)
+            return@get
+        }
+
+        call.respond(
+            HttpStatusCode.OK,
+            DateJson(date.toString())
+        )
     }
 }

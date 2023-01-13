@@ -2,18 +2,15 @@ package net.bakseter.api
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import net.bakseter.api.schema.BaseWeights
+import net.bakseter.api.schema.Joker
+import net.bakseter.api.schema.Workout
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.batchInsert
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.joda.time.DateTime
 import java.net.URI
-import net.bakseter.api.schema.BaseWeights
-import net.bakseter.api.schema.Joker
-import net.bakseter.api.schema.Workout
 
 val tables: Array<Table> = arrayOf(
     Workout,
@@ -45,7 +42,7 @@ class DatabaseHandler(
     }
 
     private val flyway: Flyway =
-        Flyway.configure().baselineOnMigrate(true).baselineVersion("1").cleanDisabled(false)
+        Flyway.configure().baselineOnMigrate(true).baselineVersion("3").cleanDisabled(false)
             .dataSource(dbUrlStr, dbUsername, dbPassword).load()
 
     private val conn by lazy {

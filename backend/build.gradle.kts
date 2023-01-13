@@ -57,7 +57,6 @@ dependencies {
 
     implementation("org.postgresql:postgresql:$postgres_version")
 
-
     implementation("com.zaxxer:HikariCP:$hikari_version")
     implementation("org.flywaydb:flyway-core:$flyway_version")
 }

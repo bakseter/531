@@ -97,6 +97,7 @@
                     "fixMixedExportsWithInlineTypeSpecifier": true
                 }
             ],
+            "@typescript-eslint/no-misused-promises": "off",
             "unicorn/no-null": "off",
             "unicorn/no-abusive-eslint-disable": "off",
             "unicorn/prevent-abbreviations": "off",
