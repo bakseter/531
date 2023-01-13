@@ -33,7 +33,6 @@ const IndexPage = () => {
         <>
             <Head>
                 <title>5/3/1</title>
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
             <SimpleGrid columns={3}>
                 <GridItem colSpan={[3, 3, 1]} colStart={[1, 1, 2]}>
@@ -48,7 +47,7 @@ const IndexPage = () => {
                             </TabList>
                             <TabPanels>
                                 {cycles.map((cycle) => (
-                                    <TabPanel key={`tabpanel-cycle-${cycle}`}>
+                                    <TabPanel key={`tabpanel-cycle-${cycle}`} px="0rem">
                                         <Tabs>
                                             <TabList>
                                                 {weeks.map((week) => (
