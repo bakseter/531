@@ -56,7 +56,7 @@ const IndexPage = () => {
                                             </TabList>
                                             <TabPanels>
                                                 {weeks.map((week: Week) => (
-                                                    <TabPanel m="1rem" key={`tabpanel-week-${week}`}>
+                                                    <TabPanel key={`tabpanel-week-${week}`}>
                                                         {days.map((day: Day) => (
                                                             <>
                                                                 <Workout

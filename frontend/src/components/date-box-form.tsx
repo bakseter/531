@@ -73,7 +73,9 @@ const DateBoxForm = ({ cycle, week, day }: Props) => {
             <form onChange={handleSubmit(onSubmit)}>{!date && <Input type="date" {...register('dateStr')} />}</form>
             {date && (
                 <HStack my="1rem">
-                    <Text fontWeight="bold">{format(date, 'EEEE dd. MMMM yyyy', { locale: nb })}</Text>
+                    <Text fontSize={['sm', null, 'md']} fontWeight="bold">
+                        {format(date, 'EEEE dd. MMMM yyyy', { locale: nb })}
+                    </Text>
                     <Button colorScheme="blue" size="xs" onClick={() => setDate(null)}>
                         Edit date
                     </Button>

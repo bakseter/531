@@ -1,4 +1,4 @@
-import { Box, Center, Text, Heading, TableContainer, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
+import { HStack, Box, Center, Text, Heading, TableContainer, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 import JokerInput from '@components/joker-input';
 import RepsInputForm from '@components/reps-input-form';
 import { type Week, type Day } from '@api/workout';
@@ -28,10 +28,12 @@ interface Props {
 const Workout = ({ cycleBaseWeights, cycle, week, day }: Props) => {
     return (
         <>
-            <Heading my="1rem" size={['md', null, 'lg']}>
-                {exerciseToText(dayToExercise(day))}
-            </Heading>
-            <DateBoxForm cycle={cycle} week={week} day={day} />
+            <HStack spacing={[3, null, 8]}>
+                <Heading my="1rem" size={['md', null, 'lg']}>
+                    {exerciseToText(dayToExercise(day))}
+                </Heading>
+                <DateBoxForm cycle={cycle} week={week} day={day} />
+            </HStack>
             <TableContainer pb="2rem">
                 <Table variant="striped" size={['sm', null, 'md']}>
                     <Thead>
