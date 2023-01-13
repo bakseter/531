@@ -1,24 +1,7 @@
-import {
-    Spinner,
-    Input,
-    Box,
-    Center,
-    Text,
-    Heading,
-    TableContainer,
-    Table,
-    Thead,
-    Tbody,
-    Tr,
-    Th,
-    Td,
-} from '@chakra-ui/react';
-import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { format, parse } from 'date-fns';
+import { Box, Center, Text, Heading, TableContainer, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 import JokerInput from '@components/joker-input';
 import RepsInputForm from '@components/reps-input-form';
-import WorkoutAPI, { type Week, type Day } from '@api/workout';
+import { type Week, type Day } from '@api/workout';
 import {
     weekToSetsReps,
     percentageToText,
@@ -27,6 +10,13 @@ import {
     weekToPercentages,
     dayToExercise,
 } from '@utils/helpers';
+import DateBoxForm from '@components/date-box-form';
+
+const indexToHeading = (i: number): string | undefined => {
+    if (i === 0) return 'Warmup';
+    if (i === 3) return 'Main sets';
+    if (i === 6) return 'Joker sets';
+};
 
 interface Props {
     baseWeights: BaseWeights;
@@ -35,73 +25,13 @@ interface Props {
     day: Day;
 }
 
-const indexToHeading = (i: number): string | undefined => {
-    if (i === 0) return 'Warmup';
-    if (i === 3) return 'Main sets';
-    if (i === 6) return 'Joker sets';
-};
-
-interface FormValues {
-    dateStr: string | null;
-}
-
 const Workout = ({ baseWeights, cycle, week, day }: Props) => {
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-
-    const { handleSubmit, register, setValue } = useForm<FormValues>({ defaultValues: { dateStr: null } });
-
-    const onSubmit = async ({ dateStr }: FormValues) => {
-        if (dateStr === null) return;
-
-        setLoading(true);
-        setError(null);
-        try {
-            const date = parse(dateStr, 'yyyy-MM-dd', new Date());
-            const result = await WorkoutAPI.putDate(cycle, week, day, date);
-
-            setLoading(false);
-
-            if (!result) {
-                setError('could not put date');
-                return;
-            }
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-            setLoading(false);
-            setError(JSON.stringify(error));
-        }
-    };
-
-    useEffect(() => {
-        const fetchDate = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const response = await WorkoutAPI.getDate(cycle, week, day);
-                setLoading(false);
-
-                if (response !== null) setValue('dateStr', format(response, 'yyyy-MM-dd'));
-            } catch (error) {
-                // eslint-disable-next-line no-console
-                console.error(error);
-                setError(JSON.stringify(error));
-            }
-        };
-        void fetchDate();
-    }, [cycle, week, day, setValue]);
-
     return (
         <>
             <Heading my="1rem" size={['md', null, 'lg']}>
                 {exerciseToText(dayToExercise(day))}
             </Heading>
-            <form onChange={handleSubmit(onSubmit)} lang="no">
-                {loading && <Spinner />}
-                {error && <Text color="red">bruh</Text>}
-                <Input type="date" {...register('dateStr')} />
-            </form>
+            <DateBoxForm cycle={cycle} week={week} day={day} />
             <TableContainer pb="2rem">
                 <Table variant="striped" size={['sm', null, 'md']}>
                     <Thead>
