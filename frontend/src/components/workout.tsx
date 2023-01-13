@@ -19,13 +19,13 @@ const indexToHeading = (i: number): string | undefined => {
 };
 
 interface Props {
-    baseWeights: BaseWeights;
+    cycleBaseWeights: BaseWeights;
     cycle: number;
     week: Week;
     day: Day;
 }
 
-const Workout = ({ baseWeights, cycle, week, day }: Props) => {
+const Workout = ({ cycleBaseWeights, cycle, week, day }: Props) => {
     return (
         <>
             <Heading my="1rem" size={['md', null, 'lg']}>
@@ -81,7 +81,7 @@ const Workout = ({ baseWeights, cycle, week, day }: Props) => {
                                         <Td>{`1x${reps}${index === 5 ? '+' : ''}`}</Td>
                                         <Td>{percentageToText(percentage)}</Td>
                                         <Td isNumeric>{`${
-                                            2.5 * Math.ceil((baseWeights[dayToExercise(day)] * percentage) / 2.5)
+                                            2.5 * Math.ceil((cycleBaseWeights[dayToExercise(day)] * percentage) / 2.5)
                                         } kg`}</Td>
                                         <Td>{repsField(index)}</Td>
                                     </Tr>
