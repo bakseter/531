@@ -68,13 +68,15 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
         void fetchWorkout();
     }, [cycle, week, day, setValue]);
 
+    const maxReps = day === 1 ? 15 : day === 2 ? 10 : 5;
+
     return (
         <SimpleGrid columns={4}>
             <GridItem colSpan={3}>
                 <form onChange={handleSubmit(onSubmit)}>
                     <Select size={['xs', null, 'md']} {...register('reps', { valueAsNumber: true })} w="100%">
                         <option value={0}></option>
-                        {[...new Array(20).keys()].map((_, index) => (
+                        {[...new Array(maxReps).keys()].map((_, index) => (
                             <option key={`select-option-${index}`} value={index + 1}>
                                 {index + 1}
                             </option>

@@ -8,7 +8,7 @@ import type { Week, Day } from '@api/workout';
 import useBaseWeights from '@hooks/use-base-weights';
 import BaseWeightsForm from '@components/base-weights-form';
 
-const cycles: Array<number> = [1, 2];
+const cycles: Array<number> = [1];
 const weeks: Array<Week> = [1, 2, 3];
 const days: Array<Day> = [1, 2, 3, 4];
 

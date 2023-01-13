@@ -41,3 +41,6 @@ terraform.tfvars
 **/.terraform/*
 .gradle
 .idea
+
+**/public/sw.js*
+**/public/workbox-*.js*
