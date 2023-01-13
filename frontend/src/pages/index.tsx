@@ -56,11 +56,8 @@ const IndexPage = () => {
                                                 ))}
                                             </TabList>
                                             <TabPanels>
-                                                {weeks.map((week: Week, index) => (
+                                                {weeks.map((week: Week) => (
                                                     <TabPanel m="1rem" key={`tabpanel-week-${week}`}>
-                                                        <Heading my="1rem" size={['lg', null, 'xl']}>{`Week ${
-                                                            index + 1
-                                                        }`}</Heading>
                                                         {days.map((day: Day) => (
                                                             <>
                                                                 <Workout
