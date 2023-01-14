@@ -22,13 +22,17 @@ const JokerAPI = {
         week: Week;
         day: Day;
         num: number;
-    }): Promise<boolean | null> => {
+    }): Promise<'on' | 'off' | 'reauth' | null> => {
         try {
-            const { ok } = await fetch(`${BACKEND_URL}/joker/${num}?cycle=${cycle}&week=${week}&day=${day}`, {
+            const { ok, status } = await fetch(`${BACKEND_URL}/joker/${num}?cycle=${cycle}&week=${week}&day=${day}`, {
                 headers: { Authorization: `Bearer ${idToken}` },
             });
 
-            return ok;
+            if (ok) return 'on';
+            if (status === 404) return 'off';
+            if (status === 401) return 'reauth';
+
+            return null;
         } catch (error) {
             // eslint-disable-next-line no-console
             console.error(error);
@@ -48,14 +52,17 @@ const JokerAPI = {
         week: Week;
         day: Day;
         num: number;
-    }): Promise<boolean> => {
+    }): Promise<boolean | null> => {
         try {
-            const { ok } = await fetch(`${BACKEND_URL}/joker/${num}?cycle=${cycle}&week=${week}&day=${day}`, {
+            const { ok, status } = await fetch(`${BACKEND_URL}/joker/${num}?cycle=${cycle}&week=${week}&day=${day}`, {
                 method: 'PUT',
                 headers: { Authorization: `Bearer ${idToken}` },
             });
 
-            return ok;
+            if (ok) return true;
+            if (status === 401) return false;
+
+            return null;
         } catch (error) {
             // eslint-disable-next-line no-console
             console.error(error);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useBoolean, SimpleGrid, Spinner, GridItem, Checkbox } from '@chakra-ui/react';
 import { AiFillExclamationCircle } from 'react-icons/ai';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { type Week, type Day } from '@api/workout';
 import JokerAPI from '@api/joker';
 
@@ -29,8 +29,13 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
 
             setLoading(false);
 
-            if (!result) {
+            if (result === null) {
                 setError(`could not put joker ${num}`);
+                return;
+            }
+
+            if (!result) {
+                await signOut();
                 return;
             }
 
@@ -59,7 +64,12 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
                     return;
                 }
 
-                result ? setChecked.on() : setChecked.off();
+                if (result === 'reauth') {
+                    await signOut();
+                    return;
+                }
+
+                result === 'on' ? setChecked.on() : setChecked.off();
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.error(error);

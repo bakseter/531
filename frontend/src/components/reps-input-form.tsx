@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { GridItem, Center, Spinner, SimpleGrid, Select } from '@chakra-ui/react';
 import { AiFillExclamationCircle } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import WorkoutAPI, { type Workout, type Week, type Day } from '@api/workout';
 
 interface Props {
@@ -54,13 +54,18 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
 
                 setLoading(false);
 
-                if (result === false) {
+                if (result === null) {
                     setError('could not get workout');
                     return;
                 }
 
                 if (result === true) {
                     setError(null);
+                    return;
+                }
+
+                if (result === false) {
+                    await signOut();
                     return;
                 }
 

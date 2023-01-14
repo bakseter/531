@@ -3,7 +3,7 @@ import { HStack, Button, Text, Spinner, Input } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { format, parse } from 'date-fns';
 import { nb } from 'date-fns/locale';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import WorkoutAPI, { type Week, type Day } from '@api/workout';
 
 interface FormValues {
@@ -37,8 +37,13 @@ const DateBoxForm = ({ cycle, week, day }: Props) => {
 
             setLoading(false);
 
-            if (!result) {
+            if (result === null) {
                 setError('could not put date');
+                return;
+            }
+
+            if (!result) {
+                await signOut();
                 return;
             }
 
@@ -60,7 +65,13 @@ const DateBoxForm = ({ cycle, week, day }: Props) => {
                 const response = await WorkoutAPI.getDate({ idToken: session.idToken, cycle, week, day });
                 setLoading(false);
 
-                if (response !== null) setDate(response);
+                if (response === null || response === true) return;
+                if (response === false) {
+                    await signOut();
+                    return;
+                }
+
+                setDate(response);
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.error(error);

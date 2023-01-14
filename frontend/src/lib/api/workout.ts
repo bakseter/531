@@ -34,7 +34,7 @@ const WorkoutAPI = {
         cycle: number;
         week: Week;
         day: Day;
-    }): Promise<Workout | boolean> => {
+    }): Promise<Workout | boolean | null> => {
         try {
             const response = await fetch(`${BACKEND_URL}/workout?cycle=${cycle}&week=${week}&day=${day}`, {
                 headers: {
@@ -48,18 +48,19 @@ const WorkoutAPI = {
             }
 
             if (response.status === 404) return true;
+            if (response.status === 401) return false;
 
-            return false;
+            return null;
         } catch (error) {
             // eslint-disable-next-line no-console
             console.error(error);
-            return false;
+            return null;
         }
     },
 
-    putWorkout: async ({ idToken, workout }: { idToken: string; workout: Workout }): Promise<boolean> => {
+    putWorkout: async ({ idToken, workout }: { idToken: string; workout: Workout }): Promise<boolean | null> => {
         try {
-            const { ok } = await fetch(`${BACKEND_URL}/workout`, {
+            const { ok, status } = await fetch(`${BACKEND_URL}/workout`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -68,11 +69,14 @@ const WorkoutAPI = {
                 body: JSON.stringify(workout),
             });
 
-            return ok;
+            if (ok) return true;
+            if (status === 401) return false;
+
+            return null;
         } catch (error) {
             // eslint-disable-next-line no-console
             console.error(error);
-            return false;
+            return null;
         }
     },
 
@@ -86,7 +90,7 @@ const WorkoutAPI = {
         cycle: number;
         week: Week;
         day: Day;
-    }): Promise<Date | null> => {
+    }): Promise<Date | boolean | null> => {
         try {
             const response = await fetch(`${BACKEND_URL}/workout/date?cycle=${cycle}&week=${week}&day=${day}`, {
                 headers: { Authorization: `Bearer ${idToken}` },
@@ -96,6 +100,9 @@ const WorkoutAPI = {
                 const json = await response.json();
                 return record({ date: date })(json).date;
             }
+
+            if (response.status === 404) return true;
+            if (response.status === 401) return false;
 
             return null;
         } catch (error) {
@@ -117,9 +124,9 @@ const WorkoutAPI = {
         week: Week;
         day: Day;
         date: Date;
-    }): Promise<boolean> => {
+    }): Promise<boolean | null> => {
         try {
-            const { ok } = await fetch(`${BACKEND_URL}/workout/date?cycle=${cycle}&week=${week}&day=${day}`, {
+            const { ok, status } = await fetch(`${BACKEND_URL}/workout/date?cycle=${cycle}&week=${week}&day=${day}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -128,11 +135,14 @@ const WorkoutAPI = {
                 body: JSON.stringify({ date: formatISO(date) }),
             });
 
-            return ok;
+            if (ok) return true;
+            if (status === 401) return false;
+
+            return null;
         } catch (error) {
             // eslint-disable-next-line no-console
             console.error(error);
-            return false;
+            return null;
         }
     },
 };

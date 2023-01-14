@@ -25,6 +25,7 @@ const BaseWeightsAPI = {
             }
 
             if (response.status === 404) return true;
+            if (response.status === 401) return false;
 
             return null;
         } catch (error) {
@@ -48,8 +49,8 @@ const BaseWeightsAPI = {
                 body: JSON.stringify(baseWeights),
             });
 
-            if (response.status === 200) return true;
-            if (response.status === 202) return false;
+            if (response.ok) return true;
+            if (response.status === 401) return false;
 
             return null;
         } catch (error) {

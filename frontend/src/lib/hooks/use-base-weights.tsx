@@ -1,5 +1,5 @@
 import { useEffect, useState, createContext, useContext, type ReactNode } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import BaseWeightsAPI, { type BaseWeights } from '@api/base-weights';
 
 interface HookProps {
@@ -38,7 +38,11 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
                     return;
                 }
 
-                if (typeof response === 'boolean') return;
+                if (response === true) return;
+                if (response === false) {
+                    await signOut();
+                    return;
+                }
 
                 setBaseWeights(response);
             } catch (error) {
@@ -63,6 +67,11 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
             if (response === null) {
                 setError('could not set base weights');
                 setLoading(false);
+                return;
+            }
+
+            if (!response) {
+                await signOut();
                 return;
             }
 
