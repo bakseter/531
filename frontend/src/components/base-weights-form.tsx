@@ -28,7 +28,7 @@ const BaseWeightsForm = ({ isFirstTime = false }: Props) => {
             {error && <Text>{error}</Text>}
             {loading && <Spinner />}
             {!error && !loading && (
-                <Flex py={isFirstTime ? '4rem' : '1rem'}>
+                <Flex py={isFirstTime ? '4rem' : '0rem'}>
                     <VStack gap="2">
                         {isFirstTime && <Heading size="md">Enter base weights:</Heading>}
                         <form onSubmit={handleSubmit(onSubmit)}>
@@ -47,7 +47,12 @@ const BaseWeightsForm = ({ isFirstTime = false }: Props) => {
                                         />
                                     </>
                                 ))}
-                                <Input type="submit" value="Submit" />
+                                <Input
+                                    type="submit"
+                                    value="Submit"
+                                    fontWeight="bold"
+                                    _hover={{ cursor: 'pointer', 'background-color': '#efefef' }}
+                                />
                             </VStack>
                         </form>
                     </VStack>

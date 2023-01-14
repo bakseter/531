@@ -11,7 +11,8 @@ import {
     Heading,
     SimpleGrid,
     GridItem,
-    VStack,
+    Stack,
+    StackDivider,
     Text,
 } from '@chakra-ui/react';
 import { useSession, signIn, signOut } from 'next-auth/react';
@@ -56,7 +57,6 @@ const IndexPage = () => {
                                 {cycles.map((cycle) => (
                                     <Tab key={`tab-cycle-${cycle}`}>{`Cycle ${cycle}`}</Tab>
                                 ))}
-                                <Tab>Base weights</Tab>
                                 <Tab>Profile</Tab>
                             </TabList>
                             <TabPanels>
@@ -93,23 +93,24 @@ const IndexPage = () => {
                                     </TabPanel>
                                 ))}
                                 <TabPanel>
-                                    <BaseWeightsForm />
+                                    <Stack direction="row" my="1rem" spacing="4rem" divider={<StackDivider />}>
+                                        <BaseWeightsForm />
+                                        <Stack direction="column">
+                                            {session?.user && (
+                                                <>
+                                                    <Heading size="sm">Name</Heading>
+                                                    <Text>{session.user.name}</Text>
+                                                    <Heading size="sm">Email</Heading>
+                                                    <Text>{session.user.email}</Text>
+                                                </>
+                                            )}
+                                            <Button variant="outline" onClick={() => void signOut()}>
+                                                Sign out
+                                            </Button>
+                                        </Stack>
+                                    </Stack>
                                 </TabPanel>
-                                <TabPanel>
-                                    <VStack>
-                                        {session?.user && (
-                                            <>
-                                                <Heading size="sm">Name</Heading>
-                                                <Text>{session.user.name}</Text>
-                                                <Heading size="sm">Email</Heading>
-                                                <Text>{session.user.email}</Text>
-                                            </>
-                                        )}
-                                        <Button variant="outline" onClick={() => void signOut()}>
-                                            Sign out
-                                        </Button>
-                                    </VStack>
-                                </TabPanel>
+                                <TabPanel></TabPanel>
                             </TabPanels>
                         </Tabs>
                     )}
