@@ -13,10 +13,11 @@ data class BaseWeightsJson(
 )
 
 object BaseWeights : Table("base_weights") {
+    val email: Column<String> = text("email")
     val dl: Column<Float> = float("dl")
     val bp: Column<Float> = float("bp")
     val sq: Column<Float> = float("sq")
     val op: Column<Float> = float("op")
 
-    override val primaryKey: PrimaryKey = PrimaryKey(dl, bp, sq, op)
+    override val primaryKey: PrimaryKey = PrimaryKey(email)
 }

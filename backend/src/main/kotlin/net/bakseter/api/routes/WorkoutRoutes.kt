@@ -4,6 +4,8 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
 import io.ktor.server.auth.authenticate
+import io.ktor.server.auth.jwt.JWTPrincipal
+import io.ktor.server.auth.principal
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
@@ -22,7 +24,7 @@ import org.joda.time.DateTime
 
 fun Application.workoutRoutes() {
     routing {
-        authenticate("auth-admin") {
+        authenticate("auth-user") {
             getWorkout()
             putWorkout()
             getDate()
@@ -33,6 +35,13 @@ fun Application.workoutRoutes() {
 
 fun Route.getWorkout() {
     get("/workout") {
+        val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
+
+        if (email == null) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@get
+        }
+
         val cycle = call.request.queryParameters["cycle"]?.toIntOrNull()
         val week = call.request.queryParameters["week"]?.toIntOrNull()
         val day = call.request.queryParameters["day"]?.toIntOrNull()
@@ -44,7 +53,7 @@ fun Route.getWorkout() {
 
         val workout = transaction {
             Workout.select {
-                Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day))
+                Workout.email eq email and (Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day)))
             }.firstOrNull()
         }
 
@@ -67,6 +76,13 @@ fun Route.getWorkout() {
 
 fun Route.putWorkout() {
     put("/workout") {
+        val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
+
+        if (email == null) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@put
+        }
+
         try {
             val workoutJson = call.receive<WorkoutJson>()
 
@@ -79,6 +95,7 @@ fun Route.putWorkout() {
             if (workout == null) {
                 transaction {
                     Workout.insert {
+                        it[Workout.email] = email
                         it[cycle] = workoutJson.cycle
                         it[week] = workoutJson.week
                         it[day] = workoutJson.day
@@ -106,6 +123,13 @@ fun Route.putWorkout() {
 
 fun Route.putDate() {
     put("/workout/date") {
+        val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
+
+        if (email == null) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@put
+        }
+
         try {
             val dateJson = call.receive<DateJson>()
 
@@ -120,13 +144,14 @@ fun Route.putDate() {
 
             val workout = transaction {
                 Workout.select {
-                    Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day))
+                    Workout.email eq email and (Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day)))
                 }.firstOrNull()
             }
 
             if (workout == null) {
                 transaction {
                     Workout.insert {
+                        it[Workout.email] = email
                         it[Workout.cycle] = cycle
                         it[Workout.week] = week
                         it[Workout.day] = day
@@ -138,7 +163,7 @@ fun Route.putDate() {
             }
 
             transaction {
-                Workout.update({ Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day)) }) {
+                Workout.update({ Workout.email eq email and (Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day))) }) {
                     it[date] = DateTime(dateJson.date)
                 }
             }
@@ -153,6 +178,13 @@ fun Route.putDate() {
 
 fun Route.getDate() {
     get("/workout/date") {
+        val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
+
+        if (email == null) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@get
+        }
+
         val cycle = call.request.queryParameters["cycle"]?.toIntOrNull()
         val week = call.request.queryParameters["week"]?.toIntOrNull()
         val day = call.request.queryParameters["day"]?.toIntOrNull()
@@ -164,7 +196,7 @@ fun Route.getDate() {
 
         val workout = transaction {
             Workout.select {
-                Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day))
+                Workout.email eq email and (Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day)))
             }.firstOrNull()
         }
 

@@ -23,11 +23,12 @@ val validWeeks = listOf(1, 2, 3)
 val validDays = listOf(1, 2, 3, 4)
 
 object Workout : Table("workout") {
+    val email: Column<String> = text("email")
     val cycle: Column<Int> = integer("cycle")
     val week: Column<Int> = integer("week").check("valid_week") { it inList validWeeks }
     val day: Column<Int> = integer("day").check("valid_day") { it inList validDays }
     val reps: Column<Int> = integer("reps").default(0)
     val date: Column<DateTime?> = datetime("date").nullable()
 
-    override val primaryKey: PrimaryKey = PrimaryKey(cycle, week, day)
+    override val primaryKey: PrimaryKey = PrimaryKey(email, cycle, week, day)
 }

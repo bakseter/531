@@ -6,7 +6,11 @@ import { type BaseWeights } from '@api/base-weights';
 
 type FormValues = BaseWeights;
 
-const BaseWeightsForm = () => {
+interface Props {
+    isFirstTime?: boolean;
+}
+
+const BaseWeightsForm = ({ isFirstTime = false }: Props) => {
     const { baseWeights, setBaseWeights, error, loading } = useBaseWeights();
     const { register, handleSubmit } = useForm<FormValues>({
         defaultValues: {
@@ -24,9 +28,9 @@ const BaseWeightsForm = () => {
             {error && <Text>{error}</Text>}
             {loading && <Spinner />}
             {!error && !loading && (
-                <Flex py="4rem">
+                <Flex py={isFirstTime ? '4rem' : '1rem'}>
                     <VStack gap="2">
-                        <Heading size="md">Enter base weights:</Heading>
+                        {isFirstTime && <Heading size="md">Enter base weights:</Heading>}
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <VStack gap="1" alignItems="start">
                                 {comps.map((value: CompExercise) => (

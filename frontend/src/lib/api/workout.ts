@@ -1,5 +1,4 @@
-import type { decodeType } from 'typescript-json-decoder';
-import { record, number } from 'typescript-json-decoder';
+import { type decodeType, record, number, date } from 'typescript-json-decoder';
 import { formatISO } from 'date-fns';
 
 const weekDecoder = (value: unknown) => {
@@ -22,10 +21,26 @@ const workoutDecoder = record({
 });
 type Workout = decodeType<typeof workoutDecoder>;
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:8080';
+
 const WorkoutAPI = {
-    getWorkout: async (cycle: number, week: Week, day: Day): Promise<Workout | boolean> => {
+    getWorkout: async ({
+        idToken,
+        cycle,
+        week,
+        day,
+    }: {
+        idToken: string;
+        cycle: number;
+        week: Week;
+        day: Day;
+    }): Promise<Workout | boolean> => {
         try {
-            const response = await fetch(`/api/workout?cycle=${cycle}&week=${week}&day=${day}`);
+            const response = await fetch(`${BACKEND_URL}/workout?cycle=${cycle}&week=${week}&day=${day}`, {
+                headers: {
+                    Authorization: `Bearer ${idToken}`,
+                },
+            });
 
             if (response.ok) {
                 const workout = await response.json();
@@ -42,12 +57,13 @@ const WorkoutAPI = {
         }
     },
 
-    putWorkout: async (workout: Workout): Promise<boolean> => {
+    putWorkout: async ({ idToken, workout }: { idToken: string; workout: Workout }): Promise<boolean> => {
         try {
-            const { ok } = await fetch('/api/workout', {
+            const { ok } = await fetch(`${BACKEND_URL}/workout`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${idToken}`,
                 },
                 body: JSON.stringify(workout),
             });
@@ -60,13 +76,25 @@ const WorkoutAPI = {
         }
     },
 
-    getDate: async (cycle: number, week: Week, day: Day): Promise<Date | null> => {
+    getDate: async ({
+        idToken,
+        cycle,
+        week,
+        day,
+    }: {
+        idToken: string;
+        cycle: number;
+        week: Week;
+        day: Day;
+    }): Promise<Date | null> => {
         try {
-            const response = await fetch(`/api/workout/date?cycle=${cycle}&week=${week}&day=${day}`);
+            const response = await fetch(`${BACKEND_URL}/workout/date?cycle=${cycle}&week=${week}&day=${day}`, {
+                headers: { Authorization: `Bearer ${idToken}` },
+            });
 
             if (response.ok) {
-                const date = await response.json();
-                return new Date(date);
+                const json = await response.json();
+                return record({ date: date })(json).date;
             }
 
             return null;
@@ -77,12 +105,25 @@ const WorkoutAPI = {
         }
     },
 
-    putDate: async (cycle: number, week: Week, day: Day, date: Date): Promise<boolean> => {
+    putDate: async ({
+        idToken,
+        cycle,
+        week,
+        day,
+        date,
+    }: {
+        idToken: string;
+        cycle: number;
+        week: Week;
+        day: Day;
+        date: Date;
+    }): Promise<boolean> => {
         try {
-            const { ok } = await fetch(`/api/workout/date?cycle=${cycle}&week=${week}&day=${day}`, {
+            const { ok } = await fetch(`${BACKEND_URL}/workout/date?cycle=${cycle}&week=${week}&day=${day}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${idToken}`,
                 },
                 body: JSON.stringify({ date: formatISO(date) }),
             });

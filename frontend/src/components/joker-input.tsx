@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useBoolean, SimpleGrid, Spinner, GridItem, Checkbox } from '@chakra-ui/react';
 import { AiFillExclamationCircle } from 'react-icons/ai';
+import { useSession } from 'next-auth/react';
 import { type Week, type Day } from '@api/workout';
 import JokerAPI from '@api/joker';
 
@@ -16,12 +17,15 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    const { data: session } = useSession();
+
     const handleChange = async () => {
+        if (!session?.idToken) return;
         setLoading(true);
         setError(null);
 
         try {
-            const result = await JokerAPI.putJoker(cycle, week, day, num);
+            const result = await JokerAPI.putJoker({ idToken: session.idToken, cycle, week, day, num });
 
             setLoading(false);
 
@@ -41,11 +45,12 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
 
     useEffect(() => {
         const fetchWorkout = async () => {
+            if (!session?.idToken) return;
             setLoading(true);
             setError(null);
 
             try {
-                const result = await JokerAPI.getJoker(cycle, week, day, num);
+                const result = await JokerAPI.getJoker({ idToken: session.idToken, cycle, week, day, num });
 
                 setLoading(false);
 
@@ -63,7 +68,7 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
             }
         };
         void fetchWorkout();
-    }, [cycle, week, day, num, setChecked]);
+    }, [cycle, week, day, num, setChecked, session?.idToken]);
 
     return (
         <SimpleGrid columns={2} justifyItems="center">

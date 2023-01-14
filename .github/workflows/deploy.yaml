@@ -51,7 +51,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-            export ADMIN_KEY=${{ secrets.ADMIN_KEY }}
             echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u bakseter --password-stdin
             cd 531/backend
             git pull

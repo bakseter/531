@@ -1,7 +1,20 @@
 import Head from 'next/head';
 import { useEffect } from 'react';
-import { Tab, Tabs, TabList, TabPanels, TabPanel, Divider, Heading, SimpleGrid, GridItem } from '@chakra-ui/react';
-import { useSession, signIn } from 'next-auth/react';
+import {
+    Button,
+    Tab,
+    Tabs,
+    TabList,
+    TabPanels,
+    TabPanel,
+    Divider,
+    Heading,
+    SimpleGrid,
+    GridItem,
+    VStack,
+    Text,
+} from '@chakra-ui/react';
+import { useSession, signIn, signOut } from 'next-auth/react';
 import Workout from '@components/workout';
 import { type BaseWeights } from '@api/base-weights';
 import type { Week, Day } from '@api/workout';
@@ -23,7 +36,7 @@ const addToBaseWeights = (baseWeights: BaseWeights, cycle: number) => {
 
 const IndexPage = () => {
     const { baseWeights } = useBaseWeights();
-    const { status } = useSession();
+    const { data: session, status } = useSession();
 
     useEffect(() => {
         if (status === 'unauthenticated') void signIn();
@@ -36,7 +49,7 @@ const IndexPage = () => {
             </Head>
             <SimpleGrid columns={3}>
                 <GridItem colSpan={[3, 3, 1]} colStart={[1, 1, 2]}>
-                    {!baseWeights && <BaseWeightsForm />}
+                    {!baseWeights && <BaseWeightsForm isFirstTime />}
                     {baseWeights && (
                         <Tabs>
                             <TabList>
@@ -44,6 +57,7 @@ const IndexPage = () => {
                                     <Tab key={`tab-cycle-${cycle}`}>{`Cycle ${cycle}`}</Tab>
                                 ))}
                                 <Tab>Base weights</Tab>
+                                <Tab>Profile</Tab>
                             </TabList>
                             <TabPanels>
                                 {cycles.map((cycle) => (
@@ -79,8 +93,22 @@ const IndexPage = () => {
                                     </TabPanel>
                                 ))}
                                 <TabPanel>
-                                    <Heading>Base weights</Heading>
                                     <BaseWeightsForm />
+                                </TabPanel>
+                                <TabPanel>
+                                    <VStack>
+                                        {session?.user && (
+                                            <>
+                                                <Heading size="sm">Name</Heading>
+                                                <Text>{session.user.name}</Text>
+                                                <Heading size="sm">Email</Heading>
+                                                <Text>{session.user.email}</Text>
+                                            </>
+                                        )}
+                                        <Button variant="outline" onClick={() => void signOut()}>
+                                            Sign out
+                                        </Button>
+                                    </VStack>
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>

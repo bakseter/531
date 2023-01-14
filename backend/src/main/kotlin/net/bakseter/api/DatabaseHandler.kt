@@ -42,14 +42,14 @@ class DatabaseHandler(
     }
 
     private val flyway: Flyway =
-        Flyway.configure().baselineOnMigrate(true).baselineVersion("3").cleanDisabled(false)
+        Flyway.configure().baselineOnMigrate(true).baselineVersion("4").cleanDisabled(false)
             .dataSource(dbUrlStr, dbUsername, dbPassword).load()
 
     private val conn by lazy {
         Database.connect(dataSource())
     }
 
-    fun init(insertTestData: Boolean = true) {
+    fun init() {
         // Need to use connection once to open.
         transaction(conn) {}
 

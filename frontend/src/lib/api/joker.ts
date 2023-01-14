@@ -7,10 +7,26 @@ const jokerDecoder = record({
 });
 type Joker = decodeType<typeof jokerDecoder>;
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:8080';
+
 const JokerAPI = {
-    getJoker: async (cycle: number, week: Week, day: Day, num: number): Promise<boolean | null> => {
+    getJoker: async ({
+        idToken,
+        cycle,
+        week,
+        day,
+        num,
+    }: {
+        idToken: string;
+        cycle: number;
+        week: Week;
+        day: Day;
+        num: number;
+    }): Promise<boolean | null> => {
         try {
-            const { ok } = await fetch(`/api/joker/${num}?cycle=${cycle}&week=${week}&day=${day}`);
+            const { ok } = await fetch(`${BACKEND_URL}/joker/${num}?cycle=${cycle}&week=${week}&day=${day}`, {
+                headers: { Authorization: `Bearer ${idToken}` },
+            });
 
             return ok;
         } catch (error) {
@@ -20,10 +36,23 @@ const JokerAPI = {
         }
     },
 
-    putJoker: async (cycle: number, week: Week, day: Day, num: number): Promise<boolean> => {
+    putJoker: async ({
+        idToken,
+        cycle,
+        week,
+        day,
+        num,
+    }: {
+        idToken: string;
+        cycle: number;
+        week: Week;
+        day: Day;
+        num: number;
+    }): Promise<boolean> => {
         try {
-            const { ok } = await fetch(`/api/joker/${num}?cycle=${cycle}&week=${week}&day=${day}`, {
+            const { ok } = await fetch(`${BACKEND_URL}/joker/${num}?cycle=${cycle}&week=${week}&day=${day}`, {
                 method: 'PUT',
+                headers: { Authorization: `Bearer ${idToken}` },
             });
 
             return ok;

@@ -3,6 +3,7 @@ import { HStack, Button, Text, Spinner, Input } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { format, parse } from 'date-fns';
 import { nb } from 'date-fns/locale';
+import { useSession } from 'next-auth/react';
 import WorkoutAPI, { type Week, type Day } from '@api/workout';
 
 interface FormValues {
@@ -22,15 +23,17 @@ const DateBoxForm = ({ cycle, week, day }: Props) => {
 
     const { handleSubmit, register } = useForm<FormValues>({ defaultValues: { dateStr: null } });
 
+    const { data: session } = useSession();
+
     const onSubmit = async ({ dateStr }: FormValues) => {
-        if (dateStr === null) return;
+        if (dateStr === null || !session?.idToken) return;
 
         setLoading(true);
         setError(null);
         setDate(null);
         try {
             const date = parse(dateStr, 'yyyy-MM-dd', new Date());
-            const result = await WorkoutAPI.putDate(cycle, week, day, date);
+            const result = await WorkoutAPI.putDate({ idToken: session.idToken, cycle, week, day, date });
 
             setLoading(false);
 
@@ -50,10 +53,11 @@ const DateBoxForm = ({ cycle, week, day }: Props) => {
 
     useEffect(() => {
         const fetchDate = async () => {
+            if (!session?.idToken) return;
             setLoading(true);
             setError(null);
             try {
-                const response = await WorkoutAPI.getDate(cycle, week, day);
+                const response = await WorkoutAPI.getDate({ idToken: session.idToken, cycle, week, day });
                 setLoading(false);
 
                 if (response !== null) setDate(response);
@@ -64,7 +68,7 @@ const DateBoxForm = ({ cycle, week, day }: Props) => {
             }
         };
         void fetchDate();
-    }, [cycle, week, day]);
+    }, [cycle, week, day, session?.idToken]);
 
     return (
         <>

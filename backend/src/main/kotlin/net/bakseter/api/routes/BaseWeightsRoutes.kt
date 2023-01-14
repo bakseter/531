@@ -4,6 +4,8 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
 import io.ktor.server.auth.authenticate
+import io.ktor.server.auth.jwt.JWTPrincipal
+import io.ktor.server.auth.principal
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
@@ -13,13 +15,13 @@ import io.ktor.server.routing.routing
 import net.bakseter.api.schema.BaseWeights
 import net.bakseter.api.schema.BaseWeightsJson
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
 fun Application.baseWeightsRoutes() {
     routing {
-        authenticate("auth-admin") {
+        authenticate("auth-user") {
             getBaseWeights()
             putBaseWeights()
         }
@@ -28,8 +30,15 @@ fun Application.baseWeightsRoutes() {
 
 fun Route.getBaseWeights() {
     get("/base-weights") {
+        val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
+
+        if (email == null) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@get
+        }
+
         val baseWeights = transaction {
-            BaseWeights.selectAll().firstOrNull()
+            BaseWeights.select { BaseWeights.email eq email }.firstOrNull()
         }
 
         if (baseWeights == null) {
@@ -51,16 +60,24 @@ fun Route.getBaseWeights() {
 
 fun Route.putBaseWeights() {
     put("/base-weights") {
+        val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
+
+        if (email == null) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@put
+        }
+
         try {
             val baseWeightsJson = call.receive<BaseWeightsJson>()
 
             val baseWeights = transaction {
-                BaseWeights.selectAll().firstOrNull()
+                BaseWeights.select { BaseWeights.email eq email }.firstOrNull()
             }
 
             if (baseWeights == null) {
                 transaction {
                     BaseWeights.insert {
+                        it[BaseWeights.email] = email
                         it[dl] = baseWeightsJson.dl
                         it[bp] = baseWeightsJson.bp
                         it[sq] = baseWeightsJson.sq
@@ -73,7 +90,7 @@ fun Route.putBaseWeights() {
             }
 
             transaction {
-                BaseWeights.update {
+                BaseWeights.update({ BaseWeights.email eq email }) {
                     it[dl] = baseWeightsJson.dl
                     it[bp] = baseWeightsJson.bp
                     it[sq] = baseWeightsJson.sq

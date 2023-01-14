@@ -1,4 +1,5 @@
 import { useEffect, useState, createContext, useContext, type ReactNode } from 'react';
+import { useSession } from 'next-auth/react';
 import BaseWeightsAPI, { type BaseWeights } from '@api/base-weights';
 
 interface HookProps {
@@ -19,14 +20,17 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
     const [baseWeights, setBaseWeights] = useState<BaseWeights | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const { data: session } = useSession();
 
     useEffect(() => {
         const fetchBaseWeights = async () => {
+            if (!session?.idToken) return;
+
             setError(null);
             setLoading(true);
 
             try {
-                const response = await BaseWeightsAPI.getBaseWeights();
+                const response = await BaseWeightsAPI.getBaseWeights({ idToken: session.idToken });
                 setLoading(false);
 
                 if (response === null) {
@@ -45,12 +49,16 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
             }
         };
         void fetchBaseWeights();
-    }, []);
+    }, [session?.idToken]);
 
     const setNewBaseWeights = async (newBaseWeights: BaseWeights) => {
+        if (!session?.idToken) return;
         setLoading(true);
         try {
-            const response = await BaseWeightsAPI.putBaseWeights(newBaseWeights);
+            const response = await BaseWeightsAPI.putBaseWeights({
+                idToken: session.idToken,
+                baseWeights: newBaseWeights,
+            });
 
             if (response === null) {
                 setError('could not set base weights');

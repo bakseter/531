@@ -14,18 +14,6 @@ variable "vercel_token" {
   type = string
 }
 
-variable "nextauth_username" {
-  type = string
-}
-
-variable "nextauth_password" {
-  type = string
-}
-
 variable "nextauth_secret" {
-  type = string
-}
-
-variable "admin_key" {
   type = string
 }

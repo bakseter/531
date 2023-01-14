@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { GridItem, Center, Spinner, SimpleGrid, Select } from '@chakra-ui/react';
 import { AiFillExclamationCircle } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
+import { useSession } from 'next-auth/react';
 import WorkoutAPI, { type Workout, type Week, type Day } from '@api/workout';
 
 interface Props {
@@ -20,12 +21,15 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
 
     const { handleSubmit, register, setValue } = useForm<FormValues>();
 
+    const { data: session } = useSession();
+
     const onSubmit = async ({ reps }: FormValues) => {
+        if (!session?.idToken) return;
         setLoading(true);
         setError(null);
         try {
             const workout: Workout = { cycle, week, day, reps };
-            const result = await WorkoutAPI.putWorkout(workout);
+            const result = await WorkoutAPI.putWorkout({ idToken: session.idToken, workout });
 
             setLoading(false);
 
@@ -42,9 +46,11 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
 
     useEffect(() => {
         const fetchWorkout = async () => {
+            if (!session?.idToken) return;
             setLoading(true);
+            setError(null);
             try {
-                const result = await WorkoutAPI.getWorkout(cycle, week, day);
+                const result = await WorkoutAPI.getWorkout({ idToken: session.idToken, cycle, week, day });
 
                 setLoading(false);
 
@@ -66,7 +72,7 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
             }
         };
         void fetchWorkout();
-    }, [cycle, week, day, setValue]);
+    }, [cycle, week, day, setValue, session?.idToken]);
 
     const maxReps = day === 1 ? 15 : day === 2 ? 10 : 5;
 

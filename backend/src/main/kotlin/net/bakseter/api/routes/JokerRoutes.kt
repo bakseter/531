@@ -4,6 +4,8 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
 import io.ktor.server.auth.authenticate
+import io.ktor.server.auth.jwt.JWTPrincipal
+import io.ktor.server.auth.principal
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
@@ -19,7 +21,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 fun Application.jokerRoutes() {
     routing {
-        authenticate("auth-admin") {
+        authenticate("auth-user") {
             getJoker()
             putJoker()
         }
@@ -28,6 +30,13 @@ fun Application.jokerRoutes() {
 
 fun Route.getJoker() {
     get("/joker/{num}") {
+        val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
+
+        if (email == null) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@get
+        }
+
         val num = call.parameters["num"]?.toIntOrNull()
         val cycle = call.request.queryParameters["cycle"]?.toIntOrNull()
         val week = call.request.queryParameters["week"]?.toIntOrNull()
@@ -40,7 +49,7 @@ fun Route.getJoker() {
 
         val joker = transaction {
             Joker.select {
-                Joker.cycle eq cycle and (Joker.week eq week and (Joker.day eq day and (Joker.num eq num)))
+                Joker.email eq email and (Joker.cycle eq cycle and (Joker.week eq week and (Joker.day eq day and (Joker.num eq num))))
             }.firstOrNull()
         }
 
@@ -55,6 +64,13 @@ fun Route.getJoker() {
 
 fun Route.putJoker() {
     put("/joker/{num}") {
+        val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
+
+        if (email == null) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@put
+        }
+
         val num = call.parameters["num"]?.toIntOrNull()
         val cycle = call.request.queryParameters["cycle"]?.toIntOrNull()
         val week = call.request.queryParameters["week"]?.toIntOrNull()
@@ -67,13 +83,14 @@ fun Route.putJoker() {
 
         val joker = transaction {
             Joker.select {
-                Joker.cycle eq cycle and (Joker.week eq week and (Joker.day eq day and (Joker.num eq num)))
+                Joker.email eq email and (Joker.cycle eq cycle and (Joker.week eq week and (Joker.day eq day and (Joker.num eq num))))
             }.firstOrNull()
         }
 
         if (joker == null) {
             transaction {
                 Joker.insert {
+                    it[Joker.email] = email
                     it[Joker.cycle] = cycle
                     it[Joker.week] = week
                     it[Joker.day] = day
@@ -87,7 +104,7 @@ fun Route.putJoker() {
 
         transaction {
             Joker.deleteWhere {
-                Joker.cycle eq cycle and (Joker.week eq week and (Joker.day eq day and (Joker.num eq num)))
+                Joker.email eq email and (Joker.cycle eq cycle and (Joker.week eq week and (Joker.day eq day and (Joker.num eq num))))
             }
         }
 
