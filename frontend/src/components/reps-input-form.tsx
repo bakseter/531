@@ -79,7 +79,7 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
         void fetchWorkout();
     }, [cycle, week, day, setValue, session?.idToken]);
 
-    const maxReps = day === 1 ? 15 : day === 2 ? 10 : 5;
+    const maxReps = week === 1 ? 15 : week === 2 ? 10 : 5;
 
     return (
         <SimpleGrid columns={4}>
