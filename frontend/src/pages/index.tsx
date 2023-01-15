@@ -49,7 +49,7 @@ const IndexPage = () => {
                 <title>5/3/1</title>
             </Head>
             <SimpleGrid columns={5}>
-                <GridItem colSpan={[5, 5, 5, 3]} colStart={[1, 1, 1, 2]}>
+                <GridItem colSpan={[5, null, null, 3]} colStart={[1, null, null, 2]}>
                     {!baseWeights && <BaseWeightsForm isFirstTime />}
                     {baseWeights && (
                         <Tabs>
@@ -93,8 +93,8 @@ const IndexPage = () => {
                                     </TabPanel>
                                 ))}
                                 <TabPanel>
-                                    <SimpleGrid columns={9}>
-                                        <GridItem colSpan={[9, null, null, 7]} colStart={[1, null, null, 2]}>
+                                    <SimpleGrid columns={5}>
+                                        <GridItem colSpan={[5, null, null, 3]} colStart={[1, null, null, 2]}>
                                             <Stack
                                                 direction={['column', null, null, 'row']}
                                                 my="1rem"
