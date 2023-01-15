@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { GridItem, Center, Spinner, SimpleGrid, Select } from '@chakra-ui/react';
+import { SkeletonText, GridItem, Center, SimpleGrid, Select } from '@chakra-ui/react';
 import { AiFillExclamationCircle } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import { signOut, useSession } from 'next-auth/react';
@@ -83,22 +83,25 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
 
     return (
         <SimpleGrid columns={4}>
-            <GridItem colSpan={3}>
-                <form onChange={handleSubmit(onSubmit)}>
-                    <Select size={['xs', null, 'md']} {...register('reps', { valueAsNumber: true })} w="100%">
-                        <option value={0}></option>
-                        {[...new Array(maxReps).keys()].map((_, index) => (
-                            <option key={`select-option-${index}`} value={index + 1}>
-                                {index + 1}
-                            </option>
-                        ))}
-                    </Select>
-                </form>
+            <GridItem colSpan={3} justifySelf="center">
+                <SkeletonText isLoaded={!loading} noOfLines={2}>
+                    <form onChange={handleSubmit(onSubmit)}>
+                        <Select size={['xs', null, 'md']} {...register('reps', { valueAsNumber: true })} w="100%">
+                            <option value={0}></option>
+                            {[...new Array(maxReps).keys()].map((_, index) => (
+                                <option key={`select-option-${index}`} value={index + 1}>
+                                    {index + 1}
+                                </option>
+                            ))}
+                        </Select>
+                    </form>
+                </SkeletonText>
             </GridItem>
-            <Center>
-                {loading && <Spinner size={['sm', null, 'md']} />}
-                {error && <AiFillExclamationCircle color="red" size="2rem" />}
-            </Center>
+            {error && (
+                <Center>
+                    <AiFillExclamationCircle color="red" size="2rem" />
+                </Center>
+            )}
         </SimpleGrid>
     );
 };

@@ -26,7 +26,20 @@ const BaseWeightsForm = ({ isFirstTime = false }: Props) => {
     return (
         <VStack>
             {error && <Text color="red">{error}</Text>}
-            {loading && <Spinner />}
+            {loading && (
+                <>
+                    <Spinner
+                        mt="30%"
+                        mb="1rem"
+                        thickness="4px"
+                        speed="0.65s"
+                        emptyColor="gray.200"
+                        color="blue.500"
+                        size="xl"
+                    />
+                    <Heading size={['md', null, null, 'lg']}>Loading...</Heading>
+                </>
+            )}
             {!error && !loading && (
                 <Flex py={isFirstTime ? '4rem' : '0rem'}>
                     <VStack gap="2">

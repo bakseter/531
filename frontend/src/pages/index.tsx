@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { useEffect } from 'react';
 import {
     Button,
@@ -21,6 +20,7 @@ import { type BaseWeights } from '@api/base-weights';
 import type { Week, Day } from '@api/workout';
 import useBaseWeights from '@hooks/use-base-weights';
 import BaseWeightsForm from '@components/base-weights-form';
+import Title from '@components/title';
 
 const cycles: Array<number> = [1];
 const weeks: Array<Week> = [1, 2, 3];
@@ -45,9 +45,7 @@ const IndexPage = () => {
 
     return (
         <>
-            <Head>
-                <title>5/3/1</title>
-            </Head>
+            <Title />
             <SimpleGrid columns={5}>
                 <GridItem colSpan={[5, null, null, 3]} colStart={[1, null, null, 2]}>
                     {!baseWeights && <BaseWeightsForm isFirstTime />}
