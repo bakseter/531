@@ -3,6 +3,7 @@ import { HStack, Button, Text, Spinner, Input } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { format, parse } from 'date-fns';
 import { nb } from 'date-fns/locale';
+import { FaEdit } from 'react-icons/fa';
 import { signOut, useSession } from 'next-auth/react';
 import WorkoutAPI, { type Week, type Day } from '@api/workout';
 
@@ -84,7 +85,7 @@ const DateBoxForm = ({ cycle, week, day }: Props) => {
     return (
         <>
             {loading && <Spinner />}
-            {error && <Text>date bruh moment: {JSON.stringify(error)}</Text>}
+            {error && <Text color="red">{error}</Text>}
             <form onChange={handleSubmit(onSubmit)}>{!date && <Input type="date" {...register('dateStr')} />}</form>
             {date && (
                 <HStack my="1rem">
@@ -92,7 +93,7 @@ const DateBoxForm = ({ cycle, week, day }: Props) => {
                         {format(date, 'EEEE dd. MMMM yyyy', { locale: nb })}
                     </Text>
                     <Button colorScheme="blue" size="xs" onClick={() => setDate(null)}>
-                        Edit date
+                        <FaEdit size="80%" />
                     </Button>
                 </HStack>
             )}

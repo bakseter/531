@@ -28,7 +28,7 @@ interface Props {
 const Workout = ({ cycleBaseWeights, cycle, week, day }: Props) => {
     return (
         <>
-            <HStack spacing={[3, null, 8]}>
+            <HStack spacing={3}>
                 <Heading my="1rem" size={['md', null, 'lg']}>
                     {exerciseToText(dayToExercise(day))}
                 </Heading>

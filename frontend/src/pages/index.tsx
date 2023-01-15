@@ -48,8 +48,8 @@ const IndexPage = () => {
             <Head>
                 <title>5/3/1</title>
             </Head>
-            <SimpleGrid columns={3}>
-                <GridItem colSpan={[3, 3, 1]} colStart={[1, 1, 2]}>
+            <SimpleGrid columns={5}>
+                <GridItem colSpan={[5, 5, 5, 3]} colStart={[1, 1, 1, 2]}>
                     {!baseWeights && <BaseWeightsForm isFirstTime />}
                     {baseWeights && (
                         <Tabs>
@@ -93,22 +93,31 @@ const IndexPage = () => {
                                     </TabPanel>
                                 ))}
                                 <TabPanel>
-                                    <Stack direction="row" my="1rem" spacing="4rem" divider={<StackDivider />}>
-                                        <BaseWeightsForm />
-                                        <Stack direction="column">
-                                            {session?.user && (
-                                                <>
-                                                    <Heading size="sm">Name</Heading>
-                                                    <Text>{session.user.name}</Text>
-                                                    <Heading size="sm">Email</Heading>
-                                                    <Text>{session.user.email}</Text>
-                                                </>
-                                            )}
-                                            <Button variant="outline" onClick={() => void signOut()}>
-                                                Sign out
-                                            </Button>
-                                        </Stack>
-                                    </Stack>
+                                    <SimpleGrid columns={9}>
+                                        <GridItem colSpan={[9, null, null, 7]} colStart={[1, null, null, 2]}>
+                                            <Stack
+                                                direction={['column', null, null, 'row']}
+                                                my="1rem"
+                                                spacing={['1rem', null, '1rem', '3rem']}
+                                                divider={<StackDivider />}
+                                            >
+                                                <BaseWeightsForm />
+                                                <Stack direction="column" mx={['2rem', null, null, '0rem']}>
+                                                    {session?.user && (
+                                                        <>
+                                                            <Heading size="sm">Name</Heading>
+                                                            <Text>{session.user.name}</Text>
+                                                            <Heading size="sm">Email</Heading>
+                                                            <Text>{session.user.email}</Text>
+                                                        </>
+                                                    )}
+                                                    <Button variant="outline" onClick={() => void signOut()}>
+                                                        Sign out
+                                                    </Button>
+                                                </Stack>
+                                            </Stack>
+                                        </GridItem>
+                                    </SimpleGrid>
                                 </TabPanel>
                                 <TabPanel></TabPanel>
                             </TabPanels>

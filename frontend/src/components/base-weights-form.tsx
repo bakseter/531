@@ -25,7 +25,7 @@ const BaseWeightsForm = ({ isFirstTime = false }: Props) => {
 
     return (
         <VStack>
-            {error && <Text>{error}</Text>}
+            {error && <Text color="red">{error}</Text>}
             {loading && <Spinner />}
             {!error && !loading && (
                 <Flex py={isFirstTime ? '4rem' : '0rem'}>

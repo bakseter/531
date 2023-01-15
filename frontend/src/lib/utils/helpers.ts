@@ -36,13 +36,13 @@ const exerciseToText = (exercise: CompExercise): string => {
             return 'Deadlift';
         }
         case 'bp': {
-            return 'Bench Press';
+            return 'Bench press';
         }
         case 'sq': {
             return 'Squat';
         }
         case 'op': {
-            return 'Overhead Press';
+            return 'Overhead press';
         }
     }
 };
