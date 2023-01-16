@@ -16,16 +16,21 @@ fun main(args: Array<String>) {
 fun Application.module() {
     val databaseUrl = URI(environment.config.property("ktor.databaseUrl").getString())
     val migrateDb = environment.config.property("ktor.migrateDb").getString().toBooleanStrict()
+    val dev = environment.config.property("ktor.dev").getString().toBooleanStrict()
+
+    val devSecret = environment.config.property("jwt.devSecret").getString()
+    val devAudience = environment.config.property("jwt.devAudience").getString()
+    val devIssuer = environment.config.property("jwt.devIssuer").getString()
 
     DatabaseHandler(
         migrateDb,
         databaseUrl,
     ).init()
 
-    configureAuthentication()
+    configureAuthentication(devSecret = devSecret, devAudience = devAudience, devIssuer = devIssuer)
     configureCORS()
     configureContentNegotiation()
-    configureRouting()
+    configureRouting(dev = dev, devSecret = devSecret, devAudience = devAudience, devIssuer = devIssuer)
     // configureDocumentation()
     configureRateLimit()
 }

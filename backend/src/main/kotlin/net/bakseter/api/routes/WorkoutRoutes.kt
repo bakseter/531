@@ -22,9 +22,9 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.joda.time.DateTime
 
-fun Application.workoutRoutes() {
+fun Application.workoutRoutes(authConfig: String) {
     routing {
-        authenticate("auth-user") {
+        authenticate(authConfig) {
             getWorkout()
             putWorkout()
             getDate()

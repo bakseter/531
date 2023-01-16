@@ -19,9 +19,9 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
-fun Application.baseWeightsRoutes() {
+fun Application.baseWeightsRoutes(authConfig: String) {
     routing {
-        authenticate("auth-user") {
+        authenticate(authConfig) {
             getBaseWeights()
             putBaseWeights()
         }

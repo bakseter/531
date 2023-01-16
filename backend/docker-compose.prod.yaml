@@ -15,6 +15,23 @@ services:
       DATABASE_URL: 'postgres://postgres:${DB_PASSWORD:-password}@database/postgres'
       MIGRATE_DB: true
 
+  backend_dev:
+    build: .
+    image: 'ghcr.io/bakseter/531/backend:latest'
+    # Don't start backend before database is up.
+    depends_on:
+      database:
+        condition: service_healthy
+    links:
+      - database
+    ports:
+      - '8081:8081'
+    environment:
+      DATABASE_URL: 'postgres://postgres:${DB_PASSWORD:-password}@database/postgres'
+      DEV_ISSUER: 'http://localhost:8081'
+      PORT: 8081
+      DEV: true
+
   database:
     image: postgres:15.1-alpine
     restart: always
@@ -49,6 +66,26 @@ services:
       - caddy_data:/data
       - caddy_config:/config
 
+  caddy_dev:
+    image: caddy:2.6.2-alpine
+    command:
+      [
+        'caddy',
+        'reverse-proxy',
+        '--from',
+        'api.bakseter.net:81',
+        '--to',
+        'backend_dev:8081',
+      ]
+    ports:
+      - '81:81'
+      - '443:443'
+    volumes:
+      - caddy_data_dev:/data
+      - caddy_config_dev:/config
+
 volumes:
   caddy_data:
   caddy_config:
+  caddy_data_dev:
+  caddy_config_dev:
