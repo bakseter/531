@@ -39,28 +39,28 @@ resource "vercel_project_environment_variable" "backend_url" {
   project_id = vercel_project.project.id
   key        = "NEXT_PUBLIC_BACKEND_URL"
   value      = "https://api.bakseter.net"
-  target     = ["production"]
+  target     = ["production", "preview", "development"]
 }
 
 resource "vercel_project_environment_variable" "nextauth_secret" {
   project_id = vercel_project.project.id
   key        = "NEXTAUTH_SECRET"
   value      = var.nextauth_secret
-  target     = ["production"]
+  target     = ["production", "preview", "development"]
 }
 
 resource "vercel_project_environment_variable" "google_client_id" {
   project_id = vercel_project.project.id
   key        = "GOOGLE_CLIENT_ID"
   value      = var.google_client_id
-  target     = ["production"]
+  target     = ["production", "preview", "development"]
 }
 
 resource "vercel_project_environment_variable" "google_client_secret" {
   project_id = vercel_project.project.id
   key        = "GOOGLE_CLIENT_SECRET"
   value      = var.google_client_secret
-  target     = ["production"]
+  target     = ["production", "preview", "development"]
 }
 
 // DigitalOcean
