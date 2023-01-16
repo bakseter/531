@@ -109,7 +109,7 @@
         }
     },
     "dependencies": {
-        "@chakra-ui/react": "2.4.6",
+        "@chakra-ui/react": "2.4.8",
         "@emotion/react": "11.10.5",
         "@emotion/styled": "11.10.5",
         "@types/node": "18.11.18",
