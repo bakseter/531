@@ -1,0 +1,7 @@
+backend:8080 {
+    reverse_proxy api.bakseter.net:80
+}
+
+backend:8081 {
+    reverse_proxy api.bakseter.net:81
+}

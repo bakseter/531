@@ -50,39 +50,14 @@ services:
 
   caddy:
     image: caddy:2.6.2-alpine
-    command:
-      [
-        'caddy',
-        'reverse-proxy',
-        '--from',
-        'api.bakseter.net',
-        '--to',
-        'backend:8080',
-      ]
     ports:
       - '80:80'
-      - '443:443'
-    volumes:
-      - caddy_data:/data
-      - caddy_config:/config
-
-  caddy_dev:
-    image: caddy:2.6.2-alpine
-    command:
-      [
-        'caddy',
-        'reverse-proxy',
-        '--from',
-        'api.bakseter.net:81',
-        '--to',
-        'backend_dev:8081',
-      ]
-    ports:
       - '81:81'
       - '443:443'
     volumes:
-      - caddy_data_dev:/data
-      - caddy_config_dev:/config
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
 
 volumes:
   caddy_data:
