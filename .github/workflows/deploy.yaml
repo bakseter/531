@@ -55,4 +55,4 @@ jobs:
             cd 531/backend
             git pull
             docker compose -f docker-compose.prod.yaml pull
-            docker compose -f docker-compose.prod.yaml up -d --no-build
+            docker compose -f docker-compose.prod.yaml up -d --no-build --remove-orphans
