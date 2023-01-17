@@ -33,6 +33,11 @@ fun Route.getStatus() {
 
 fun Route.getToken(dev: Boolean, secret: String, audience: String, issuer: String) {
     get("/token/{email}") {
+        if (!dev) {
+            call.respond(HttpStatusCode.Forbidden, "Only available in dev environment! >:(")
+            return@get
+        }
+
         val email = call.parameters["email"]
 
         if (email == null) {
@@ -40,10 +45,6 @@ fun Route.getToken(dev: Boolean, secret: String, audience: String, issuer: Strin
             return@get
         }
 
-        if (!dev) {
-            call.respond(HttpStatusCode.Forbidden, "Only available in dev or preview environment! >:(")
-            return@get
-        }
         val token =
             JWT.create()
                 .withAudience(audience)
