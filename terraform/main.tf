@@ -35,11 +35,18 @@ resource "vercel_project_domain" "domain" {
   domain     = "bakseter.net"
 }
 
-resource "vercel_project_environment_variable" "backend_url" {
+resource "vercel_project_environment_variable" "backend_url_prod" {
   project_id = vercel_project.project.id
   key        = "NEXT_PUBLIC_BACKEND_URL"
   value      = "https://api.bakseter.net"
-  target     = ["production", "preview", "development"]
+  target     = ["production"]
+}
+
+resource "vercel_project_environment_variable" "backend_url_dev" {
+  project_id = vercel_project.project.id
+  key        = "NEXT_PUBLIC_BACKEND_URL"
+  value      = "http://api.bakseter.net:8081"
+  target     = ["preview", "development"]
 }
 
 resource "vercel_project_environment_variable" "nextauth_secret" {
