@@ -11,6 +11,12 @@ services:
       - database
     ports:
       - '8080:8080'
+    # Check if backend is ready.
+    healthcheck:
+      test: ['CMD-SHELL', 'curl http://backend:8080/status -v']
+      interval: 5s
+      timeout: 5s
+      retries: 5
     environment:
       DATABASE_URL: 'postgres://postgres:${DB_PASSWORD:-password}@database/postgres'
       MIGRATE_DB: true
@@ -18,9 +24,9 @@ services:
   backend_dev:
     build: .
     image: 'ghcr.io/bakseter/531/backend:latest'
-    # Don't start backend before database is up.
+    # Don't start backend before other backend is up.
     depends_on:
-      database:
+      backend:
         condition: service_healthy
     links:
       - database
@@ -28,7 +34,7 @@ services:
       - '8081:8081'
     environment:
       DATABASE_URL: 'postgres://postgres:${DB_PASSWORD:-password}@database/postgres'
-      DEV_ISSUER: 'http://localhost:8081'
+      DEV_ISSUER: 'http://backend:8081/'
       PORT: 8081
       DEV: true
 
