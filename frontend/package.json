@@ -130,8 +130,8 @@
         "typescript-json-decoder": "1.0.11"
     },
     "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "5.48.1",
-        "@typescript-eslint/parser": "5.48.1",
+        "@typescript-eslint/eslint-plugin": "5.48.2",
+        "@typescript-eslint/parser": "5.48.2",
         "eslint-config-prettier": "8.6.0",
         "eslint-plugin-prettier": "4.2.1",
         "eslint-plugin-unicorn": "45.0.2",
