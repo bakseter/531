@@ -58,15 +58,30 @@ const Workout = ({ cycleBaseWeights, cycle, week, day }: Props) => {
                             const repsField = (index: number) => {
                                 const jokerCutoff = 5;
                                 if (index === jokerCutoff) {
-                                    return <RepsInputForm cycle={cycle} week={week} day={day} />;
+                                    return (
+                                        <RepsInputForm
+                                            key={`reps-input-${cycle}-${week}-${day}`}
+                                            cycle={cycle}
+                                            week={week}
+                                            day={day}
+                                        />
+                                    );
                                 }
 
                                 if (index > jokerCutoff) {
-                                    return <JokerInput cycle={cycle} week={week} day={day} num={index - jokerCutoff} />;
+                                    return (
+                                        <JokerInput
+                                            key={`joker-input-${cycle}-${week}-${day}-${index}-${percentage}`}
+                                            cycle={cycle}
+                                            week={week}
+                                            day={day}
+                                            num={index - jokerCutoff}
+                                        />
+                                    );
                                 }
 
                                 return (
-                                    <Center>
+                                    <Center key={`n/a-${percentage}-${index}`}>
                                         <Text color="gray">–</Text>
                                     </Center>
                                 );
@@ -82,9 +97,10 @@ const Workout = ({ cycleBaseWeights, cycle, week, day }: Props) => {
                                     <Tr key={`table-row-${index}`}>
                                         <Td>{`1x${reps}${index === 5 ? '+' : ''}`}</Td>
                                         <Td>{percentageToText(percentage)}</Td>
-                                        <Td isNumeric>{`${
-                                            2.5 * Math.ceil((cycleBaseWeights[dayToExercise(day)] * percentage) / 2.5)
-                                        } kg`}</Td>
+                                        <Td isNumeric>{`${Math.max(
+                                            20,
+                                            2.5 * Math.ceil((cycleBaseWeights[dayToExercise(day)] * percentage) / 2.5),
+                                        )} kg`}</Td>
                                         <Td>{repsField(index)}</Td>
                                     </Tr>
                                 </>

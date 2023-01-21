@@ -7,7 +7,7 @@ const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
 
 if (!clientId || !clientSecret) throw new Error('Google client id or secret is not defined');
 
-const isProd = (process.env.VERCEL_ENV ?? 'production') === 'production';
+const isProd = (process.env.VERCEL_ENV ?? 'development') === 'production';
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:8080';
 const testEmail = 'test@mctest.com';
 const testName = 'Test McTest';
@@ -44,14 +44,13 @@ export const authOptions: NextAuthOptions = {
         async jwt({ token, account }) {
             if (!isProd) {
                 try {
-                    const response = await fetch(`${BACKEND_URL}/token${testEmail}`);
+                    const response = await fetch(`${BACKEND_URL}/token/${encodeURIComponent(testEmail)}`);
                     const testToken = await response.text();
 
                     token.idToken = testToken;
                 } catch (error) {
                     // eslint-disable-next-line no-console
                     console.log(error);
-                    throw new Error(JSON.stringify(error));
                 }
             } else if (account) {
                 token.idToken = account.id_token;
@@ -63,19 +62,9 @@ export const authOptions: NextAuthOptions = {
         async session({ session, token }) {
             const { idToken } = token;
 
-            if (!isProd) {
-                try {
-                    const response = await fetch(`${BACKEND_URL}/token/${testEmail}`);
-                    const testToken = await response.text();
-
-                    session.idToken = testToken;
-                } catch (error) {
-                    // eslint-disable-next-line no-console
-                    console.log(error);
-                }
-            } else if (typeof idToken === 'string') {
-                session.idToken = idToken;
-            }
+            if (typeof idToken === 'string') session.idToken = idToken;
+            // eslint-disable-next-line no-console
+            else console.log(`no idToken: ${JSON.stringify(token)}`);
 
             return session;
         },

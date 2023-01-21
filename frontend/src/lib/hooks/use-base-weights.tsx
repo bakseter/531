@@ -24,7 +24,11 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         const fetchBaseWeights = async () => {
-            if (!session?.idToken) return;
+            if (!session?.idToken) {
+                setError(`No idToken: ${JSON.stringify(session)}`);
+                setLoading(false);
+                return;
+            }
 
             setError(null);
             setLoading(true);
@@ -53,7 +57,7 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
             }
         };
         void fetchBaseWeights();
-    }, [session?.idToken]);
+    }, [session]);
 
     const setNewBaseWeights = async (newBaseWeights: BaseWeights) => {
         if (!session?.idToken) return;
