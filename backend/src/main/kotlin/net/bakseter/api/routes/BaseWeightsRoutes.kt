@@ -14,6 +14,9 @@ import io.ktor.server.routing.put
 import io.ktor.server.routing.routing
 import net.bakseter.api.schema.BaseWeights
 import net.bakseter.api.schema.BaseWeightsJson
+import net.bakseter.api.schema.BaseWeightsModifier
+import net.bakseter.api.schema.BaseWeightsModifierJson
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -24,6 +27,8 @@ fun Application.baseWeightsRoutes(authConfig: String) {
         authenticate(authConfig) {
             getBaseWeights()
             putBaseWeights()
+            getBaseWeightsModifier()
+            putBaseWeightsModifier()
         }
     }
 }
@@ -49,10 +54,10 @@ fun Route.getBaseWeights() {
         call.respond(
             HttpStatusCode.OK,
             BaseWeightsJson(
-                baseWeights[BaseWeights.dl],
-                baseWeights[BaseWeights.bp],
-                baseWeights[BaseWeights.sq],
-                baseWeights[BaseWeights.op],
+                dl = baseWeights[BaseWeights.dl],
+                bp = baseWeights[BaseWeights.bp],
+                sq = baseWeights[BaseWeights.sq],
+                op = baseWeights[BaseWeights.op],
             )
         )
     }
@@ -95,6 +100,95 @@ fun Route.putBaseWeights() {
                     it[bp] = baseWeightsJson.bp
                     it[sq] = baseWeightsJson.sq
                     it[op] = baseWeightsJson.op
+                }
+            }
+
+            call.respond(HttpStatusCode.Accepted)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            call.respond(HttpStatusCode.InternalServerError)
+        }
+    }
+}
+
+fun Route.getBaseWeightsModifier() {
+    get("/base-weights/modifier/{cycle}") {
+        val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
+
+        if (email == null) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@get
+        }
+
+        val cycle = call.parameters["cycle"]?.toIntOrNull()
+
+        if (cycle == null) {
+            call.respond(HttpStatusCode.BadRequest)
+            return@get
+        }
+
+        val mod = transaction {
+            BaseWeightsModifier.select {
+                BaseWeightsModifier.email eq email and (BaseWeightsModifier.cycle eq cycle)
+            }.firstOrNull()
+        }
+
+        if (mod == null) {
+            call.respond(HttpStatusCode.NotFound)
+            return@get
+        }
+
+        call.respond(
+            BaseWeightsModifierJson(
+                cycle = mod[BaseWeightsModifier.cycle],
+                dl = mod[BaseWeightsModifier.dl],
+                bp = mod[BaseWeightsModifier.bp],
+                sq = mod[BaseWeightsModifier.sq],
+                op = mod[BaseWeightsModifier.op],
+            )
+        )
+    }
+}
+
+fun Route.putBaseWeightsModifier() {
+    put("/base-weights/modifier") {
+        val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
+
+        if (email == null) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@put
+        }
+
+        try {
+            val baseWeightsModJson = call.receive<BaseWeightsModifierJson>()
+
+            val baseWeightsMod = transaction {
+                BaseWeightsModifier.select { BaseWeightsModifier.email eq email and (BaseWeightsModifier.cycle eq baseWeightsModJson.cycle) }
+                    .firstOrNull()
+            }
+
+            if (baseWeightsMod == null) {
+                transaction {
+                    BaseWeightsModifier.insert {
+                        it[BaseWeightsModifier.email] = email
+                        it[cycle] = baseWeightsModJson.cycle
+                        it[dl] = baseWeightsModJson.dl
+                        it[bp] = baseWeightsModJson.bp
+                        it[sq] = baseWeightsModJson.sq
+                        it[op] = baseWeightsModJson.op
+                    }
+                }
+
+                call.respond(HttpStatusCode.OK)
+                return@put
+            }
+
+            transaction {
+                BaseWeightsModifier.update({ BaseWeightsModifier.email eq email and (BaseWeightsModifier.cycle eq baseWeightsModJson.cycle) }) {
+                    it[dl] = baseWeightsModJson.dl
+                    it[bp] = baseWeightsModJson.bp
+                    it[sq] = baseWeightsModJson.sq
+                    it[op] = baseWeightsModJson.op
                 }
             }
 

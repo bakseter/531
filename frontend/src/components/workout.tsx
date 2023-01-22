@@ -1,16 +1,24 @@
-import { HStack, Box, Center, Text, Heading, TableContainer, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
+import {
+    Spinner,
+    HStack,
+    Box,
+    Center,
+    Text,
+    Heading,
+    TableContainer,
+    Table,
+    Thead,
+    Tbody,
+    Tr,
+    Th,
+    Td,
+} from '@chakra-ui/react';
 import JokerInput from '@components/joker-input';
 import RepsInputForm from '@components/reps-input-form';
 import { type Week, type Day } from '@api/workout';
-import {
-    weekToSetsReps,
-    percentageToText,
-    exerciseToText,
-    type BaseWeights,
-    weekToPercentages,
-    dayToExercise,
-} from '@utils/helpers';
+import { weekToSetsReps, percentageToText, exerciseToText, weekToPercentages, dayToExercise } from '@utils/helpers';
 import DateBoxForm from '@components/date-box-form';
+import useBaseWeights from '@hooks/use-base-weights';
 
 const indexToHeading = (i: number): string | undefined => {
     if (i === 0) return 'Warmup';
@@ -19,17 +27,18 @@ const indexToHeading = (i: number): string | undefined => {
 };
 
 interface Props {
-    cycleBaseWeights: BaseWeights;
     cycle: number;
     week: Week;
     day: Day;
 }
 
-const Workout = ({ cycleBaseWeights, cycle, week, day }: Props) => {
+const Workout = ({ cycle, week, day }: Props) => {
     const warmupCutoff = 2;
     const jokerCutoff = 5;
     const reps = (index: number) => weekToSetsReps(week)[index];
     const roundToNearest = (index: number) => (index <= warmupCutoff ? 5 : 2.5);
+
+    const { baseWeightsForCycle } = useBaseWeights();
 
     const repsField = ({ index, percentage }: { index: number; percentage: number }) => {
         if (index === jokerCutoff) {
@@ -54,6 +63,10 @@ const Workout = ({ cycleBaseWeights, cycle, week, day }: Props) => {
             </Center>
         );
     };
+
+    const baseWeights = baseWeightsForCycle?.find((bw) => bw.cycle === cycle)?.baseWeights;
+
+    if (!baseWeights) return <Spinner />;
 
     return (
         <>
@@ -96,8 +109,7 @@ const Workout = ({ cycleBaseWeights, cycle, week, day }: Props) => {
                                         20,
                                         roundToNearest(index) *
                                             Math.ceil(
-                                                (cycleBaseWeights[dayToExercise(day)] * percentage) /
-                                                    roundToNearest(index),
+                                                (baseWeights[dayToExercise(day)] * percentage) / roundToNearest(index),
                                             ),
                                     )} kg`}</Td>
                                     <Td>{repsField({ index, percentage })}</Td>

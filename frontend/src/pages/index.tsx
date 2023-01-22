@@ -16,24 +16,12 @@ import {
 } from '@chakra-ui/react';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Workout from '@components/workout';
-import { type BaseWeights } from '@api/base-weights';
 import type { Week, Day } from '@api/workout';
 import useBaseWeights from '@hooks/use-base-weights';
 import BaseWeightsForm from '@components/base-weights-form';
+import BaseWeightsModifierForm from '@components/base-weights-modifier-form';
 import Title from '@components/title';
-
-const cycles: Array<number> = [1, 2, 3];
-const weeks: Array<Week> = [1, 2, 3];
-const days: Array<Day> = [1, 2, 3, 4];
-
-const addToBaseWeights = (baseWeights: BaseWeights, cycle: number) => {
-    return {
-        dl: baseWeights.dl + (cycle - 1) * 5,
-        bp: baseWeights.bp + (cycle - 1) * 2.5,
-        sq: baseWeights.sq + (cycle - 1) * 5,
-        op: baseWeights.op + (cycle - 1) * 2.5,
-    };
-};
+import { cycles, weeks, days } from '@utils/constants';
 
 const IndexPage = () => {
     const { baseWeights } = useBaseWeights();
@@ -65,6 +53,7 @@ const IndexPage = () => {
                                                 {weeks.map((week) => (
                                                     <Tab key={`tab-week-${week}`}>{`Week ${week}`}</Tab>
                                                 ))}
+                                                <Tab>Modify cycle base weights</Tab>
                                             </TabList>
                                             <TabPanels>
                                                 {weeks.map((week: Week) => (
@@ -76,16 +65,15 @@ const IndexPage = () => {
                                                                     cycle={cycle}
                                                                     week={week}
                                                                     day={day}
-                                                                    cycleBaseWeights={addToBaseWeights(
-                                                                        baseWeights,
-                                                                        cycle,
-                                                                    )}
                                                                 />
                                                                 <Divider key={`divider-${week}-${day}`} />
                                                             </>
                                                         ))}
                                                     </TabPanel>
                                                 ))}
+                                                <TabPanel>
+                                                    <BaseWeightsModifierForm cycle={cycle} />
+                                                </TabPanel>
                                             </TabPanels>
                                         </Tabs>
                                     </TabPanel>
