@@ -8,6 +8,7 @@ env:
 
 jobs:
   docker_build:
+    name: "Build with Docker"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

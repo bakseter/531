@@ -12,6 +12,7 @@ env:
 
 jobs:
   docker_push:
+    name: "Build with Docker and push to registry"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -37,6 +38,7 @@ jobs:
           DOCKER_BUILDKIT: 1
 
   deploy:
+    name: "Deploy to DigitalOcean droplet"
     runs-on: ubuntu-latest
     needs: [docker_push]
     steps:
