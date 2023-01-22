@@ -22,7 +22,7 @@ import useBaseWeights from '@hooks/use-base-weights';
 import BaseWeightsForm from '@components/base-weights-form';
 import Title from '@components/title';
 
-const cycles: Array<number> = [1];
+const cycles: Array<number> = [1, 2, 3];
 const weeks: Array<Week> = [1, 2, 3];
 const days: Array<Day> = [1, 2, 3, 4];
 
