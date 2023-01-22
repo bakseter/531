@@ -14,8 +14,8 @@ services:
     environment:
       DATABASE_URL: 'postgres://postgres:${DB_PASSWORD:-password}@database/postgres'
       DEV_ISSUER: 'http://localhost:${PORT:-8080}'
+      DEV: ${DEV:-true}
       MIGRATE_DB:
-      DEV:
 
   database:
     image: postgres:15.1-alpine

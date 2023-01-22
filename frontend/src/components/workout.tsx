@@ -55,8 +55,11 @@ const Workout = ({ cycleBaseWeights, cycle, week, day }: Props) => {
                     <Tbody>
                         {weekToPercentages(week).map((percentage, index) => {
                             const reps = weekToSetsReps(week)[index];
-                            const repsField = (index: number) => {
-                                const jokerCutoff = 5;
+                            const warmupCutoff = 2;
+                            const jokerCutoff = 5;
+                            const roundToNearest = index <= warmupCutoff ? 5 : 2.5;
+
+                            const repsField = () => {
                                 if (index === jokerCutoff) {
                                     return (
                                         <RepsInputForm
@@ -99,9 +102,13 @@ const Workout = ({ cycleBaseWeights, cycle, week, day }: Props) => {
                                         <Td>{percentageToText(percentage)}</Td>
                                         <Td isNumeric>{`${Math.max(
                                             20,
-                                            2.5 * Math.ceil((cycleBaseWeights[dayToExercise(day)] * percentage) / 2.5),
+                                            roundToNearest *
+                                                Math.ceil(
+                                                    (cycleBaseWeights[dayToExercise(day)] * percentage) /
+                                                        roundToNearest,
+                                                ),
                                         )} kg`}</Td>
-                                        <Td>{repsField(index)}</Td>
+                                        <Td>{repsField()}</Td>
                                     </Tr>
                                 </>
                             );
