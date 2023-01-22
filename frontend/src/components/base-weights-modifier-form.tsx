@@ -97,6 +97,7 @@ const BaseWeightsModifierForm = ({ cycle }: Props) => {
                                         </Select>
                                         {baseWeightsForCycle && (
                                             <Text>
+                                                {'= '}
                                                 {
                                                     baseWeightsForCycle.find((bw) => bw.cycle === cycle)?.baseWeights[
                                                         exercise
