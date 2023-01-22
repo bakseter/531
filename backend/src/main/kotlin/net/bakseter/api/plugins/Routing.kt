@@ -9,10 +9,10 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
-import java.util.Date
 import net.bakseter.api.routes.baseWeightsRoutes
 import net.bakseter.api.routes.jokerRoutes
 import net.bakseter.api.routes.workoutRoutes
+import java.util.Date
 
 fun Application.configureRouting(dev: Boolean, devSecret: String, devAudience: String, devIssuer: String) {
     val authConfig = if (dev) "auth-cred" else "auth-user"

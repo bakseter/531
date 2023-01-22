@@ -3,6 +3,7 @@ package net.bakseter.api
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import net.bakseter.api.schema.BaseWeights
+import net.bakseter.api.schema.BaseWeightsModifier
 import net.bakseter.api.schema.Joker
 import net.bakseter.api.schema.Workout
 import org.flywaydb.core.Flyway
@@ -16,6 +17,7 @@ val tables: Array<Table> = arrayOf(
     Workout,
     BaseWeights,
     Joker,
+    BaseWeightsModifier,
 )
 
 class DatabaseHandler(
@@ -42,7 +44,7 @@ class DatabaseHandler(
     }
 
     private val flyway: Flyway =
-        Flyway.configure().baselineOnMigrate(true).baselineVersion("4").cleanDisabled(false)
+        Flyway.configure().baselineOnMigrate(true).baselineVersion("5").cleanDisabled(false)
             .dataSource(dbUrlStr, dbUsername, dbPassword).load()
 
     private val conn by lazy {

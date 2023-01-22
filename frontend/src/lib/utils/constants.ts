@@ -1,0 +1,7 @@
+import { type Week, type Day } from '@api/workout';
+
+const cycles: Array<number> = [1, 2, 3];
+const weeks: Array<Week> = [1, 2, 3];
+const days: Array<Day> = [1, 2, 3, 4];
+
+export { cycles, weeks, days };

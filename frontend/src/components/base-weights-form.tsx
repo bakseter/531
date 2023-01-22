@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { Spinner, Text, Heading, Flex, Input, VStack } from '@chakra-ui/react';
 import useBaseWeights from '@hooks/use-base-weights';
-import { comps, exerciseToText, type CompExercise } from '@utils/helpers';
-import { type BaseWeights } from '@api/base-weights';
+import { exerciseToText } from '@utils/helpers';
+import { type CompExercise, comps, type BaseWeights } from '@api/base-weights';
 
 type FormValues = BaseWeights;
 

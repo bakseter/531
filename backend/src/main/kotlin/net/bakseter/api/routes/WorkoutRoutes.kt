@@ -65,10 +65,10 @@ fun Route.getWorkout() {
         call.respond(
             HttpStatusCode.OK,
             WorkoutJson(
-                workout[Workout.cycle],
-                workout[Workout.week],
-                workout[Workout.day],
-                workout[Workout.reps],
+                cycle = workout[Workout.cycle],
+                week = workout[Workout.week],
+                day = workout[Workout.day],
+                reps = workout[Workout.reps],
             )
         )
     }
