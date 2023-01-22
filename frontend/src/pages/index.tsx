@@ -50,7 +50,7 @@ const IndexPage = () => {
                 <GridItem colSpan={[5, null, null, 3]} colStart={[1, null, null, 2]}>
                     {!baseWeights && <BaseWeightsForm isFirstTime />}
                     {baseWeights && (
-                        <Tabs>
+                        <Tabs isLazy>
                             <TabList>
                                 {cycles.map((cycle) => (
                                     <Tab key={`tab-cycle-${cycle}`}>{`Cycle ${cycle}`}</Tab>
@@ -60,7 +60,7 @@ const IndexPage = () => {
                             <TabPanels>
                                 {cycles.map((cycle) => (
                                     <TabPanel key={`tabpanel-cycle-${cycle}`} px="0rem">
-                                        <Tabs>
+                                        <Tabs isLazy>
                                             <TabList>
                                                 {weeks.map((week) => (
                                                     <Tab key={`tab-week-${week}`}>{`Week ${week}`}</Tab>
