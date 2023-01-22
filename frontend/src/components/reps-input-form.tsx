@@ -47,8 +47,10 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
     useEffect(() => {
         const fetchWorkout = async () => {
             if (!session?.idToken) return;
+
             setLoading(true);
             setError(null);
+
             try {
                 const result = await WorkoutAPI.getWorkout({ idToken: session.idToken, cycle, week, day });
 

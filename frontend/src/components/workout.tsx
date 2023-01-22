@@ -26,6 +26,35 @@ interface Props {
 }
 
 const Workout = ({ cycleBaseWeights, cycle, week, day }: Props) => {
+    const warmupCutoff = 2;
+    const jokerCutoff = 5;
+    const reps = (index: number) => weekToSetsReps(week)[index];
+    const roundToNearest = (index: number) => (index <= warmupCutoff ? 5 : 2.5);
+
+    const repsField = ({ index, percentage }: { index: number; percentage: number }) => {
+        if (index === jokerCutoff) {
+            return <RepsInputForm key={`reps-input-${cycle}-${week}-${day}`} cycle={cycle} week={week} day={day} />;
+        }
+
+        if (index > jokerCutoff) {
+            return (
+                <JokerInput
+                    key={`joker-input-${cycle}-${week}-${day}-${index}-${percentage}`}
+                    cycle={cycle}
+                    week={week}
+                    day={day}
+                    num={index - jokerCutoff}
+                />
+            );
+        }
+
+        return (
+            <Center key={`n/a-${percentage}-${index}`}>
+                <Text color="gray">–</Text>
+            </Center>
+        );
+    };
+
     return (
         <>
             <HStack spacing={3}>
@@ -53,66 +82,28 @@ const Workout = ({ cycleBaseWeights, cycle, week, day }: Props) => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {weekToPercentages(week).map((percentage, index) => {
-                            const reps = weekToSetsReps(week)[index];
-                            const warmupCutoff = 2;
-                            const jokerCutoff = 5;
-                            const roundToNearest = index <= warmupCutoff ? 5 : 2.5;
-
-                            const repsField = () => {
-                                if (index === jokerCutoff) {
-                                    return (
-                                        <RepsInputForm
-                                            key={`reps-input-${cycle}-${week}-${day}`}
-                                            cycle={cycle}
-                                            week={week}
-                                            day={day}
-                                        />
-                                    );
-                                }
-
-                                if (index > jokerCutoff) {
-                                    return (
-                                        <JokerInput
-                                            key={`joker-input-${cycle}-${week}-${day}-${index}-${percentage}`}
-                                            cycle={cycle}
-                                            week={week}
-                                            day={day}
-                                            num={index - jokerCutoff}
-                                        />
-                                    );
-                                }
-
-                                return (
-                                    <Center key={`n/a-${percentage}-${index}`}>
-                                        <Text color="gray">–</Text>
-                                    </Center>
-                                );
-                            };
-
-                            return (
-                                <>
-                                    {index % 3 === 0 && (
-                                        <Box key={`padding-box-${index}`} py="1rem">
-                                            <Heading size={['xs', null, 'sm']}>{indexToHeading(index)}</Heading>
-                                        </Box>
-                                    )}
-                                    <Tr key={`table-row-${index}`}>
-                                        <Td>{`1x${reps}${index === 5 ? '+' : ''}`}</Td>
-                                        <Td>{percentageToText(percentage)}</Td>
-                                        <Td isNumeric>{`${Math.max(
-                                            20,
-                                            roundToNearest *
-                                                Math.ceil(
-                                                    (cycleBaseWeights[dayToExercise(day)] * percentage) /
-                                                        roundToNearest,
-                                                ),
-                                        )} kg`}</Td>
-                                        <Td>{repsField()}</Td>
-                                    </Tr>
-                                </>
-                            );
-                        })}
+                        {weekToPercentages(week).map((percentage, index) => (
+                            <>
+                                {index % 3 === 0 && (
+                                    <Box key={`padding-box-${index}`} py="1rem">
+                                        <Heading size={['xs', null, 'sm']}>{indexToHeading(index)}</Heading>
+                                    </Box>
+                                )}
+                                <Tr key={`table-row-${index}`}>
+                                    <Td>{`1x${reps(index)}${index === 5 ? '+' : ''}`}</Td>
+                                    <Td>{percentageToText(percentage)}</Td>
+                                    <Td isNumeric>{`${Math.max(
+                                        20,
+                                        roundToNearest(index) *
+                                            Math.ceil(
+                                                (cycleBaseWeights[dayToExercise(day)] * percentage) /
+                                                    roundToNearest(index),
+                                            ),
+                                    )} kg`}</Td>
+                                    <Td>{repsField({ index, percentage })}</Td>
+                                </Tr>
+                            </>
+                        ))}
                     </Tbody>
                 </Table>
             </TableContainer>

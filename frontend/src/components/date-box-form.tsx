@@ -32,6 +32,7 @@ const DateBoxForm = ({ cycle, week, day }: Props) => {
         setLoading(true);
         setError(null);
         setDate(null);
+
         try {
             const date = parse(dateStr, 'yyyy-MM-dd', new Date());
             const result = await WorkoutAPI.putDate({ idToken: session.idToken, cycle, week, day, date });
@@ -60,8 +61,10 @@ const DateBoxForm = ({ cycle, week, day }: Props) => {
     useEffect(() => {
         const fetchDate = async () => {
             if (!session?.idToken) return;
+
             setLoading(true);
             setError(null);
+
             try {
                 const response = await WorkoutAPI.getDate({ idToken: session.idToken, cycle, week, day });
                 setLoading(false);

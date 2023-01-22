@@ -21,6 +21,7 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
 
     const handleChange = async () => {
         if (!session?.idToken) return;
+
         setLoading(true);
         setError(null);
 
@@ -51,6 +52,7 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
     useEffect(() => {
         const fetchWorkout = async () => {
             if (!session?.idToken) return;
+
             setLoading(true);
             setError(null);
 
