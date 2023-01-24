@@ -11,7 +11,8 @@ const Document = () => {
                 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
                 <meta name="theme-color" content="#ffffff" />
 
-                <link rel="apple-touch-icon" sizes="180x180" href="/ios/512.png" />
+                <link rel="apple-touch-icon" type="image/png" sizes="512x512" href="/icons/icon-512x512.png" />
+                <link rel="icon" type="image/png" sizes="48x48" href="/icons/icon-48x48.png" />
                 <link rel="manifest" href="/site.webmanifest" />
             </Head>
             <body>
