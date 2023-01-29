@@ -1,8 +1,6 @@
 import type { CompExercise, BaseWeights } from '@api/base-weights';
 import type { Week, Day } from '@api/workout';
-
-const jokerAmount = 3;
-const jokers: Array<number> = [...new Array(jokerAmount).keys()].map((i) => i + 1);
+import { jokers } from '@utils/constants';
 
 const addToBaseWeights = (baseWeights: BaseWeights, cycle: number): BaseWeights => ({
     dl: baseWeights.dl + (cycle - 1) * 5,
@@ -88,4 +86,4 @@ const weekToSetsReps = (week: Week): Array<number> => {
 
 const percentageToText = (percentage: number): string => `${(percentage * 100).toFixed(0)}%`;
 
-export { jokers, dayToExercise, exerciseToText, weekToPercentages, percentageToText, weekToSetsReps, addToBaseWeights };
+export { dayToExercise, exerciseToText, weekToPercentages, percentageToText, weekToSetsReps, addToBaseWeights };
