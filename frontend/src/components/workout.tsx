@@ -95,27 +95,32 @@ const Workout = ({ cycle, week, day }: Props) => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {weekToPercentages(week).map((percentage, index) => (
-                            <>
-                                {index % 3 === 0 && (
-                                    <Box key={`padding-box-${index}`} py="1rem">
-                                        <Heading size={['xs', null, 'sm']}>{indexToHeading(index)}</Heading>
-                                    </Box>
-                                )}
-                                <Tr key={`table-row-${index}`}>
-                                    <Td>{`1x${reps(index)}${index === 5 ? '+' : ''}`}</Td>
-                                    <Td>{percentageToText(percentage)}</Td>
-                                    <Td isNumeric>{`${Math.max(
-                                        20,
-                                        roundToNearest(index) *
-                                            Math.ceil(
-                                                (baseWeights[dayToExercise(day)] * percentage) / roundToNearest(index),
-                                            ),
-                                    )} kg`}</Td>
-                                    <Td>{repsField({ index, percentage })}</Td>
-                                </Tr>
-                            </>
-                        ))}
+                        {weekToPercentages(week).map((percentage, index) => {
+                            const headingText = indexToHeading(index);
+
+                            return (
+                                <>
+                                    {index % 3 === 0 && index <= 6 && (
+                                        <Box key={`padding-box-${index}`} py="1rem">
+                                            {headingText && <Heading size={['xs', null, 'sm']}>headingText</Heading>}
+                                        </Box>
+                                    )}
+                                    <Tr key={`table-row-${index}`}>
+                                        <Td>{`1x${reps(index)}${index === 5 ? '+' : ''}`}</Td>
+                                        <Td>{percentageToText(percentage)}</Td>
+                                        <Td isNumeric>{`${Math.max(
+                                            20,
+                                            roundToNearest(index) *
+                                                Math.ceil(
+                                                    (baseWeights[dayToExercise(day)] * percentage) /
+                                                        roundToNearest(index),
+                                                ),
+                                        )} kg`}</Td>
+                                        <Td>{repsField({ index, percentage })}</Td>
+                                    </Tr>
+                                </>
+                            );
+                        })}
                     </Tbody>
                 </Table>
             </TableContainer>
