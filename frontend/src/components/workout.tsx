@@ -102,7 +102,7 @@ const Workout = ({ cycle, week, day }: Props) => {
                                 <>
                                     {index % 3 === 0 && index <= 6 && (
                                         <Box key={`padding-box-${index}`} py="1rem">
-                                            {headingText && <Heading size={['xs', null, 'sm']}>headingText</Heading>}
+                                            {headingText && <Heading size={['xs', null, 'sm']}>{headingText}</Heading>}
                                         </Box>
                                     )}
                                     <Tr key={`table-row-${index}`}>
