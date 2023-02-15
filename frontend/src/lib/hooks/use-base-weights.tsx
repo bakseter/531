@@ -72,20 +72,32 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
 
         const fetchBaseWeightsModifiers = async () => {
             const response = await Promise.all(
-                Array.from({ length: cycles.length }, (_, i) => i + 1).map((c) =>
+                Array.from({ length: cycles.length }, (_, i) => i + 1).map((cycle) =>
                     BaseWeightsAPI.getBaseWeightsModifier({
                         idToken: session.idToken,
-                        cycle: c,
+                        cycle,
                     }),
                 ),
             );
 
-            const baseWeightsModifiers = response.filter(
+            const baseWeightsModifiersRaw = response.filter(
                 (mod: BaseWeightsModifier | boolean | null) => mod !== true && mod !== false && mod !== null,
             ) as Array<BaseWeightsModifier>;
 
+            const baseWeightsModifiersFilledCycle = (cycle: number): Array<BaseWeightsModifier> =>
+                [...new Array(cycle).keys()].map(
+                    (index) =>
+                        baseWeightsModifiersRaw.find((mod) => mod.cycle === index + 1) ?? {
+                            cycle,
+                            dl: 0,
+                            bp: 0,
+                            sq: 0,
+                            op: 0,
+                        },
+                );
+
             const modSumToCycle = (cycle: number) =>
-                baseWeightsModifiers.slice(1, cycle).reduce(
+                baseWeightsModifiersFilledCycle(cycle).reduce(
                     (prev, curr) => ({
                         dl: prev.dl + curr.dl,
                         bp: prev.bp + curr.bp,
@@ -94,10 +106,10 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
                         cycle,
                     }),
                     {
-                        dl: baseWeightsModifiers[0]?.dl ?? 0,
-                        bp: baseWeightsModifiers[0]?.bp ?? 0,
-                        sq: baseWeightsModifiers[0]?.sq ?? 0,
-                        op: baseWeightsModifiers[0]?.op ?? 0,
+                        dl: baseWeightsModifiersRaw.find((mod) => mod.cycle === 1)?.dl ?? 0,
+                        bp: baseWeightsModifiersRaw.find((mod) => mod.cycle === 1)?.bp ?? 0,
+                        sq: baseWeightsModifiersRaw.find((mod) => mod.cycle === 1)?.sq ?? 0,
+                        op: baseWeightsModifiersRaw.find((mod) => mod.cycle === 1)?.op ?? 0,
                         cycle,
                     },
                 );
@@ -109,9 +121,9 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
                 op: (baseWeights?.op ?? 0) + 2.5 * modSumToCycle(cycle).op,
             });
 
-            const bwCycle = cycles.map((c) => ({
-                cycle: c,
-                baseWeights: addToBaseWeights(modCycleBaseWeightsToCycle(c), c),
+            const bwCycle = cycles.map((cycle) => ({
+                cycle,
+                baseWeights: addToBaseWeights(modCycleBaseWeightsToCycle(cycle), cycle),
             }));
 
             setBaseWeightsForCycle(bwCycle);
