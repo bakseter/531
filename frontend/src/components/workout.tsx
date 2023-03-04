@@ -1,4 +1,5 @@
 import {
+    Button,
     Spinner,
     HStack,
     Box,
@@ -13,10 +14,18 @@ import {
     Th,
     Td,
 } from '@chakra-ui/react';
+import { useState } from 'react';
 import JokerInput from '@components/joker-input';
 import RepsInputForm from '@components/reps-input-form';
 import { type Week, type Day } from '@api/workout';
-import { weekToSetsReps, percentageToText, exerciseToText, weekToPercentages, dayToExercise } from '@utils/helpers';
+import {
+    weekToSetsReps,
+    percentageToText,
+    exerciseToText,
+    weekToPercentages,
+    dayToExercise,
+    weekToDefiningRep,
+} from '@utils/helpers';
 import DateBoxForm from '@components/date-box-form';
 import useBaseWeights from '@hooks/use-base-weights';
 
@@ -35,10 +44,15 @@ interface Props {
 const Workout = ({ cycle, week, day }: Props) => {
     const warmupCutoff = 2;
     const jokerCutoff = 5;
-    const reps = (index: number) => weekToSetsReps(week)[index];
+    const reps = (index: number): number | undefined => weekToSetsReps(week)[index];
     const roundToNearest = (index: number) => (index <= warmupCutoff ? 5 : 2.5);
+    const [jokersWeightAdd, setJokersWeightAdd] = useState<number | undefined>();
 
     const { baseWeightsForCycle } = useBaseWeights();
+
+    const handleClick = () => {
+        setJokersWeightAdd((value) => (value === undefined ? 1 : value + 1));
+    };
 
     const repsField = ({ index, percentage }: { index: number; percentage: number }) => {
         if (index === jokerCutoff) {
@@ -95,7 +109,7 @@ const Workout = ({ cycle, week, day }: Props) => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {weekToPercentages(week).map((percentage, index) => {
+                        {weekToPercentages(week, jokersWeightAdd).map((percentage, index) => {
                             const headingText = indexToHeading(index);
 
                             return (
@@ -106,7 +120,9 @@ const Workout = ({ cycle, week, day }: Props) => {
                                         </Box>
                                     )}
                                     <Tr key={`table-row-${index}`}>
-                                        <Td>{`1x${reps(index)}${index === 5 ? '+' : ''}`}</Td>
+                                        <Td>{`1x${reps(index) ?? weekToDefiningRep(week)}${
+                                            index === 5 ? '+' : ''
+                                        }`}</Td>
                                         <Td>{percentageToText(percentage)}</Td>
                                         <Td isNumeric>{`${Math.max(
                                             20,
@@ -124,6 +140,9 @@ const Workout = ({ cycle, week, day }: Props) => {
                     </Tbody>
                 </Table>
             </TableContainer>
+            <Button onClick={handleClick} mb="1rem">
+                MORE!!!
+            </Button>
         </>
     );
 };
