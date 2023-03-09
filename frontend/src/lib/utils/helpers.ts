@@ -87,7 +87,7 @@ const weekToPercentages = (week: Week, customJokersLengthAdd?: number): Array<nu
 const weekToSetsReps = (week: Week): Array<number> => {
     const warmupReps = [5, 5, 3];
     const defRep = weekToDefiningRep(week);
-    const defReps = [defRep, defRep, defRep];
+    const defReps = week === 3 ? [5, 3, defRep] : [defRep, defRep, defRep];
 
     switch (week) {
         case 1: {
