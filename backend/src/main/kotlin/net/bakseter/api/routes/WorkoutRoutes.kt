@@ -155,6 +155,7 @@ fun Route.putDate() {
                         it[Workout.cycle] = cycle
                         it[Workout.week] = week
                         it[Workout.day] = day
+                        it[Workout.date] = DateTime(dateJson.date)
                     }
                 }
 
