@@ -145,6 +145,25 @@ const WorkoutAPI = {
             return null;
         }
     },
+
+    getWorkoutCount: async ({ idToken }: { idToken: string }): Promise<number | null> => {
+        try {
+            const response = await fetch(`${BACKEND_URL}/workout/count`, {
+                headers: { Authorization: `Bearer ${idToken}` },
+            });
+
+            if (response.ok) {
+                const json = await response.json();
+                return record({ count: number })(json).count;
+            }
+
+            return null;
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+            return null;
+        }
+    },
 };
 
 export default WorkoutAPI;

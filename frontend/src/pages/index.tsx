@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { type GetServerSideProps } from 'next';
 import {
     Button,
     Tab,
@@ -15,15 +16,21 @@ import {
     Text,
 } from '@chakra-ui/react';
 import { useSession, signIn, signOut } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@pages/api/auth/[...nextauth]';
 import Workout from '@components/workout';
-import type { Week, Day } from '@api/workout';
+import WorkoutAPI, { type Week, type Day } from '@api/workout';
 import useBaseWeights from '@hooks/use-base-weights';
 import BaseWeightsForm from '@components/base-weights-form';
 import BaseWeightsModifierForm from '@components/base-weights-modifier-form';
 import Title from '@components/title';
 import { cycles, weeks, days } from '@utils/constants';
 
-const IndexPage = () => {
+interface Props {
+    weekTabIndex: number;
+    cycleTabIndex: number;
+}
+const IndexPage = ({ weekTabIndex, cycleTabIndex }: Props) => {
     const { baseWeights } = useBaseWeights();
     const { data: session, status } = useSession();
 
@@ -38,7 +45,7 @@ const IndexPage = () => {
                 <GridItem colSpan={[5, null, null, 3]} colStart={[1, null, null, 2]}>
                     {!baseWeights && <BaseWeightsForm isFirstTime />}
                     {baseWeights && (
-                        <Tabs isLazy>
+                        <Tabs isLazy defaultIndex={cycleTabIndex}>
                             <TabList>
                                 {cycles.map((cycle) => (
                                     <Tab key={`tab-cycle-${cycle}`}>{`Cycle ${cycle}`}</Tab>
@@ -48,7 +55,7 @@ const IndexPage = () => {
                             <TabPanels>
                                 {cycles.map((cycle) => (
                                     <TabPanel key={`tabpanel-cycle-${cycle}`} px="0rem">
-                                        <Tabs isLazy>
+                                        <Tabs isLazy defaultIndex={weekTabIndex}>
                                             <TabList>
                                                 {weeks.map((week) => (
                                                     <Tab key={`tab-week-${week}`}>{`Week ${week}`}</Tab>
@@ -113,6 +120,28 @@ const IndexPage = () => {
             </SimpleGrid>
         </>
     );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const session = await getServerSession(context.req, context.res, authOptions);
+
+    if (!session?.idToken) {
+        return { props: { weekTabIndex: 0, cycleTabIndex: 0 } };
+    }
+
+    const workoutCount = await WorkoutAPI.getWorkoutCount({ idToken: session.idToken });
+
+    const cycleTabIndex = Math.floor((workoutCount ?? 0) / 12);
+    const weekTabIndex = Math.floor(((workoutCount ?? 0) % 12) / 3);
+
+    const props: Props = {
+        weekTabIndex,
+        cycleTabIndex,
+    };
+
+    return {
+        props,
+    };
 };
 
 export default IndexPage;

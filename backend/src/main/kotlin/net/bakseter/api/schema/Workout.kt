@@ -19,6 +19,11 @@ data class DateJson(
     val date: String,
 )
 
+@Serializable
+data class WorkoutCountJson(
+    val count: Int,
+)
+
 val validWeeks = listOf(1, 2, 3)
 val validDays = listOf(1, 2, 3, 4)
 

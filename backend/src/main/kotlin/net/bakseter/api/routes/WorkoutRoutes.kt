@@ -14,6 +14,7 @@ import io.ktor.server.routing.put
 import io.ktor.server.routing.routing
 import net.bakseter.api.schema.DateJson
 import net.bakseter.api.schema.Workout
+import net.bakseter.api.schema.WorkoutCountJson
 import net.bakseter.api.schema.WorkoutJson
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
@@ -29,6 +30,7 @@ fun Application.workoutRoutes(authConfig: String) {
             putWorkout()
             getDate()
             putDate()
+            getWorkoutCount()
         }
     }
 }
@@ -211,6 +213,28 @@ fun Route.getDate() {
         call.respond(
             HttpStatusCode.OK,
             DateJson(date.toString())
+        )
+    }
+}
+
+fun Route.getWorkoutCount() {
+    get("/workout/count") {
+        val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
+
+        if (email == null) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@get
+        }
+
+        val count = transaction {
+            Workout.select {
+                Workout.email eq email
+            }.count().toInt()
+        }
+
+        call.respond(
+            HttpStatusCode.OK,
+            WorkoutCountJson(count)
         )
     }
 }
