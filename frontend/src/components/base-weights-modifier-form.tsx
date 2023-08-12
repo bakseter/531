@@ -7,6 +7,7 @@ import { useSession, signOut } from 'next-auth/react';
 import BaseWeightsAPI, { type BaseWeights, comps } from '@api/base-weights';
 import { exerciseToText } from '@utils/helpers';
 import useBaseWeights from '@hooks/use-base-weights';
+import useProfile from '@hooks/use-profile';
 
 interface Props {
     cycle: number;
@@ -17,6 +18,8 @@ type FormValues = BaseWeights;
 const BaseWeightsModifierForm = ({ cycle }: Props) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    const { profile } = useProfile();
 
     const { baseWeightsForCycle, setBaseWeightsModifier } = useBaseWeights();
 
@@ -39,7 +42,11 @@ const BaseWeightsModifierForm = ({ cycle }: Props) => {
             setError(null);
 
             try {
-                const result = await BaseWeightsAPI.getBaseWeightsModifier({ idToken: session.idToken, cycle });
+                const result = await BaseWeightsAPI.getBaseWeightsModifier({
+                    idToken: session.idToken,
+                    profile,
+                    cycle,
+                });
 
                 setLoading(false);
 
@@ -69,7 +76,7 @@ const BaseWeightsModifierForm = ({ cycle }: Props) => {
             }
         };
         void fetchWorkout();
-    }, [session?.idToken, cycle, setValue]);
+    }, [session?.idToken, cycle, setValue, profile]);
 
     return (
         <SimpleGrid columns={4}>

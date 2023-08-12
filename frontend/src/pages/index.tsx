@@ -16,13 +16,12 @@ import {
     Text,
 } from '@chakra-ui/react';
 import { useSession, signIn, signOut } from 'next-auth/react';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@pages/api/auth/[...nextauth]';
 import Workout from '@components/workout';
-import WorkoutAPI, { type Week, type Day } from '@api/workout';
+import { type Week, type Day } from '@api/workout';
 import useBaseWeights from '@hooks/use-base-weights';
 import BaseWeightsForm from '@components/base-weights-form';
 import BaseWeightsModifierForm from '@components/base-weights-modifier-form';
+import ProfileInputForm from '@components/profile-input-form';
 import Title from '@components/title';
 import { cycles, weeks, days } from '@utils/constants';
 
@@ -104,6 +103,8 @@ const IndexPage = ({ weekTabIndex, cycleTabIndex }: Props) => {
                                                             <Text>{session.user.email}</Text>
                                                         </>
                                                     )}
+                                                    <Heading size="sm">Profile</Heading>
+                                                    <ProfileInputForm />
                                                     <Button variant="outline" onClick={() => void signOut()}>
                                                         Sign out
                                                     </Button>
@@ -122,11 +123,17 @@ const IndexPage = ({ weekTabIndex, cycleTabIndex }: Props) => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+// eslint-disable-next-line @typescript-eslint/require-await
+export const getServerSideProps: GetServerSideProps = async () => {
+    return { props: { weekTabIndex: 0, cycleTabIndex: 0 } };
+
+    /*
+     * TODO:
+     * doesn't work with profile since server side, fix this
+
     const session = await getServerSession(context.req, context.res, authOptions);
 
     if (!session?.idToken) {
-        return { props: { weekTabIndex: 0, cycleTabIndex: 0 } };
     }
 
     const workoutCount = await WorkoutAPI.getWorkoutCount({ idToken: session.idToken });
@@ -142,6 +149,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
         props,
     };
+    */
 };
 
 export default IndexPage;
