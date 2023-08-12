@@ -13,8 +13,8 @@ project.setProperty("mainClassName", "net.bakseter.api.ApplicationKt")
 
 plugins {
     application
-    kotlin("jvm") version "1.8.21"
-    kotlin("plugin.serialization") version "1.8.21"
+    kotlin("jvm") version "1.9.0"
+    kotlin("plugin.serialization") version "1.9.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
     id("com.adarshr.test-logger") version "3.2.0"
