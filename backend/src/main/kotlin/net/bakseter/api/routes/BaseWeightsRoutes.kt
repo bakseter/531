@@ -36,14 +36,19 @@ fun Application.baseWeightsRoutes(authConfig: String) {
 fun Route.getBaseWeights() {
     get("/base-weights") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
-
         if (email == null) {
             call.respond(HttpStatusCode.Unauthorized)
             return@get
         }
 
+        val profile = call.request.queryParameters["profile"]?.toIntOrNull()
+        if (profile == null) {
+            call.respond(HttpStatusCode.BadRequest)
+            return@get
+        }
+
         val baseWeights = transaction {
-            BaseWeights.select { BaseWeights.email eq email }.firstOrNull()
+            BaseWeights.select { BaseWeights.email eq email and (BaseWeights.profile eq profile)}.firstOrNull()
         }
 
         if (baseWeights == null) {
@@ -72,17 +77,24 @@ fun Route.putBaseWeights() {
             return@put
         }
 
+        val profile = call.request.queryParameters["profile"]?.toIntOrNull()
+        if (profile == null) {
+            call.respond(HttpStatusCode.BadRequest)
+            return@put
+        }
+
         try {
             val baseWeightsJson = call.receive<BaseWeightsJson>()
 
             val baseWeights = transaction {
-                BaseWeights.select { BaseWeights.email eq email }.firstOrNull()
+                BaseWeights.select { BaseWeights.email eq email and (BaseWeights.profile eq profile) }.firstOrNull()
             }
 
             if (baseWeights == null) {
                 transaction {
                     BaseWeights.insert {
                         it[BaseWeights.email] = email
+                        it[BaseWeights.profile] = profile
                         it[dl] = baseWeightsJson.dl
                         it[bp] = baseWeightsJson.bp
                         it[sq] = baseWeightsJson.sq
@@ -95,7 +107,7 @@ fun Route.putBaseWeights() {
             }
 
             transaction {
-                BaseWeights.update({ BaseWeights.email eq email }) {
+                BaseWeights.update({ BaseWeights.email eq email and (BaseWeights.profile eq profile)}) {
                     it[dl] = baseWeightsJson.dl
                     it[bp] = baseWeightsJson.bp
                     it[sq] = baseWeightsJson.sq
@@ -114,22 +126,22 @@ fun Route.putBaseWeights() {
 fun Route.getBaseWeightsModifier() {
     get("/base-weights/modifier/{cycle}") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
-
         if (email == null) {
             call.respond(HttpStatusCode.Unauthorized)
             return@get
         }
 
+        val profile = call.request.queryParameters["profile"]?.toIntOrNull()
         val cycle = call.parameters["cycle"]?.toIntOrNull()
 
-        if (cycle == null) {
+        if (profile == null || cycle == null) {
             call.respond(HttpStatusCode.BadRequest)
             return@get
         }
 
         val mod = transaction {
             BaseWeightsModifier.select {
-                BaseWeightsModifier.email eq email and (BaseWeightsModifier.cycle eq cycle)
+                BaseWeightsModifier.email eq email and (BaseWeightsModifier.profile eq profile and (BaseWeightsModifier.cycle eq cycle))
             }.firstOrNull()
         }
 
@@ -153,9 +165,14 @@ fun Route.getBaseWeightsModifier() {
 fun Route.putBaseWeightsModifier() {
     put("/base-weights/modifier") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
-
         if (email == null) {
             call.respond(HttpStatusCode.Unauthorized)
+            return@put
+        }
+
+        val profile = call.request.queryParameters["profile"]?.toIntOrNull()
+        if (profile == null) {
+            call.respond(HttpStatusCode.BadRequest)
             return@put
         }
 
@@ -163,7 +180,7 @@ fun Route.putBaseWeightsModifier() {
             val baseWeightsModJson = call.receive<BaseWeightsModifierJson>()
 
             val baseWeightsMod = transaction {
-                BaseWeightsModifier.select { BaseWeightsModifier.email eq email and (BaseWeightsModifier.cycle eq baseWeightsModJson.cycle) }
+                BaseWeightsModifier.select { BaseWeightsModifier.email eq email and (BaseWeightsModifier.profile eq profile and (BaseWeightsModifier.cycle eq baseWeightsModJson.cycle)) }
                     .firstOrNull()
             }
 
@@ -171,6 +188,7 @@ fun Route.putBaseWeightsModifier() {
                 transaction {
                     BaseWeightsModifier.insert {
                         it[BaseWeightsModifier.email] = email
+                        it[BaseWeightsModifier.profile] = profile
                         it[cycle] = baseWeightsModJson.cycle
                         it[dl] = baseWeightsModJson.dl
                         it[bp] = baseWeightsModJson.bp
@@ -184,7 +202,7 @@ fun Route.putBaseWeightsModifier() {
             }
 
             transaction {
-                BaseWeightsModifier.update({ BaseWeightsModifier.email eq email and (BaseWeightsModifier.cycle eq baseWeightsModJson.cycle) }) {
+                BaseWeightsModifier.update({ BaseWeightsModifier.email eq email and (BaseWeightsModifier.profile eq profile and (BaseWeightsModifier.cycle eq baseWeightsModJson.cycle)) }) {
                     it[dl] = baseWeightsModJson.dl
                     it[bp] = baseWeightsModJson.bp
                     it[sq] = baseWeightsModJson.sq

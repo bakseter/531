@@ -3,6 +3,7 @@ import { useSession, signOut } from 'next-auth/react';
 import BaseWeightsAPI, { type BaseWeights, type BaseWeightsModifier } from '@api/base-weights';
 import { cycles } from '@utils/constants';
 import { addToBaseWeights } from '@utils/helpers';
+import useProfile from '@hooks/use-profile';
 
 interface BaseWeightsForCycle {
     cycle: number;
@@ -30,6 +31,7 @@ const BaseWeightsContext = createContext<HookProps>({
 const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
     const [baseWeights, setBaseWeights] = useState<BaseWeights | null>(null);
     const [baseWeightsForCycle, setBaseWeightsForCycle] = useState<Array<BaseWeightsForCycle> | null>(null);
+    const { profile } = useProfile();
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const { data: session } = useSession();
@@ -42,7 +44,7 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
             setLoading(true);
 
             try {
-                const response = await BaseWeightsAPI.getBaseWeights(session.idToken);
+                const response = await BaseWeightsAPI.getBaseWeights({ idToken: session.idToken, profile });
                 setLoading(false);
 
                 if (response === null) {
@@ -65,7 +67,7 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
             }
         };
         void fetchBaseWeights();
-    }, [session]);
+    }, [session, profile]);
 
     useEffect(() => {
         if (!session?.idToken) return;
@@ -75,6 +77,7 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
                 Array.from({ length: cycles.length }, (_, i) => i + 1).map((cycle) =>
                     BaseWeightsAPI.getBaseWeightsModifier({
                         idToken: session.idToken,
+                        profile,
                         cycle,
                     }),
                 ),
@@ -129,7 +132,7 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
             setBaseWeightsForCycle(bwCycle);
         };
         void fetchBaseWeightsModifiers();
-    }, [session?.idToken, baseWeights]);
+    }, [session?.idToken, baseWeights, profile]);
 
     const setNewBaseWeights = async (newBaseWeights: BaseWeights) => {
         if (!session?.idToken) return;
@@ -139,6 +142,7 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
         try {
             const response = await BaseWeightsAPI.putBaseWeights({
                 idToken: session.idToken,
+                profile,
                 baseWeights: newBaseWeights,
             });
 
@@ -172,6 +176,7 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
         try {
             const result = await BaseWeightsAPI.putBaseWeightsModifier({
                 idToken: session.idToken,
+                profile,
                 baseWeightsModifier,
             });
 

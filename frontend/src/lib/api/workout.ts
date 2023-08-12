@@ -21,26 +21,37 @@ const workoutDecoder = record({
 });
 type Workout = decodeType<typeof workoutDecoder>;
 
+const profileDecoder = (value: unknown) => {
+    if (value === 1 || value === 2 || value === 3 || value === 4) return value;
+    throw new TypeError('Invalid profile');
+};
+type Profile = decodeType<typeof profileDecoder>;
+
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:8080';
 
 const WorkoutAPI = {
     getWorkout: async ({
         idToken,
+        profile,
         cycle,
         week,
         day,
     }: {
         idToken: string;
+        profile: Profile;
         cycle: number;
         week: Week;
         day: Day;
     }): Promise<Workout | boolean | null> => {
         try {
-            const response = await fetch(`${BACKEND_URL}/workout?cycle=${cycle}&week=${week}&day=${day}`, {
-                headers: {
-                    Authorization: `Bearer ${idToken}`,
+            const response = await fetch(
+                `${BACKEND_URL}/workout?profile=${profile}&cycle=${cycle}&week=${week}&day=${day}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${idToken}`,
+                    },
                 },
-            });
+            );
 
             if (response.ok) {
                 const workout = await response.json();
@@ -58,9 +69,17 @@ const WorkoutAPI = {
         }
     },
 
-    putWorkout: async ({ idToken, workout }: { idToken: string; workout: Workout }): Promise<boolean | null> => {
+    putWorkout: async ({
+        idToken,
+        profile,
+        workout,
+    }: {
+        idToken: string;
+        profile: Profile;
+        workout: Workout;
+    }): Promise<boolean | null> => {
         try {
-            const { ok, status } = await fetch(`${BACKEND_URL}/workout`, {
+            const { ok, status } = await fetch(`${BACKEND_URL}/workout?profile=${profile}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -82,19 +101,24 @@ const WorkoutAPI = {
 
     getDate: async ({
         idToken,
+        profile,
         cycle,
         week,
         day,
     }: {
         idToken: string;
+        profile: Profile;
         cycle: number;
         week: Week;
         day: Day;
     }): Promise<Date | boolean | null> => {
         try {
-            const response = await fetch(`${BACKEND_URL}/workout/date?cycle=${cycle}&week=${week}&day=${day}`, {
-                headers: { Authorization: `Bearer ${idToken}` },
-            });
+            const response = await fetch(
+                `${BACKEND_URL}/workout/date?profile=${profile}&cycle=${cycle}&week=${week}&day=${day}`,
+                {
+                    headers: { Authorization: `Bearer ${idToken}` },
+                },
+            );
 
             if (response.ok) {
                 const json = await response.json();
@@ -114,26 +138,31 @@ const WorkoutAPI = {
 
     putDate: async ({
         idToken,
+        profile,
         cycle,
         week,
         day,
         date,
     }: {
         idToken: string;
+        profile: Profile;
         cycle: number;
         week: Week;
         day: Day;
         date: Date;
     }): Promise<boolean | null> => {
         try {
-            const { ok, status } = await fetch(`${BACKEND_URL}/workout/date?cycle=${cycle}&week=${week}&day=${day}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${idToken}`,
+            const { ok, status } = await fetch(
+                `${BACKEND_URL}/workout/date?profile=${profile}&cycle=${cycle}&week=${week}&day=${day}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${idToken}`,
+                    },
+                    body: JSON.stringify({ date: formatISO(date) }),
                 },
-                body: JSON.stringify({ date: formatISO(date) }),
-            });
+            );
 
             if (ok) return true;
             if (status === 401) return false;
@@ -146,9 +175,9 @@ const WorkoutAPI = {
         }
     },
 
-    getWorkoutCount: async ({ idToken }: { idToken: string }): Promise<number | null> => {
+    getWorkoutCount: async ({ idToken, profile }: { idToken: string; profile: Profile }): Promise<number | null> => {
         try {
-            const response = await fetch(`${BACKEND_URL}/workout/count`, {
+            const response = await fetch(`${BACKEND_URL}/workout/count?profile=${profile}`, {
                 headers: { Authorization: `Bearer ${idToken}` },
             });
 
@@ -167,4 +196,4 @@ const WorkoutAPI = {
 };
 
 export default WorkoutAPI;
-export { workoutDecoder, type Week, type Day, type Workout };
+export { workoutDecoder, type Profile, type Week, type Day, type Workout };

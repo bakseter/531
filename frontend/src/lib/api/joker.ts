@@ -1,6 +1,6 @@
 import type { decodeType } from 'typescript-json-decoder';
 import { record, boolean, array } from 'typescript-json-decoder';
-import type { Week, Day } from '@api/workout';
+import type { Week, Day, Profile } from '@api/workout';
 
 const jokerDecoder = record({
     joker: array(boolean),
@@ -12,21 +12,26 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:808
 const JokerAPI = {
     getJoker: async ({
         idToken,
+        profile,
         cycle,
         week,
         day,
         num,
     }: {
         idToken: string;
+        profile: Profile;
         cycle: number;
         week: Week;
         day: Day;
         num: number;
     }): Promise<'on' | 'off' | 'reauth' | null> => {
         try {
-            const { ok, status } = await fetch(`${BACKEND_URL}/joker/${num}?cycle=${cycle}&week=${week}&day=${day}`, {
-                headers: { Authorization: `Bearer ${idToken}` },
-            });
+            const { ok, status } = await fetch(
+                `${BACKEND_URL}/joker/${num}?profile=${profile}&cycle=${cycle}&week=${week}&day=${day}`,
+                {
+                    headers: { Authorization: `Bearer ${idToken}` },
+                },
+            );
 
             if (ok) return 'on';
             if (status === 404) return 'off';
@@ -42,22 +47,27 @@ const JokerAPI = {
 
     putJoker: async ({
         idToken,
+        profile,
         cycle,
         week,
         day,
         num,
     }: {
         idToken: string;
+        profile: Profile;
         cycle: number;
         week: Week;
         day: Day;
         num: number;
     }): Promise<boolean | null> => {
         try {
-            const { ok, status } = await fetch(`${BACKEND_URL}/joker/${num}?cycle=${cycle}&week=${week}&day=${day}`, {
-                method: 'PUT',
-                headers: { Authorization: `Bearer ${idToken}` },
-            });
+            const { ok, status } = await fetch(
+                `${BACKEND_URL}/joker/${num}?profile=${profile}&cycle=${cycle}&week=${week}&day=${day}`,
+                {
+                    method: 'PUT',
+                    headers: { Authorization: `Bearer ${idToken}` },
+                },
+            );
 
             if (ok) return true;
             if (status === 401) return false;

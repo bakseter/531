@@ -6,6 +6,7 @@ import { nb } from 'date-fns/locale';
 import { FaEdit } from 'react-icons/fa';
 import { signOut, useSession } from 'next-auth/react';
 import WorkoutAPI, { type Week, type Day } from '@api/workout';
+import useProfile from '@hooks/use-profile';
 
 interface FormValues {
     dateStr: string | null;
@@ -18,6 +19,7 @@ interface Props {
 }
 
 const DateBoxForm = ({ cycle, week, day }: Props) => {
+    const { profile } = useProfile();
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [date, setDate] = useState<Date | null>(null);
@@ -35,7 +37,7 @@ const DateBoxForm = ({ cycle, week, day }: Props) => {
 
         try {
             const date = parse(dateStr, 'yyyy-MM-dd', new Date());
-            const result = await WorkoutAPI.putDate({ idToken: session.idToken, cycle, week, day, date });
+            const result = await WorkoutAPI.putDate({ idToken: session.idToken, profile, cycle, week, day, date });
 
             setLoading(false);
 
@@ -66,7 +68,7 @@ const DateBoxForm = ({ cycle, week, day }: Props) => {
             setError(null);
 
             try {
-                const response = await WorkoutAPI.getDate({ idToken: session.idToken, cycle, week, day });
+                const response = await WorkoutAPI.getDate({ idToken: session.idToken, profile, cycle, week, day });
                 setLoading(false);
 
                 if (response === null || response === true) return;
@@ -83,7 +85,7 @@ const DateBoxForm = ({ cycle, week, day }: Props) => {
             }
         };
         void fetchDate();
-    }, [cycle, week, day, session?.idToken]);
+    }, [cycle, week, day, session?.idToken, profile]);
 
     return (
         <>

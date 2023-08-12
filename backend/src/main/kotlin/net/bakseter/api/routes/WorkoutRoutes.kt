@@ -38,24 +38,24 @@ fun Application.workoutRoutes(authConfig: String) {
 fun Route.getWorkout() {
     get("/workout") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
-
         if (email == null) {
             call.respond(HttpStatusCode.Unauthorized)
             return@get
         }
 
+        val profile = call.request.queryParameters["profile"]?.toIntOrNull()
         val cycle = call.request.queryParameters["cycle"]?.toIntOrNull()
         val week = call.request.queryParameters["week"]?.toIntOrNull()
         val day = call.request.queryParameters["day"]?.toIntOrNull()
 
-        if (cycle == null || week == null || day == null) {
+        if (profile == null || cycle == null || week == null || day == null) {
             call.respond(HttpStatusCode.BadRequest)
             return@get
         }
 
         val workout = transaction {
             Workout.select {
-                Workout.email eq email and (Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day)))
+                Workout.email eq email and (Workout.profile eq profile and (Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day))))
             }.firstOrNull()
         }
 
@@ -79,9 +79,14 @@ fun Route.getWorkout() {
 fun Route.putWorkout() {
     put("/workout") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
-
         if (email == null) {
             call.respond(HttpStatusCode.Unauthorized)
+            return@put
+        }
+
+        val profile = call.request.queryParameters["profile"]?.toIntOrNull()
+        if (profile == null) {
+            call.respond(HttpStatusCode.BadRequest)
             return@put
         }
 
@@ -90,7 +95,7 @@ fun Route.putWorkout() {
 
             val workout = transaction {
                 Workout.select {
-                    Workout.cycle eq workoutJson.cycle and (Workout.week eq workoutJson.week and (Workout.day eq workoutJson.day))
+                    Workout.cycle eq workoutJson.cycle and (Workout.profile eq profile and (Workout.week eq workoutJson.week and (Workout.day eq workoutJson.day)))
                 }.firstOrNull()
             }
 
@@ -98,6 +103,7 @@ fun Route.putWorkout() {
                 transaction {
                     Workout.insert {
                         it[Workout.email] = email
+                        it[Workout.profile] = profile
                         it[cycle] = workoutJson.cycle
                         it[week] = workoutJson.week
                         it[day] = workoutJson.day
@@ -110,7 +116,7 @@ fun Route.putWorkout() {
             }
 
             transaction {
-                Workout.update({ Workout.cycle eq workoutJson.cycle and (Workout.week eq workoutJson.week and (Workout.day eq workoutJson.day)) }) {
+                Workout.update({ Workout.cycle eq workoutJson.cycle and (Workout.profile eq profile and (Workout.week eq workoutJson.week and (Workout.day eq workoutJson.day))) }) {
                     it[reps] = workoutJson.reps
                 }
             }
@@ -126,27 +132,27 @@ fun Route.putWorkout() {
 fun Route.putDate() {
     put("/workout/date") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
-
         if (email == null) {
             call.respond(HttpStatusCode.Unauthorized)
+            return@put
+        }
+
+        val profile = call.request.queryParameters["profile"]?.toIntOrNull()
+        val cycle = call.request.queryParameters["cycle"]?.toIntOrNull()
+        val week = call.request.queryParameters["week"]?.toIntOrNull()
+        val day = call.request.queryParameters["day"]?.toIntOrNull()
+
+        if (profile == null || cycle == null || week == null || day == null) {
+            call.respond(HttpStatusCode.BadRequest)
             return@put
         }
 
         try {
             val dateJson = call.receive<DateJson>()
 
-            val cycle = call.request.queryParameters["cycle"]?.toIntOrNull()
-            val week = call.request.queryParameters["week"]?.toIntOrNull()
-            val day = call.request.queryParameters["day"]?.toIntOrNull()
-
-            if (cycle == null || week == null || day == null) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@put
-            }
-
             val workout = transaction {
                 Workout.select {
-                    Workout.email eq email and (Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day)))
+                    Workout.email eq email and (Workout.profile eq profile and (Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day))))
                 }.firstOrNull()
             }
 
@@ -154,6 +160,7 @@ fun Route.putDate() {
                 transaction {
                     Workout.insert {
                         it[Workout.email] = email
+                        it[Workout.profile] = profile
                         it[Workout.cycle] = cycle
                         it[Workout.week] = week
                         it[Workout.day] = day
@@ -166,7 +173,7 @@ fun Route.putDate() {
             }
 
             transaction {
-                Workout.update({ Workout.email eq email and (Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day))) }) {
+                Workout.update({ Workout.email eq email and (Workout.profile eq profile and (Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day)))) }) {
                     it[date] = DateTime(dateJson.date)
                 }
             }
@@ -182,24 +189,24 @@ fun Route.putDate() {
 fun Route.getDate() {
     get("/workout/date") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
-
         if (email == null) {
             call.respond(HttpStatusCode.Unauthorized)
             return@get
         }
 
+        val profile = call.request.queryParameters["profile"]?.toIntOrNull()
         val cycle = call.request.queryParameters["cycle"]?.toIntOrNull()
         val week = call.request.queryParameters["week"]?.toIntOrNull()
         val day = call.request.queryParameters["day"]?.toIntOrNull()
 
-        if (cycle == null || week == null || day == null) {
+        if (profile == null || cycle == null || week == null || day == null) {
             call.respond(HttpStatusCode.BadRequest)
             return@get
         }
 
         val workout = transaction {
             Workout.select {
-                Workout.email eq email and (Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day)))
+                Workout.email eq email and (Workout.profile eq profile and (Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day))))
             }.firstOrNull()
         }
 
@@ -220,15 +227,20 @@ fun Route.getDate() {
 fun Route.getWorkoutCount() {
     get("/workout/count") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
-
         if (email == null) {
             call.respond(HttpStatusCode.Unauthorized)
             return@get
         }
 
+        val profile = call.request.queryParameters["profile"]?.toIntOrNull()
+        if (profile == null) {
+            call.respond(HttpStatusCode.BadRequest)
+            return@get
+        }
+
         val count = transaction {
             Workout.select {
-                Workout.email eq email
+                Workout.email eq email and (Workout.profile eq profile)
             }.count().toInt()
         }
 

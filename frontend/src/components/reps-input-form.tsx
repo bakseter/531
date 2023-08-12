@@ -4,6 +4,7 @@ import { AiFillExclamationCircle } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import { signOut, useSession } from 'next-auth/react';
 import WorkoutAPI, { type Workout, type Week, type Day } from '@api/workout';
+import useProfile from '@hooks/use-profile';
 
 interface Props {
     cycle: number;
@@ -16,6 +17,7 @@ interface FormValues {
 }
 
 const RepsInputForm = ({ cycle, week, day }: Props) => {
+    const { profile } = useProfile();
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -29,7 +31,7 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
         setError(null);
         try {
             const workout: Workout = { cycle, week, day, reps };
-            const result = await WorkoutAPI.putWorkout({ idToken: session.idToken, workout });
+            const result = await WorkoutAPI.putWorkout({ idToken: session.idToken, profile, workout });
 
             setLoading(false);
 
@@ -52,7 +54,7 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
             setError(null);
 
             try {
-                const result = await WorkoutAPI.getWorkout({ idToken: session.idToken, cycle, week, day });
+                const result = await WorkoutAPI.getWorkout({ idToken: session.idToken, profile, cycle, week, day });
 
                 setLoading(false);
 
@@ -79,7 +81,7 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
             }
         };
         void fetchWorkout();
-    }, [cycle, week, day, setValue, session?.idToken]);
+    }, [cycle, week, day, setValue, session?.idToken, profile]);
 
     const maxReps = 15;
 

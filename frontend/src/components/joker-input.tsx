@@ -4,6 +4,7 @@ import { AiFillExclamationCircle } from 'react-icons/ai';
 import { signOut, useSession } from 'next-auth/react';
 import { type Week, type Day } from '@api/workout';
 import JokerAPI from '@api/joker';
+import useProfile from '@hooks/use-profile';
 
 interface Props {
     cycle: number;
@@ -19,6 +20,8 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
 
     const { data: session } = useSession();
 
+    const { profile } = useProfile();
+
     const handleChange = async () => {
         if (!session?.idToken) return;
 
@@ -26,7 +29,7 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
         setError(null);
 
         try {
-            const result = await JokerAPI.putJoker({ idToken: session.idToken, cycle, week, day, num });
+            const result = await JokerAPI.putJoker({ idToken: session.idToken, profile, cycle, week, day, num });
 
             setLoading(false);
 
@@ -57,7 +60,7 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
             setError(null);
 
             try {
-                const result = await JokerAPI.getJoker({ idToken: session.idToken, cycle, week, day, num });
+                const result = await JokerAPI.getJoker({ idToken: session.idToken, profile, cycle, week, day, num });
 
                 setLoading(false);
 
@@ -80,7 +83,7 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
             }
         };
         void fetchWorkout();
-    }, [cycle, week, day, num, setChecked, session?.idToken]);
+    }, [cycle, week, day, num, setChecked, session?.idToken, profile]);
 
     return (
         <SimpleGrid columns={2} justifyItems="center">
