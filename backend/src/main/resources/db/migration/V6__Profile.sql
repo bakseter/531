@@ -30,7 +30,7 @@ ALTER TABLE base_weights_modifier
     DROP CONSTRAINT pk_base_weights_modifier;
 ALTER TABLE base_weights_modifier
     ADD CONSTRAINT pk_base_weights_modifier
-        PRIMARY KEY ("email", "profile");
+        PRIMARY KEY ("email", "profile", "cycle");
 
 ALTER TABLE joker
     ADD CONSTRAINT fk_joker_email_profile_cycle_week_day__email_profile_cycle_week_day
