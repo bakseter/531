@@ -1,5 +1,3 @@
--- TODO: sjekk att dette funker
-
 ALTER TABLE joker
     ADD COLUMN "profile" INT NOT NULL DEFAULT 1;
 ALTER TABLE joker
@@ -13,9 +11,9 @@ ALTER TABLE joker
 ALTER TABLE base_weights
     ADD COLUMN "profile" INT NOT NULL DEFAULT 1;
 ALTER TABLE base_weights
-    DROP CONSTRAINT pk_base_weights;
+    DROP CONSTRAINT base_weights_pkey;
 ALTER TABLE base_weights
-    ADD CONSTRAINT pk_base_weights
+    ADD CONSTRAINT base_weights_pkey
         PRIMARY KEY ("email", "profile");
 
 ALTER TABLE workout
