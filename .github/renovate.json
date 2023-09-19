@@ -6,5 +6,19 @@
   "stabilityDays": 3,
   "prCreation": "not-pending",
   "updateInternalDeps": true,
-  "rangeStrategy": "pin"
+  "rangeStrategy": "pin",
+  "packageRules": [
+    {
+      "matchDepTypes": ["devDependencies"],
+      "matchPackageNames": [
+        "@types/*",
+        "eslint",
+        "eslint-plugin-*",
+        "eslint-config-*",
+        "prettier",
+        "@typescript-eslint/*"
+      ],
+      "automerge": true
+    }
+  ]
 }
