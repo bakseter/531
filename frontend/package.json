@@ -117,27 +117,27 @@
         "@vercel/analytics": "1.0.2",
         "date-fns": "2.30.0",
         "eslint": "8.50.0",
-        "eslint-config-next": "13.4.13",
-        "framer-motion": "10.15.1",
-        "next": "13.4.13",
+        "framer-motion": "10.16.4",
+        "next": "13.5.3",
         "next-auth": "4.23.2",
         "next-pwa": "5.6.0",
         "react": "18.2.0",
         "react-dom": "18.2.0",
-        "react-hook-form": "7.45.4",
-        "react-icons": "4.10.1",
+        "react-hook-form": "7.47.0",
+        "react-icons": "4.11.0",
         "typescript-json-decoder": "1.0.11"
     },
     "devDependencies": {
         "@types/node": "20.8.0",
         "@types/react": "18.2.24",
         "@types/react-dom": "18.2.8",
-        "@typescript-eslint/eslint-plugin": "6.3.0",
-        "@typescript-eslint/parser": "6.3.0",
+        "@typescript-eslint/eslint-plugin": "6.7.4",
+        "@typescript-eslint/parser": "6.7.4",
+        "eslint-config-next": "13.5.3",
         "eslint-config-prettier": "9.0.0",
         "eslint-plugin-prettier": "5.0.0",
         "eslint-plugin-unicorn": "48.0.1",
         "prettier": "3.0.3",
-        "typescript": "5.1.6"
+        "typescript": "5.2.2"
     }
 }
