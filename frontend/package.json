@@ -114,7 +114,7 @@
         "@chakra-ui/react": "2.8.1",
         "@emotion/react": "11.11.1",
         "@emotion/styled": "11.11.0",
-        "@vercel/analytics": "1.0.2",
+        "@vercel/analytics": "1.1.0",
         "date-fns": "2.30.0",
         "eslint": "8.50.0",
         "framer-motion": "10.16.4",
