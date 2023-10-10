@@ -116,7 +116,7 @@
         "@emotion/styled": "11.11.0",
         "@vercel/analytics": "1.1.0",
         "date-fns": "2.30.0",
-        "eslint": "8.50.0",
+        "eslint": "8.51.0",
         "framer-motion": "10.16.4",
         "next": "13.5.4",
         "next-auth": "4.23.2",
