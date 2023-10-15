@@ -1,5 +1,5 @@
 # Download Gradle wrapper and install dependencies.
-FROM openjdk:17.0.2-jdk-slim AS deps
+FROM openjdk:21-jdk-slim AS deps
 
 WORKDIR /opt/build
 
@@ -11,7 +11,7 @@ RUN ./gradlew installDist --build-cache --no-daemon
 
 
 # Build project with downloaded Gradle wrapper and cached dependencies.
-FROM openjdk:17.0.2-jdk-slim AS build
+FROM openjdk:21-jdk-slim AS build
 
 WORKDIR /opt/build
 
@@ -28,7 +28,7 @@ COPY src/main src/main
 RUN ./gradlew shadowJar --build-cache --no-rebuild --no-daemon
 
 # Run the server
-FROM openjdk:17.0.2-jdk-slim
+FROM openjdk:21-jdk-slim
 
 WORKDIR /opt/app
 
