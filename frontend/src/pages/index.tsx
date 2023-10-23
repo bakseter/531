@@ -14,6 +14,7 @@ import {
     Stack,
     StackDivider,
     Text,
+    useBreakpointValue,
 } from '@chakra-ui/react';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Workout from '@components/workout';
@@ -33,6 +34,11 @@ const IndexPage = ({ weekTabIndex, cycleTabIndex }: Props) => {
     const { baseWeights } = useBaseWeights();
     const { data: session, status } = useSession();
 
+    const cyclePrefix = useBreakpointValue({ lg: 'Cycle', base: '🔄' });
+    const weekPrefix = useBreakpointValue({ lg: 'Week', base: '📆' });
+    const profileHeader = useBreakpointValue({ lg: 'Profile', base: '👤' });
+    const modifyCycleBaseWeightsHeader = useBreakpointValue({ lg: 'Modify cycle base weights', base: '📝' });
+
     useEffect(() => {
         if (status === 'unauthenticated') void signIn();
     }, [status]);
@@ -47,9 +53,9 @@ const IndexPage = ({ weekTabIndex, cycleTabIndex }: Props) => {
                         <Tabs isLazy defaultIndex={cycleTabIndex}>
                             <TabList>
                                 {cycles.map((cycle) => (
-                                    <Tab key={`tab-cycle-${cycle}`}>{`Cycle ${cycle}`}</Tab>
+                                    <Tab key={`tab-cycle-${cycle}`}>{`${cyclePrefix} ${cycle}`}</Tab>
                                 ))}
-                                <Tab>Profile</Tab>
+                                <Tab>{profileHeader}</Tab>
                             </TabList>
                             <TabPanels>
                                 {cycles.map((cycle) => (
@@ -57,9 +63,9 @@ const IndexPage = ({ weekTabIndex, cycleTabIndex }: Props) => {
                                         <Tabs isLazy defaultIndex={weekTabIndex}>
                                             <TabList>
                                                 {weeks.map((week) => (
-                                                    <Tab key={`tab-week-${week}`}>{`Week ${week}`}</Tab>
+                                                    <Tab key={`tab-week-${week}`}>{`${weekPrefix} ${week}`}</Tab>
                                                 ))}
-                                                <Tab>Modify cycle base weights</Tab>
+                                                <Tab>{modifyCycleBaseWeightsHeader}</Tab>
                                             </TabList>
                                             <TabPanels>
                                                 {weeks.map((week: Week) => (
