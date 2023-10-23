@@ -5,6 +5,7 @@
   "prHourlyLimit": 0,
   "stabilityDays": 3,
   "prCreation": "not-pending",
+  "ignoreDeps": ["openjdk", "postgres"],
   "updateInternalDeps": true,
   "rangeStrategy": "pin",
   "packageRules": [
