@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useBoolean, SimpleGrid, Spinner, GridItem, Checkbox } from '@chakra-ui/react';
+'use client';
+
+import { useEffect, useState, useId } from 'react';
 import { AiFillExclamationCircle } from 'react-icons/ai';
 import { signOut, useSession } from 'next-auth/react';
 import { type Week, type Day } from '@api/workout';
 import JokerAPI from '@api/joker';
-import useProfile from '@hooks/use-profile';
+import { useProfile } from '@hooks/use-profile';
 
 interface Props {
     cycle: number;
@@ -14,9 +15,11 @@ interface Props {
 }
 
 const JokerInput = ({ cycle, week, day, num }: Props) => {
-    const [checked, setChecked] = useBoolean();
+    const [checked, setChecked] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    const id = useId();
 
     const { data: session } = useSession();
 
@@ -43,7 +46,7 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
                 return;
             }
 
-            setChecked.toggle();
+            setChecked((prev) => !prev);
         } catch (error) {
             // eslint-disable-next-line no-console
             console.error(error);
@@ -74,7 +77,7 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
                     return;
                 }
 
-                result === 'on' ? setChecked.on() : setChecked.off();
+                result === 'on' ? setChecked(true) : setChecked(false);
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.error(error);
@@ -86,15 +89,16 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
     }, [cycle, week, day, num, setChecked, session?.idToken, profile]);
 
     return (
-        <SimpleGrid columns={2} justifyItems="center">
-            <GridItem>
-                <Checkbox isChecked={checked} size={['md', null, 'lg']} w="100%" onChange={handleChange} />
-            </GridItem>
-            <GridItem>
-                {loading && <Spinner size={['sm', null, 'md']} />}
-                {error && <AiFillExclamationCircle color="red" size="2rem" />}
-            </GridItem>
-        </SimpleGrid>
+        <div className="grid grid-cols-2">
+            <input type="checkbox" id={id} className="rounded w-4 h-4" checked={checked} onChange={handleChange} />
+            <label hidden htmlFor={id}>
+                Joker {num}
+            </label>
+            <div>
+                {loading && <p>Loading...</p>}
+                {error && <AiFillExclamationCircle color="red" size="1.5rem" />}
+            </div>
+        </div>
     );
 };
 

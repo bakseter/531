@@ -1,9 +1,11 @@
+'use client';
+
 import { useEffect, useState, createContext, useContext, type ReactNode } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import BaseWeightsAPI, { type BaseWeights, type BaseWeightsModifier } from '@api/base-weights';
 import { cycles } from '@utils/constants';
 import { addToBaseWeights } from '@utils/helpers';
-import useProfile from '@hooks/use-profile';
+import { useProfile } from '@hooks/use-profile';
 
 interface BaseWeightsForCycle {
     cycle: number;
@@ -211,5 +213,4 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
 
 const useBaseWeights = (): HookProps => useContext(BaseWeightsContext);
 
-export default useBaseWeights;
-export { BaseWeightsProvider };
+export { useBaseWeights, BaseWeightsProvider };

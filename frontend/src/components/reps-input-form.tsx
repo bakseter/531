@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
-import { SkeletonText, GridItem, Center, SimpleGrid, Select } from '@chakra-ui/react';
+'use client';
+
+import { useId, useState, useEffect } from 'react';
 import { AiFillExclamationCircle } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import { signOut, useSession } from 'next-auth/react';
 import WorkoutAPI, { type Workout, type Week, type Day } from '@api/workout';
-import useProfile from '@hooks/use-profile';
+import { useProfile } from '@hooks/use-profile';
 
 interface Props {
     cycle: number;
@@ -18,17 +19,21 @@ interface FormValues {
 
 const RepsInputForm = ({ cycle, week, day }: Props) => {
     const { profile } = useProfile();
-    const [loading, setLoading] = useState<boolean>(true);
+    const [, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     const { handleSubmit, register, setValue } = useForm<FormValues>();
 
     const { data: session } = useSession();
 
+    const id = useId();
+
     const onSubmit = async ({ reps }: FormValues) => {
         if (!session?.idToken) return;
+
         setLoading(true);
         setError(null);
+
         try {
             const workout: Workout = { cycle, week, day, reps };
             const result = await WorkoutAPI.putWorkout({ idToken: session.idToken, profile, workout });
@@ -86,27 +91,22 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
     const maxReps = 15;
 
     return (
-        <SimpleGrid columns={4}>
-            <GridItem colSpan={3} justifySelf="center">
-                <SkeletonText isLoaded={!loading} noOfLines={2}>
-                    <form onChange={handleSubmit(onSubmit)}>
-                        <Select size={['xs', null, 'md']} {...register('reps', { valueAsNumber: true })} w="100%">
-                            <option value={0}></option>
-                            {[...new Array(maxReps).keys()].map((_, index) => (
-                                <option key={`select-option-${index}`} value={index + 1}>
-                                    {index + 1}
-                                </option>
-                            ))}
-                        </Select>
-                    </form>
-                </SkeletonText>
-            </GridItem>
-            {error && (
-                <Center>
-                    <AiFillExclamationCircle color="red" size="2rem" />
-                </Center>
-            )}
-        </SimpleGrid>
+        <>
+            <form onChange={handleSubmit(onSubmit)}>
+                <select id={id} {...register('reps', { valueAsNumber: true })}>
+                    <option value={0}></option>
+                    {[...new Array(maxReps).keys()].map((_, index) => (
+                        <option key={`select-option-${index}`} value={index + 1}>
+                            {index + 1}
+                        </option>
+                    ))}
+                </select>
+                <label hidden htmlFor={id}>
+                    Reps
+                </label>
+            </form>
+            {error && <AiFillExclamationCircle color="red" size="1.5rem" />}
+        </>
     );
 };
 

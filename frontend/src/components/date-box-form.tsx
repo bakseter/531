@@ -1,12 +1,13 @@
+'use client';
+
 import { useForm } from 'react-hook-form';
-import { HStack, Button, Text, SkeletonText, Input } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { format, parse } from 'date-fns';
 import { nb } from 'date-fns/locale';
-import { FaEdit } from 'react-icons/fa';
 import { signOut, useSession } from 'next-auth/react';
 import WorkoutAPI, { type Week, type Day } from '@api/workout';
-import useProfile from '@hooks/use-profile';
+import { useProfile } from '@hooks/use-profile';
+import Button from '@components/button';
 
 interface FormValues {
     dateStr: string | null;
@@ -20,7 +21,7 @@ interface Props {
 
 const DateBoxForm = ({ cycle, week, day }: Props) => {
     const { profile } = useProfile();
-    const [loading, setLoading] = useState<boolean>(true);
+    const [, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [date, setDate] = useState<Date | null>(null);
 
@@ -89,20 +90,18 @@ const DateBoxForm = ({ cycle, week, day }: Props) => {
 
     return (
         <>
-            {error && <Text color="red">{error}</Text>}
-            <SkeletonText isLoaded={!loading} noOfLines={2}>
-                <form onChange={handleSubmit(onSubmit)}>{!date && <Input type="date" {...register('dateStr')} />}</form>
-                {date && (
-                    <HStack my="1rem">
-                        <Text fontSize={['sm', null, 'md']} fontWeight="bold">
-                            {format(date, 'EEEE dd. MMMM yyyy', { locale: nb })}
-                        </Text>
-                        <Button colorScheme="blue" size="xs" onClick={() => setDate(null)}>
-                            <FaEdit size="1.2rem" />
-                        </Button>
-                    </HStack>
-                )}
-            </SkeletonText>
+            {error && <p className="color-red">{error}</p>}
+            <form onChange={handleSubmit(onSubmit)}>
+                {!date && <input className="border-2 rounded-md border-sky-500" type="date" {...register('dateStr')} />}
+            </form>
+            {date && (
+                <div className="grid grid-flow-col items-center text-start">
+                    <p className="text-sm">{format(date, 'EEEE dd. MMMM yyyy', { locale: nb })}</p>
+                    <Button className="m-4 p-1" onClick={() => setDate(null)}>
+                        📝
+                    </Button>
+                </div>
+            )}
         </>
     );
 };

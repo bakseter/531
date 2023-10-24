@@ -1,6 +1,8 @@
-import { GridItem, SimpleGrid, Select } from '@chakra-ui/react';
+'use client';
+
+import { useId } from 'react';
 import { useForm } from 'react-hook-form';
-import useProfile from '@hooks/use-profile';
+import { useProfile } from '@hooks/use-profile';
 import { type Profile } from '@api/workout';
 
 interface FormValues {
@@ -11,21 +13,22 @@ const RepsInputForm = () => {
     const { profile, setProfile } = useProfile();
     const { handleSubmit, register } = useForm<FormValues>({ defaultValues: { profile } });
 
+    const id = useId();
+
     const onSubmit = ({ profile }: FormValues) => setProfile(profile);
 
     return (
-        <SimpleGrid columns={4}>
-            <GridItem colSpan={3} justifySelf="center">
-                <form onChange={handleSubmit(onSubmit)}>
-                    <Select size={['xs', null, 'md']} {...register('profile', { valueAsNumber: true })} w="100%">
-                        <option value={1}>1</option>
-                        <option value={2}>2</option>
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                    </Select>
-                </form>
-            </GridItem>
-        </SimpleGrid>
+        <form onChange={handleSubmit(onSubmit)}>
+            <label hidden htmlFor={id}>
+                Profile
+            </label>
+            <select className="p-1" {...register('profile', { valueAsNumber: true })}>
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
+            </select>
+        </form>
     );
 };
 

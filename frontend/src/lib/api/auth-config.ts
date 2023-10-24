@@ -2,10 +2,8 @@ import NextAuth, { type NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-const clientId = process.env.GOOGLE_CLIENT_ID;
-const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-
-if (!clientId || !clientSecret) throw new Error('Google client id or secret is not defined');
+const clientId = process.env.GOOGLE_CLIENT_ID as string;
+const clientSecret = process.env.GOOGLE_CLIENT_SECRET as string;
 
 const isProd = (process.env.VERCEL_ENV ?? 'development') === 'production';
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:8080';

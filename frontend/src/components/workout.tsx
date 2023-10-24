@@ -1,22 +1,9 @@
-import {
-    Button,
-    Spinner,
-    HStack,
-    Box,
-    Center,
-    Text,
-    Heading,
-    TableContainer,
-    Table,
-    Thead,
-    Tbody,
-    Tr,
-    Th,
-    Td,
-} from '@chakra-ui/react';
+'use client';
+
 import { useState } from 'react';
 import JokerInput from '@components/joker-input';
 import RepsInputForm from '@components/reps-input-form';
+import Spinner from '@components/spinner';
 import { type Week, type Day } from '@api/workout';
 import {
     weekToSetsReps,
@@ -26,8 +13,9 @@ import {
     dayToExercise,
     weekToDefiningRep,
 } from '@utils/helpers';
+import Button from '@components/button';
 import DateBoxForm from '@components/date-box-form';
-import useBaseWeights from '@hooks/use-base-weights';
+import { useBaseWeights } from '@hooks/use-base-weights';
 
 const indexToHeading = (i: number): string | undefined => {
     if (i === 0) return 'Warmup';
@@ -54,6 +42,9 @@ const Workout = ({ cycle, week, day }: Props) => {
         setJokersWeightAdd((value) => (value === undefined ? 1 : value + 1));
     };
 
+    const tableRowStyle = 'p-2';
+    const tableRowStyleAlt = `${tableRowStyle} bg-slate-200`;
+
     const repsField = ({ index, percentage }: { index: number; percentage: number }) => {
         if (index === jokerCutoff) {
             return <RepsInputForm key={`reps-input-${cycle}-${week}-${day}`} cycle={cycle} week={week} day={day} />;
@@ -71,11 +62,7 @@ const Workout = ({ cycle, week, day }: Props) => {
             );
         }
 
-        return (
-            <Center key={`n/a-${percentage}-${index}`}>
-                <Text color="gray">–</Text>
-            </Center>
-        );
+        return <p key={`n/a-${percentage}-${index}`}>–</p>;
     };
 
     const baseWeights = baseWeightsForCycle?.find((bw) => bw.cycle === cycle)?.baseWeights;
@@ -84,65 +71,61 @@ const Workout = ({ cycle, week, day }: Props) => {
 
     return (
         <>
-            <HStack spacing={3}>
-                <Heading my="1rem" size={['md', null, 'lg']}>
-                    {exerciseToText(dayToExercise(day))}
-                </Heading>
-                <DateBoxForm cycle={cycle} week={week} day={day} />
-            </HStack>
-            <TableContainer pb="2rem">
-                <Table variant="striped" size={['sm', null, 'md']}>
-                    <Thead>
-                        <Tr>
-                            <Th>
-                                <Text fontSize={['xx-small', 'small']}>Sets</Text>
-                            </Th>
-                            <Th>
-                                <Text fontSize={['xx-small', 'small']}>Percent</Text>
-                            </Th>
-                            <Th isNumeric>
-                                <Text fontSize={['xx-small', 'small']}>Weight</Text>
-                            </Th>
-                            <Th>
-                                <Text fontSize={['xx-small', 'small']}>Actual</Text>
-                            </Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
+            <div className="grid grid-flow-col items-center">
+                <h3 className="font-bold my-2 inline">{exerciseToText(dayToExercise(day))}</h3>
+                <div className="my-2">
+                    <DateBoxForm cycle={cycle} week={week} day={day} />
+                </div>
+            </div>
+            <div className="grid grid-cols-1 items-center">
+                <table className="border-collapse border-spacing-2 border border-slate-400 table-auto">
+                    <thead>
+                        <tr className="border border-slate-400">
+                            <th className={tableRowStyle}>Sets</th>
+                            <th className={tableRowStyle}>Percent</th>
+                            <th className={tableRowStyle}>Weight</th>
+                            <th className={tableRowStyle}>Actual</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         {weekToPercentages(week, jokersWeightAdd).map((percentage, index) => {
                             const headingText = indexToHeading(index);
 
                             return (
                                 <>
                                     {index % 3 === 0 && index <= 6 && (
-                                        <Box key={`padding-box-${index}`} py="1rem">
-                                            {headingText && <Heading size={['xs', null, 'sm']}>{headingText}</Heading>}
-                                        </Box>
+                                        <div className="px-2 py-4 pt-8" key={`padding-box-${index}`}>
+                                            {headingText && <p className="font-bold">{headingText}</p>}
+                                        </div>
                                     )}
-                                    <Tr key={`table-row-${index}`}>
-                                        <Td>{`1x${reps(index) ?? weekToDefiningRep(week)}${
-                                            index === 5 ? '+' : ''
-                                        }`}</Td>
-                                        <Td>{percentageToText(percentage)}</Td>
-                                        <Td isNumeric>{`${Math.max(
+                                    <tr key={`table-row-${index}`}>
+                                        <td className={index % 2 === 0 ? tableRowStyle : tableRowStyleAlt}>{`1x${
+                                            reps(index) ?? weekToDefiningRep(week)
+                                        }${index === 5 ? '+' : ''}`}</td>
+                                        <td className={index % 2 === 0 ? tableRowStyle : tableRowStyleAlt}>
+                                            {percentageToText(percentage)}
+                                        </td>
+                                        <td className={index % 2 === 0 ? tableRowStyle : tableRowStyleAlt}>{`${Math.max(
                                             20,
                                             roundToNearest(index) *
                                                 Math.ceil(
                                                     (baseWeights[dayToExercise(day)] * percentage) /
                                                         roundToNearest(index),
                                                 ),
-                                        )} kg`}</Td>
-                                        <Td>{repsField({ index, percentage })}</Td>
-                                    </Tr>
+                                        )} kg`}</td>
+                                        <td className={index % 2 === 0 ? tableRowStyle : tableRowStyleAlt}>
+                                            {repsField({ index, percentage })}
+                                        </td>
+                                    </tr>
                                 </>
                             );
                         })}
-                    </Tbody>
-                </Table>
-            </TableContainer>
-            <Button onClick={handleClick} mb="1rem">
-                MORE!!!
-            </Button>
+                    </tbody>
+                </table>
+                <Button className="mx-auto" onClick={handleClick}>
+                    MORE!!!
+                </Button>
+            </div>
         </>
     );
 };
