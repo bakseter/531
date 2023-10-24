@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, createContext, useContext, type ReactNode } from 'react';
 import { type Profile } from '@api/workout';
 
@@ -28,5 +30,4 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
 
 const useProfile = (): HookProps => useContext(ProfileContext);
 
-export default useProfile;
-export { ProfileProvider };
+export { useProfile, ProfileProvider };

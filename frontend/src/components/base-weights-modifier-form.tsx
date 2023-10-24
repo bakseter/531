@@ -1,13 +1,14 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { Text, Heading, StackItem, Stack, Center, SimpleGrid, GridItem, SkeletonText, Select } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
 import { AiFillExclamationCircle } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import { useSession, signOut } from 'next-auth/react';
 import BaseWeightsAPI, { type BaseWeights, comps } from '@api/base-weights';
 import { exerciseToText } from '@utils/helpers';
-import useBaseWeights from '@hooks/use-base-weights';
-import useProfile from '@hooks/use-profile';
+import { useBaseWeights } from '@hooks/use-base-weights';
+import { useProfile } from '@hooks/use-profile';
 
 interface Props {
     cycle: number;
@@ -16,7 +17,7 @@ interface Props {
 type FormValues = BaseWeights;
 
 const BaseWeightsModifierForm = ({ cycle }: Props) => {
-    const [loading, setLoading] = useState<boolean>(true);
+    const [, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     const { profile } = useProfile();
@@ -31,7 +32,7 @@ const BaseWeightsModifierForm = ({ cycle }: Props) => {
 
     const onSubmit = async (mod: FormValues) => {
         await setBaseWeightsModifier({ ...mod, cycle });
-        router.reload();
+        router.refresh();
     };
 
     useEffect(() => {
@@ -79,53 +80,32 @@ const BaseWeightsModifierForm = ({ cycle }: Props) => {
     }, [session?.idToken, cycle, setValue, profile]);
 
     return (
-        <SimpleGrid columns={4}>
-            <GridItem colSpan={3}>
-                <SkeletonText isLoaded={!loading} noOfLines={2}>
-                    <form onChange={handleSubmit(onSubmit)}>
-                        <Stack direction="column" gap={2}>
-                            {comps.map((exercise) => (
-                                <StackItem key={`bm-mod-select-${exercise}`} w="80%">
-                                    <Heading size="sm" my="0.8rem">
-                                        {exerciseToText(exercise)}
-                                    </Heading>
-                                    <SimpleGrid columns={2} gap={5}>
-                                        <Select
-                                            size={['xs', null, 'md']}
-                                            {...register(exercise, { valueAsNumber: true })}
-                                            w="100%"
-                                        >
-                                            <option value={0}>+0 kg</option>
-                                            {[1, 2, 3, 4, 5].map((_, index) => (
-                                                <option key={`select-option-${index}`} value={index + 1}>
-                                                    +{2.5 * (index + 1)} kg
-                                                </option>
-                                            ))}
-                                        </Select>
-                                        {baseWeightsForCycle && (
-                                            <Text>
-                                                {'= '}
-                                                {
-                                                    baseWeightsForCycle.find((bw) => bw.cycle === cycle)?.baseWeights[
-                                                        exercise
-                                                    ]
-                                                }{' '}
-                                                kg
-                                            </Text>
-                                        )}
-                                    </SimpleGrid>
-                                </StackItem>
-                            ))}
-                        </Stack>
-                    </form>
-                </SkeletonText>
-            </GridItem>
-            {error && (
-                <Center>
-                    <AiFillExclamationCircle color="red" size="2rem" />
-                </Center>
-            )}
-        </SimpleGrid>
+        <>
+            <form onChange={handleSubmit(onSubmit)}>
+                {comps.map((exercise) => (
+                    <div className="m-8" key={`bm-mod-select-${exercise}`}>
+                        <h4 className="my-2 font-bold">{exerciseToText(exercise)}</h4>
+                        <div className="grid grid-cols-2 gap-5">
+                            <select className="text-center p-1" {...register(exercise, { valueAsNumber: true })}>
+                                <option value={0}>+ 0 kg</option>
+                                {[1, 2, 3, 4, 5].map((_, index) => (
+                                    <option key={`select-option-${index}`} value={index + 1}>
+                                        + {2.5 * (index + 1)} kg
+                                    </option>
+                                ))}
+                            </select>
+                            {baseWeightsForCycle && (
+                                <p>
+                                    {'= '}
+                                    {baseWeightsForCycle.find((bw) => bw.cycle === cycle)?.baseWeights[exercise]} kg
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                ))}
+            </form>
+            {error && <AiFillExclamationCircle color="red" size="2rem" />}
+        </>
     );
 };
 

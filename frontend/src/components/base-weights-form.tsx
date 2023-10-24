@@ -1,7 +1,11 @@
+'use client';
+
+import { useId } from 'react';
 import { useForm } from 'react-hook-form';
-import { Spinner, Text, Heading, Flex, Input, VStack } from '@chakra-ui/react';
-import useBaseWeights from '@hooks/use-base-weights';
+import { useBaseWeights } from '@hooks/use-base-weights';
 import { exerciseToText } from '@utils/helpers';
+import { defaultClassNames } from '@components/button';
+import Spinner from '@components/spinner';
 import { type CompExercise, comps, type BaseWeights } from '@api/base-weights';
 
 type FormValues = BaseWeights;
@@ -21,57 +25,43 @@ const BaseWeightsForm = ({ isFirstTime = false }: Props) => {
         },
     });
 
+    const id = useId();
+
     const onSubmit = (data: FormValues) => setBaseWeights(data);
 
     return (
-        <VStack>
-            {error && <Text color="red">{error}</Text>}
-            {loading && (
-                <>
-                    <Spinner
-                        mt="30%"
-                        mb="1rem"
-                        thickness="4px"
-                        speed="0.65s"
-                        emptyColor="gray.200"
-                        color="blue.500"
-                        size="xl"
-                    />
-                    <Heading size={['md', null, null, 'lg']}>Loading...</Heading>
-                </>
-            )}
+        <div className="grid grid-cols-1">
+            {error && <p>{error}</p>}
+            {loading && <Spinner />}
             {!error && !loading && (
-                <Flex py={isFirstTime ? '4rem' : '0rem'}>
-                    <VStack gap="2">
-                        {isFirstTime && <Heading size="md">Enter base weights:</Heading>}
+                <div className={`flex mx-auto ${isFirstTime ? 'py-8' : ''}`}>
+                    <div className="grid grid-cols-1 gap-2">
+                        {isFirstTime && <h3 className="text-center">Please enter your base weights below 👇</h3>}
                         <form onSubmit={handleSubmit(onSubmit)}>
-                            <VStack gap="1" alignItems="start">
+                            <div className="grid grid-cols-1 gap-1 align-items-start">
                                 {comps.map((value: CompExercise) => (
                                     <>
-                                        <Text key={`text-${value}`} fontWeight="bold">
+                                        <label htmlFor={id} className="text-2xl font-bold py-2" key={`text-${value}`}>
                                             {exerciseToText(value)}
-                                        </Text>
-                                        <Input
+                                        </label>
+                                        <input
+                                            id={id}
                                             type="number"
                                             step=".25"
                                             key={`input-${value}`}
                                             placeholder={exerciseToText(value)}
+                                            className="border-2 border-gray-300 rounded-md p-2"
                                             {...register(value, { valueAsNumber: true })}
                                         />
                                     </>
                                 ))}
-                                <Input
-                                    type="submit"
-                                    value="Submit"
-                                    fontWeight="bold"
-                                    _hover={{ cursor: 'pointer', 'background-color': '#efefef' }}
-                                />
-                            </VStack>
+                                <input className={`${defaultClassNames} cursor-pointer`} type="submit" value="Submit" />
+                            </div>
                         </form>
-                    </VStack>
-                </Flex>
+                    </div>
+                </div>
             )}
-        </VStack>
+        </div>
     );
 };
 

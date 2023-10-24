@@ -104,6 +104,13 @@ const weekToSetsReps = (week: Week): Array<number> => {
 
 const percentageToText = (percentage: number): string => `${(percentage * 100).toFixed(0)}%`;
 
+const safeParseInt = (value: unknown): number | undefined => {
+    if (typeof value === 'string') {
+        const parsed = Number.parseInt(value);
+        if (Number.isInteger(parsed)) return parsed;
+    }
+};
+
 export {
     dayToExercise,
     exerciseToText,
@@ -112,4 +119,5 @@ export {
     weekToSetsReps,
     addToBaseWeights,
     weekToDefiningRep,
+    safeParseInt,
 };
