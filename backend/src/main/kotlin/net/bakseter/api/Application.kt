@@ -7,14 +7,16 @@ import net.bakseter.api.plugins.configureCORS
 import net.bakseter.api.plugins.configureContentNegotiation
 import net.bakseter.api.plugins.configureRateLimit
 import net.bakseter.api.plugins.configureRouting
-import java.net.URI
 
 fun main(args: Array<String>) {
     EngineMain.main(args)
 }
 
 fun Application.module() {
-    val databaseUrl = URI(environment.config.property("ktor.databaseUrl").getString())
+    val databaseUrl = environment.config.property("ktor.databaseUrl").getString()
+    val databaseUsername = environment.config.property("ktor.databaseUsername").getString()
+    val databasePassword = environment.config.property("ktor.databasePassword").getString()
+
     val migrateDb = environment.config.property("ktor.migrateDb").getString().toBooleanStrict()
     val dev = environment.config.property("ktor.dev").getString().toBooleanStrict()
 
@@ -24,7 +26,9 @@ fun Application.module() {
 
     DatabaseHandler(
         migrateDb,
-        databaseUrl
+        databaseUrl,
+        databaseUsername,
+        databasePassword
     ).init()
 
     configureAuthentication(devSecret = devSecret, devAudience = devAudience, devIssuer = devIssuer)
