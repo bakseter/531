@@ -11,7 +11,7 @@
   "packageRules": [
     {
       "matchDepTypes": ["devDependencies"],
-      "matchPackageNames": [
+      "matchPackagePatterns": [
         "@types/*",
         "eslint",
         "eslint-plugin-*",
@@ -20,6 +20,10 @@
         "@typescript-eslint/*"
       ],
       "automerge": true
+    },
+    {
+        "matchPackagePatterns": ["digitalocean", "vercel"],
+        "dependencyDashboardApproval": true
     }
   ]
 }
