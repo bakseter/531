@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useId } from 'react';
-import { AiFillExclamationCircle } from 'react-icons/ai';
 import { signOut, useSession } from 'next-auth/react';
 import { type Week, type Day } from '@api/workout';
 import JokerAPI from '@api/joker';
@@ -96,7 +95,7 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
             </label>
             <div>
                 {loading && <p>Loading...</p>}
-                {error && <AiFillExclamationCircle color="red" size="1.5rem" />}
+                {error && <p>🚨</p>}
             </div>
         </div>
     );
