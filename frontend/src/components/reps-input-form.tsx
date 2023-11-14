@@ -1,7 +1,6 @@
 'use client';
 
 import { useId, useState, useEffect } from 'react';
-import { AiFillExclamationCircle } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import { signOut, useSession } from 'next-auth/react';
 import WorkoutAPI, { type Workout, type Week, type Day } from '@api/workout';
@@ -105,7 +104,7 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
                     Reps
                 </label>
             </form>
-            {error && <AiFillExclamationCircle color="red" size="1.5rem" />}
+            {error && <p>🚨</p>}
         </>
     );
 };

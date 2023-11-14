@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { AiFillExclamationCircle } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import { useSession, signOut } from 'next-auth/react';
 import BaseWeightsAPI, { type BaseWeights, comps } from '@api/base-weights';
@@ -104,7 +103,7 @@ const BaseWeightsModifierForm = ({ cycle }: Props) => {
                     </div>
                 ))}
             </form>
-            {error && <AiFillExclamationCircle color="red" size="2rem" />}
+            {error && <p>🚨</p>}
         </>
     );
 };
