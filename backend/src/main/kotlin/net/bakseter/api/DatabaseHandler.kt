@@ -41,8 +41,9 @@ class DatabaseHandler(
     }
 
     private val flyway: Flyway =
-        Flyway.configure().baselineOnMigrate(true).baselineVersion("5").cleanDisabled(false)
+        Flyway.configure().baselineOnMigrate(true).baselineVersion("6").cleanDisabled(false)
             .dataSource(dbUrl, dbUsername, dbPassword).load()
+
 
     private val conn by lazy {
         Database.connect(dataSource())
