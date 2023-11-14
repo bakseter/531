@@ -11,7 +11,6 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.net.URI
 
 val tables: Array<Table> = arrayOf(
     Workout,
@@ -22,18 +21,16 @@ val tables: Array<Table> = arrayOf(
 
 class DatabaseHandler(
     private val migrateDb: Boolean,
-    dbUrl: URI
+    private val dbUrl: String,
+    private val dbUsername: String,
+    private val dbPassword: String
 ) {
-    private val dbPort = if (dbUrl.port == -1) 5432 else dbUrl.port
-    private val dbUrlStr = "jdbc:postgresql://${dbUrl.host}:${dbPort}${dbUrl.path}"
-    private val dbUsername = dbUrl.userInfo.split(":")[0]
-    private val dbPassword = dbUrl.userInfo.split(":")[1]
     private val maxPoolSize = 7
 
     private fun dataSource(): HikariDataSource {
         return HikariDataSource(
             HikariConfig().apply {
-                jdbcUrl = dbUrlStr
+                jdbcUrl = dbUrl
                 username = dbUsername
                 password = dbPassword
                 driverClassName = "org.postgresql.Driver"
@@ -45,7 +42,7 @@ class DatabaseHandler(
 
     private val flyway: Flyway =
         Flyway.configure().baselineOnMigrate(true).baselineVersion("5").cleanDisabled(false)
-            .dataSource(dbUrlStr, dbUsername, dbPassword).load()
+            .dataSource(dbUrl, dbUsername, dbPassword).load()
 
     private val conn by lazy {
         Database.connect(dataSource())
