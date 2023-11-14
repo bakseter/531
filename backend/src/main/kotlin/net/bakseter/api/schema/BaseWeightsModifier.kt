@@ -11,7 +11,7 @@ data class BaseWeightsModifierJson(
     val dl: Float,
     val bp: Float,
     val sq: Float,
-    val op: Float,
+    val op: Float
 )
 
 object BaseWeightsModifier : Table("base_weights_modifier") {

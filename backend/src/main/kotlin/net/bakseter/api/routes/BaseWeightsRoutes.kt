@@ -48,7 +48,7 @@ fun Route.getBaseWeights() {
         }
 
         val baseWeights = transaction {
-            BaseWeights.select { BaseWeights.email eq email and (BaseWeights.profile eq profile)}.firstOrNull()
+            BaseWeights.select { BaseWeights.email eq email and (BaseWeights.profile eq profile) }.firstOrNull()
         }
 
         if (baseWeights == null) {
@@ -62,7 +62,7 @@ fun Route.getBaseWeights() {
                 dl = baseWeights[BaseWeights.dl],
                 bp = baseWeights[BaseWeights.bp],
                 sq = baseWeights[BaseWeights.sq],
-                op = baseWeights[BaseWeights.op],
+                op = baseWeights[BaseWeights.op]
             )
         )
     }
@@ -107,7 +107,7 @@ fun Route.putBaseWeights() {
             }
 
             transaction {
-                BaseWeights.update({ BaseWeights.email eq email and (BaseWeights.profile eq profile)}) {
+                BaseWeights.update({ BaseWeights.email eq email and (BaseWeights.profile eq profile) }) {
                     it[dl] = baseWeightsJson.dl
                     it[bp] = baseWeightsJson.bp
                     it[sq] = baseWeightsJson.sq
@@ -156,7 +156,7 @@ fun Route.getBaseWeightsModifier() {
                 dl = mod[BaseWeightsModifier.dl],
                 bp = mod[BaseWeightsModifier.bp],
                 sq = mod[BaseWeightsModifier.sq],
-                op = mod[BaseWeightsModifier.op],
+                op = mod[BaseWeightsModifier.op]
             )
         )
     }

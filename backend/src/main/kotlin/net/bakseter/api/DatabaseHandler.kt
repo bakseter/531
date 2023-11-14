@@ -17,12 +17,12 @@ val tables: Array<Table> = arrayOf(
     Workout,
     BaseWeights,
     Joker,
-    BaseWeightsModifier,
+    BaseWeightsModifier
 )
 
 class DatabaseHandler(
     private val migrateDb: Boolean,
-    dbUrl: URI,
+    dbUrl: URI
 ) {
     private val dbPort = if (dbUrl.port == -1) 5432 else dbUrl.port
     private val dbUrlStr = "jdbc:postgresql://${dbUrl.host}:${dbPort}${dbUrl.path}"

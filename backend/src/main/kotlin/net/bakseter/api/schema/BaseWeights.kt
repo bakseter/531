@@ -10,7 +10,7 @@ data class BaseWeightsJson(
     val dl: Float,
     val bp: Float,
     val sq: Float,
-    val op: Float,
+    val op: Float
 )
 
 object BaseWeights : Table("base_weights") {

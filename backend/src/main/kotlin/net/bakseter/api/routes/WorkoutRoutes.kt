@@ -70,7 +70,7 @@ fun Route.getWorkout() {
                 cycle = workout[Workout.cycle],
                 week = workout[Workout.week],
                 day = workout[Workout.day],
-                reps = workout[Workout.reps],
+                reps = workout[Workout.reps]
             )
         )
     }

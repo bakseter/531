@@ -24,7 +24,7 @@ fun Application.module() {
 
     DatabaseHandler(
         migrateDb,
-        databaseUrl,
+        databaseUrl
     ).init()
 
     configureAuthentication(devSecret = devSecret, devAudience = devAudience, devIssuer = devIssuer)
