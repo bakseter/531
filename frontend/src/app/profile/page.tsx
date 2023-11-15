@@ -21,9 +21,13 @@ const ProfilePage = () => {
                     {session?.user && (
                         <>
                             <h3 className="font-bold">Name</h3>
-                            <p className="text-lg">{session.user.name}</p>
+                            <p className="text-lg" data-cy="profile-name">
+                                {session.user.name}
+                            </p>
                             <h3 className="font-bold">Email</h3>
-                            <p className="text-lg">{session.user.email}</p>
+                            <p className="text-lg" data-cy="profile-email">
+                                {session.user.email}
+                            </p>
                         </>
                     )}
                     <p className="text-2xl font-bold">Profile</p>
