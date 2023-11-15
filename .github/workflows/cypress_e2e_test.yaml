@@ -1,0 +1,156 @@
+name: Cypress end-to-end tests
+
+on:
+  pull_request:
+    branches: [master]
+
+env:
+  IMAGE_NAME: 'ghcr.io/${{ github.repository }}'
+  TAG: ${{ github.sha }}
+
+jobs:
+  build_backend:
+    name: 'Build backend'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v40
+        with:
+          files: |
+            backend/**
+          files_ignore: |
+            backend/.gitignore
+            backend/.env.example
+          since_last_remote_commit: true
+
+      - name: List all changed files
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
+          echo "any_changed = ${{ steps.changed-files.outputs.any_changed }}"
+
+      - name: Login to GitHub Container Registry
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build backend with cache and push to registry
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: |
+          cd backend
+          docker build \
+            --cache-from "$IMAGE_NAME/backend:latest" \
+            -t "$IMAGE_NAME/backend:$TAG" \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            .
+          docker push "$IMAGE_NAME/backend" --all-tags
+        env:
+          DOCKER_BUILDKIT: 1
+
+  cypress_e2e_tests:
+    name: 'Cypress end-to-end tests'
+    runs-on: ubuntu-latest
+    needs: [build_backend]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Get changed files, frontend
+        id: changed-files-frontend
+        uses: tj-actions/changed-files@v40
+        with:
+          files: |
+            frontend/**
+            yarn.lock
+            package.json
+            .github/workflows/docker_tests_and_previews.yaml
+          files_ignore: |
+            *.md
+            *.png
+            *.ico
+            *.svg
+            *.test.tsx
+            frontend/.gitignore
+            frontend/.env.example
+          since_last_remote_commit: true
+
+      - name: List all changed files, frontend
+        run: |
+          for file in ${{ steps.changed-files-frontend.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
+          echo "any_changed = ${{ steps.changed-files-frontend.outputs.any_changed }}"
+
+      - name: Get changed files, backend
+        id: changed-files-backend
+        uses: tj-actions/changed-files@v40
+        with:
+          files: |
+            backend/**
+          files_ignore: |
+            backend/.gitignore
+            backend/.env.example
+          since_last_remote_commit: true
+
+      - name: List all changed files, backend
+        run: |
+          for file in ${{ steps.changed-files-backend.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
+          echo "any_changed = ${{ steps.changed-files-backend.outputs.any_changed }}"
+
+      - name: Backend changed, pull Docker image
+        if: steps.changed-files-frontend.outputs.any_changed == 'true' && steps.changed-files-backend.outputs.any_changed == 'true'
+        run: docker pull "$IMAGE_NAME/backend:$TAG"
+
+      - name: Backend didn't change, pull Docker image
+        if: steps.changed-files-frontend.outputs.any_changed == 'true' && steps.changed-files-backend.outputs.any_changed != 'true'
+        run: docker pull "$IMAGE_NAME/backend:latest"
+
+      - name: Start backend
+        if: steps.changed-files-frontend.outputs.any_changed == 'true' || steps.changed-files-backend.outputs.any_changed == 'true'
+        run: |
+          cd backend
+          docker compose up &
+        env:
+          BACKEND_TAG: ${{ steps.changed-files-backend.outputs.any_changed == 'true' && github.sha || 'latest' }}
+          ENVIRONMENT: preview
+
+      - name: Run Cypress end-to-end tests
+        if: steps.changed-files-frontend.outputs.any_changed == 'true' || steps.changed-files-backend.outputs.any_changed == 'true'
+        uses: cypress-io/github-action@v6.5.0
+        with:
+          working-directory: frontend
+          install-command: yarn --frozen-lockfile
+          build: yarn build
+          start: yarn start
+          wait-on: 'http://localhost:3000, http://localhost:8080/status'
+          config: video=false
+          browser: firefox
+        env:
+          NEXTAUTH_URL: http://localhost:3000
+          NEXTAUTH_SECRET: very-secret-string-123
+
+      - name: Upload Cypress screenshots (only on failure)
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: frontend/cypress/screenshots

@@ -1,4 +1,5 @@
 name: Terraform format
+
 on:
   pull_request:
     branches: [master]
