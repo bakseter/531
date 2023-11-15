@@ -83,7 +83,6 @@ services:
       ]
     ports:
       - '8081:8081'
-      - '443:443'
     volumes:
       - caddy_data_dev:/data
       - caddy_config_dev:/config
