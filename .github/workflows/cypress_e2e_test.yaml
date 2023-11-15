@@ -4,8 +4,12 @@ on:
   pull_request:
     branches: [master]
 
+permissions:
+  packages: write
+  actions: read
+
 env:
-  IMAGE_NAME: 'ghcr.io/${{ github.repository }}'
+  IMAGE_NAME: 'ghcr.io/${{ github.repository }}/backend'
   TAG: ${{ github.sha }}
 
 jobs:
@@ -49,11 +53,11 @@ jobs:
         run: |
           cd backend
           docker build \
-            --cache-from "$IMAGE_NAME/backend:latest" \
-            -t "$IMAGE_NAME/backend:$TAG" \
+            --cache-from "$IMAGE_NAME" \
+            -t "$IMAGE_NAME:$TAG" \
             --build-arg BUILDKIT_INLINE_CACHE=1 \
             .
-          docker push "$IMAGE_NAME/backend" --all-tags
+          docker push "$IMAGE_NAME" --all-tags
         env:
           DOCKER_BUILDKIT: 1
 
@@ -118,11 +122,11 @@ jobs:
 
       - name: Backend changed, pull Docker image
         if: steps.changed-files-frontend.outputs.any_changed == 'true' && steps.changed-files-backend.outputs.any_changed == 'true'
-        run: docker pull "$IMAGE_NAME/backend:$TAG"
+        run: docker pull "$IMAGE_NAME:$TAG"
 
       - name: Backend didn't change, pull Docker image
         if: steps.changed-files-frontend.outputs.any_changed == 'true' && steps.changed-files-backend.outputs.any_changed != 'true'
-        run: docker pull "$IMAGE_NAME/backend:latest"
+        run: docker pull "$IMAGE_NAME:latest"
 
       - name: Start backend
         if: steps.changed-files-frontend.outputs.any_changed == 'true' || steps.changed-files-backend.outputs.any_changed == 'true'
