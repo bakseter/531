@@ -1,10 +1,10 @@
-import type { Profile } from '$lib/server/workout';
+import type { Profile } from '$lib/types';
 import { PUBLIC_BACKEND_URL } from '$env/static/public';
 import {
 	type BaseWeights,
 	baseWeightsDecoder,
 	type BaseWeightsModifier,
-	baseWeightsModifierDecoder,
+	baseWeightsModifierDecoder
 } from '$lib/types';
 
 const BaseWeightsAPI = {

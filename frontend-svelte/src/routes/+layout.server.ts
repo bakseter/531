@@ -7,7 +7,10 @@ const load: LayoutServerLoad = async (event) => {
 
 	if (!session?.idToken) throw redirect(307, '/auth/signin');
 
-	const baseWeights = await BaseWeightsAPI.getBaseWeights({ profile: 1, idToken: session?.idToken });
+	const baseWeights = await BaseWeightsAPI.getBaseWeights({
+		profile: 1,
+		idToken: session?.idToken
+	});
 
 	if (baseWeights) throw redirect(307, `/week/1/cycle/1`);
 };
