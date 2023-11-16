@@ -3,13 +3,10 @@ on:
   pull_request:
     branches: [master]
 
-defaults:
-  run:
-    working-directory: frontend
 
 jobs:
-  lint_format:
-    name: 'Lint & format'
+  lint_format_next:
+    name: 'Lint & format Next.js'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -23,14 +20,47 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: '**/frontend/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/frontend/yarn.lock') }}
 
       - name: Install dependencies
-        run: yarn --frozen-lockfile --ignore-scripts
+        run: yarn --frozen-lockfile
+        working-directory: frontend
 
       - name: Run linter
         run: yarn lint
+        working-directory: frontend
 
       - name: Run prettier check
         run: yarn pcheck
+        working-directory: frontend
+
+  lint_format_check_svelte:
+    name: 'Lint, format & check Svelte'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: '**/frontend-svelte/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/frontend-svelte/yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+        working-directory: frontend-svelte
+
+      - name: Run linter & format check
+        run: yarn lint
+        working-directory: frontend-svelte
+
+      - name: Run Svelte check
+        run: yarn check
+        working-directory: frontend-svelte

@@ -101,9 +101,9 @@ resource "vercel_project_environment_variable" "svelte_auth_secret" {
 
 resource "vercel_project_environment_variable" "svelte_google_client_id" {
   project_id = vercel_project.svelte_project.id
-  key         = "GOOGLE_CLIENT_ID"
-  value       = var.google_client_id
-  target      = ["production", "preview", "development"]
+  key        = "GOOGLE_CLIENT_ID"
+  value      = var.google_client_id
+  target     = ["production", "preview", "development"]
 }
 
 resource "vercel_project_environment_variable" "svelte_google_client_secret" {

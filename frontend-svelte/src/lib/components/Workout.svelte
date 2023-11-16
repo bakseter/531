@@ -2,7 +2,7 @@
   import type { Week, Day, BaseWeights } from '$lib/types';
   import {
     weekToPercentages,
-    weekToSetReps,
+    weekToSetsReps,
     weekToDefiningRep,
     percentageToText,
     exerciseToText,
@@ -27,7 +27,7 @@
   }));
   export const warmupCutOff = 2;
   export const jokerCutOff = 5;
-  export const reps = (index: number): number | undefined => weekToSetReps(week)[index];
+  export const reps = (index: number): number | undefined => weekToSetsReps(week)[index];
   export const roundToNearest = (index: number): number => (index <= warmupCutOff ? 5 : 2.5);
   export const tableRowStyle = 'p-2';
   export const tableRowStyleAlt = '{tableRowStyle} bg-slate-200';
