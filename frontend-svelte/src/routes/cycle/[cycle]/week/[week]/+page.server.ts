@@ -6,23 +6,23 @@ import { cycles } from '$lib/constants';
 import { safeWeekDecoder } from '$lib/types';
 
 const load: PageServerLoad = async ({ locals, params }) => {
-	const session = await locals.getSession();
-	if (!session?.idToken) throw error(401, 'Unauthorized');
+  const session = await locals.getSession();
+  if (!session?.idToken) throw error(401, 'Unauthorized');
 
-	const profile = 1;
+  const profile = 1;
 
-	const cycle = safeParseInt(params.cycle);
-	const week = safeWeekDecoder(safeParseInt(params.week));
+  const cycle = safeParseInt(params.cycle);
+  const week = safeWeekDecoder(safeParseInt(params.week));
 
-	if (cycle && cycles.includes(cycle) && week) {
-		const baseWeights = await BaseWeightsAPI.getBaseWeights({ idToken: session.idToken, profile });
+  if (cycle && cycles.includes(cycle) && week) {
+    const baseWeights = await BaseWeightsAPI.getBaseWeights({ idToken: session.idToken, profile });
 
-		if (!baseWeights) throw error(404, 'Base weights not found');
+    if (!baseWeights) throw error(404, 'Base weights not found');
 
-		return { cycle, week, baseWeights };
-	}
+    return { cycle, week, baseWeights };
+  }
 
-	throw error(404, 'Cycle not found');
+  throw error(404, 'Cycle not found');
 };
 
 export { load };

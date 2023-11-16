@@ -4,11 +4,11 @@ import { safeParseInt } from '$lib/utils';
 import { cycles } from '$lib/constants';
 
 const load: PageServerLoad = async ({ params }) => {
-	const cycle = safeParseInt(params.cycle);
+  const cycle = safeParseInt(params.cycle);
 
-	if (cycle && cycles.includes(cycle)) return { cycle };
+  if (cycle && cycles.includes(cycle)) return { cycle };
 
-	throw error(404, 'Cycle not found');
+  throw error(404, 'Cycle not found');
 };
 
 export { load };
