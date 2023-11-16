@@ -23,8 +23,14 @@ const actions: Record<string, Action> = {
 
 		const profile = 1;
 
-		return { success: await BaseWeightsAPI.putBaseWeights({ idToken, profile, baseWeights: { dl, bp, sq, op } }) };
-	},
-}
+		return {
+			success: await BaseWeightsAPI.putBaseWeights({
+				idToken,
+				profile,
+				baseWeights: { dl, bp, sq, op }
+			})
+		};
+	}
+};
 
 export { actions };

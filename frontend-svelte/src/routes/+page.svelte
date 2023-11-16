@@ -1,8 +1,6 @@
 <script>
 	import { comps } from '$lib/constants';
 	import { exerciseToText } from '$lib/utils';
-
-	export { comps, exerciseToText };
 </script>
 
 <div class="grid grid-cols-1">
