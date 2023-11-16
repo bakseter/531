@@ -44,11 +44,25 @@ resource "vercel_project_environment_variable" "next_auth_secret" {
   target     = ["production", "preview", "development"]
 }
 
+resource "vercel_project_environment_variable" "next_google_client_id" {
+  project_id = vercel_project.next_project.id
+  key        = "GOOGLE_CLIENT_ID"
+  value      = var.google_client_id
+  target     = ["production", "preview", "development"]
+}
+
+resource "vercel_project_environment_variable" "next_google_client_secret" {
+  project_id = vercel_project.next_project.id
+  key        = "GOOGLE_CLIENT_SECRET"
+  value      = var.google_client_secret
+  target     = ["production", "preview", "development"]
+}
+
 # SvelteKit
 
 resource "vercel_project" "svelte_project" {
   name                       = "531-svelte"
-  framework                  = "sveltekit"
+  framework                  = "sveltekit-1"
   root_directory             = "frontend-svelte"
   serverless_function_region = "arn1"
   install_command            = "yarn --frozen-lockfile"
@@ -73,9 +87,9 @@ resource "vercel_project_environment_variable" "svelte_backend_url_prod" {
 
 resource "vercel_project_environment_variable" "svelte_backend_url_dev" {
   project_id = vercel_project.svelte_project.id
-  key         = "PUBLIC_BACKEND_URL"
-  value       = local.backend_url_dev
-  target      = ["preview", "development"]
+  key        = "PUBLIC_BACKEND_URL"
+  value      = local.backend_url_dev
+  target     = ["preview", "development"]
 }
 
 resource "vercel_project_environment_variable" "svelte_auth_secret" {
@@ -85,18 +99,16 @@ resource "vercel_project_environment_variable" "svelte_auth_secret" {
   target     = ["production", "preview", "development"]
 }
 
-# Shared
-
-resource "vercel_shared_environment_variable" "google_client_id" {
-  project_ids = [vercel_project.next_project.id, vercel_project.svelte_project.id]
+resource "vercel_project_environment_variable" "svelte_google_client_id" {
+  project_id = vercel_project.svelte_project.id
   key         = "GOOGLE_CLIENT_ID"
   value       = var.google_client_id
   target      = ["production", "preview", "development"]
 }
 
-resource "vercel_shared_environment_variable" "google_client_secret" {
-  project_ids = [vercel_project.next_project.id, vercel_project.svelte_project.id]
-  key         = "GOOGLE_CLIENT_SECRET"
-  value       = var.google_client_secret
-  target      = ["production", "preview", "development"]
+resource "vercel_project_environment_variable" "svelte_google_client_secret" {
+  project_id = vercel_project.svelte_project.id
+  key        = "GOOGLE_CLIENT_SECRET"
+  value      = var.google_client_secret
+  target     = ["production", "preview", "development"]
 }
