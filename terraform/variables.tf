@@ -14,7 +14,7 @@ variable "vercel_token" {
   type = string
 }
 
-variable "nextauth_secret" {
+variable "auth_secret" {
   type = string
 }
 
