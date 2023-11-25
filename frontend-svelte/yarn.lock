@@ -20,18 +20,6 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@auth/core@0.18.2":
-  version "0.18.2"
-  resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.18.2.tgz#21fff058cc62509c408db1e7d36c9698b059ad17"
-  integrity sha512-pjTS0ReNNgZgUJPuuAwlp9wA+wu5ko0fX1KTTCgbuYioo9OVvUz6L3LV9+1hS4BtFw6yBtv6fVCLwCDu68/dQw==
-  dependencies:
-    "@panva/hkdf" "^1.1.1"
-    cookie "0.5.0"
-    jose "^5.1.0"
-    oauth4webapi "^2.3.0"
-    preact "10.11.3"
-    preact-render-to-string "5.2.3"
-
 "@auth/core@0.18.3":
   version "0.18.3"
   resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.18.3.tgz#e85c2e8f3dbcee47ff7759d94a762781acedb505"
@@ -44,12 +32,12 @@
     preact "10.11.3"
     preact-render-to-string "5.2.3"
 
-"@auth/sveltekit@0.3.13":
-  version "0.3.13"
-  resolved "https://registry.yarnpkg.com/@auth/sveltekit/-/sveltekit-0.3.13.tgz#9e7e020dc48f4e083d031fe3049eff23b00b003a"
-  integrity sha512-fymj7A9dQiqGIiXxcEiTprfcp6fplFuplH0Yu8Aiis3dDrnbR3EHyAdzTLWKbhOaXHR+qkZ7hiTOKBwWJ5jL9Q==
+"@auth/sveltekit@0.3.14":
+  version "0.3.14"
+  resolved "https://registry.yarnpkg.com/@auth/sveltekit/-/sveltekit-0.3.14.tgz#c164674b12c804ca658607d45c9b90f7cf749d68"
+  integrity sha512-Ealyi4uM4V42tk4UhhRQ+iZKah0OOp12siXwgDsCj1uBOCeZwL97RkvdMDX7pg18zBP/h2qFAuMWjW5q7bSYxA==
   dependencies:
-    "@auth/core" "0.18.2"
+    "@auth/core" "0.18.3"
 
 "@babel/runtime@^7.21.0":
   version "7.23.2"
