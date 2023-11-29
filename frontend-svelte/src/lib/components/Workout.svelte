@@ -29,7 +29,7 @@
   export const jokerCutOff = 5;
   export const reps = (index: number): number | undefined => weekToSetsReps(week)[index];
   export const roundToNearest = (index: number): number => (index <= warmupCutOff ? 5 : 2.5);
-  export const tableRowStyle = 'p-2';
+  export const tableRowStyle = 'py-2 text-left';
   export const tableRowStyleAlt = '{tableRowStyle} bg-slate-200';
 </script>
 
@@ -52,36 +52,32 @@
       </thead>
       <tbody>
         {#each weekPercents as { index, percentage, headingText }}
-          <div>
-            {#if index % 3 === 0 && index <= 6}
-              <div class="px-2 py-4 pt-8" key={`padding-box-${index}`}>
-                {#if headingText}
-                  <p class="font-bold">{headingText}</p>
-                {/if}
-              </div>
-            {/if}
-            <tr key={`table-row-${index}`}>
-              <td class={index % 2 === 0 ? tableRowStyle : tableRowStyleAlt}>
-                1x {reps(index) ?? weekToDefiningRep(week)}{index === 5 ? '+' : ''}
-              </td>
-              <td class={index % 2 === 0 ? tableRowStyle : tableRowStyleAlt}>
-                {percentageToText(percentage)}
-              </td>
-              <td class={index % 2 === 0 ? tableRowStyle : tableRowStyleAlt}>
-                {Math.max(
-                  20,
-                  roundToNearest(index) *
-                    Math.ceil(
-                      (baseWeights[dayToExercise(day)] * percentage) / roundToNearest(index)
-                    )
-                )} kg
-              </td>
-              <td class={index % 2 === 0 ? tableRowStyle : tableRowStyleAlt}>
-                <!-- {repsField({ index, percentage })} -->
-                -
-              </td>
-            </tr>
-          </div>
+          {#if index % 3 === 0 && index <= 6}
+            <div class="px-2 py-4 pt-8" key={`padding-box-${index}`}>
+              {#if headingText}
+                <p class="font-bold">{headingText}</p>
+              {/if}
+            </div>
+          {/if}
+          <tr key={`table-row-${index}`}>
+            <td class={index % 2 === 0 ? tableRowStyle : tableRowStyleAlt}>
+              1x{reps(index) ?? weekToDefiningRep(week)}{index === 5 ? '+' : ''}
+            </td>
+            <td class={index % 2 === 0 ? tableRowStyle : tableRowStyleAlt}>
+              {percentageToText(percentage)}
+            </td>
+            <td class={index % 2 === 0 ? tableRowStyle : tableRowStyleAlt}>
+              {Math.max(
+                20,
+                roundToNearest(index) *
+                  Math.ceil((baseWeights[dayToExercise(day)] * percentage) / roundToNearest(index))
+              )} kg
+            </td>
+            <td class={index % 2 === 0 ? tableRowStyle : tableRowStyleAlt}>
+              <!-- {repsField({ index, percentage })} -->
+              -
+            </td>
+          </tr>
         {/each}
       </tbody>
     </table>
