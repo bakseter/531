@@ -54,7 +54,7 @@ fun Route.getJoker() {
         }
 
         if (joker == null) {
-            call.respond(HttpStatusCode.NotFound)
+            call.respond(HttpStatusCode.NoContent)
             return@get
         }
 

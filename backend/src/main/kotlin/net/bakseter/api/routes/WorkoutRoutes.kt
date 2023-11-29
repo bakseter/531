@@ -60,7 +60,7 @@ fun Route.getWorkout() {
         }
 
         if (workout == null) {
-            call.respond(HttpStatusCode.NotFound)
+            call.respond(HttpStatusCode.NoContent)
             return@get
         }
 
@@ -213,7 +213,7 @@ fun Route.getDate() {
         val date = workout?.get(Workout.date)
 
         if (date == null) {
-            call.respond(HttpStatusCode.NotFound)
+            call.respond(HttpStatusCode.NoContent)
             return@get
         }
 
