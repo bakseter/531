@@ -4,8 +4,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-open-sans)'],
-        mono: ['var(--font-roboto-mono)']
+        sans: ['Open Sans', 'sans-serif'],
+        serif: ['Roboto Slab', 'serif']
       }
     },
     container: {

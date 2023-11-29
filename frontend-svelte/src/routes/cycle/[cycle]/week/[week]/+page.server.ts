@@ -12,17 +12,15 @@ const load: PageServerLoad = async ({ locals, params }) => {
   const profile = 1;
 
   const cycle = safeParseInt(params.cycle);
+  if (!cycle || !cycles.includes(cycle)) throw error(404, 'Cycle not found');
+
   const week = safeWeekDecoder(safeParseInt(params.week));
+  if (!week) throw error(404, 'Week not found');
 
-  if (cycle && cycles.includes(cycle) && week) {
-    const baseWeights = await BaseWeightsAPI.getBaseWeights({ idToken: session.idToken, profile });
+  const baseWeights = await BaseWeightsAPI.getBaseWeights({ idToken: session.idToken, profile });
+  if (!baseWeights) throw error(404, 'Base weights not found');
 
-    if (!baseWeights) throw error(404, 'Base weights not found');
-
-    return { cycle, week, baseWeights };
-  }
-
-  throw error(404, 'Cycle not found');
+  return { cycle, week, baseWeights };
 };
 
 export { load };

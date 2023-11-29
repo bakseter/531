@@ -15,19 +15,16 @@ const BaseWeightsAPI = {
     idToken: string;
     profile: Profile;
   }): Promise<BaseWeights | undefined> => {
-    try {
-      const response = await fetch(`${PUBLIC_BACKEND_URL}/base-weights?profile=${profile}`, {
-        headers: { Authorization: `Bearer ${idToken}` }
-      });
+    const response = await fetch(`${PUBLIC_BACKEND_URL}/base-weights?profile=${profile}`, {
+      headers: { Authorization: `Bearer ${idToken}` }
+    });
 
-      if (response.status === 200) {
-        const json = await response.json();
+    if (response.status !== 200 && response.status !== 204)
+      throw new Error(`Failed to GET base weights: ${response.status}, ${response.statusText}`);
+    if (response.status === 204) return undefined;
 
-        return baseWeightsDecoder(json);
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    const json = await response.json();
+    return baseWeightsDecoder(json);
   },
 
   putBaseWeights: async ({
@@ -38,20 +35,15 @@ const BaseWeightsAPI = {
     idToken: string;
     profile: Profile;
     baseWeights: BaseWeights;
-  }): Promise<boolean> => {
-    try {
-      const response = await fetch(`${PUBLIC_BACKEND_URL}/base-weights?profile=${profile}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
-        body: JSON.stringify(baseWeights)
-      });
+  }): Promise<void> => {
+    const response = await fetch(`${PUBLIC_BACKEND_URL}/base-weights?profile=${profile}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
+      body: JSON.stringify(baseWeights)
+    });
 
-      return response.ok;
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-      return false;
-    }
+    if (response.status !== 200 && response.status !== 204)
+      throw new Error(`Failed to PUT base weights: ${response.statusText}`);
   },
 
   getBaseWeightsModifier: async ({
@@ -63,22 +55,19 @@ const BaseWeightsAPI = {
     profile: Profile;
     cycle: number;
   }): Promise<BaseWeightsModifier | undefined> => {
-    try {
-      const response = await fetch(
-        `${PUBLIC_BACKEND_URL}/base-weights/modifier/${cycle}?profile=${profile}`,
-        {
-          headers: { Authorization: `Bearer ${idToken}` }
-        }
-      );
-
-      if (response.status === 200) {
-        const json = await response.json();
-
-        return baseWeightsModifierDecoder(json);
+    const response = await fetch(
+      `${PUBLIC_BACKEND_URL}/base-weights/modifier/${cycle}?profile=${profile}`,
+      {
+        headers: { Authorization: `Bearer ${idToken}` }
       }
-    } catch (error) {
-      console.error(error);
-    }
+    );
+
+    if (response.status !== 200 && response.status !== 204)
+      throw new Error(`Failed to GET base weights modifier: ${response.statusText}`);
+    if (response.status === 204) return undefined;
+
+    const json = await response.json();
+    return baseWeightsModifierDecoder(json);
   },
 
   putBaseWeightsModifier: async ({
@@ -89,22 +78,15 @@ const BaseWeightsAPI = {
     idToken: string;
     profile: Profile;
     baseWeightsModifier: BaseWeightsModifier;
-  }): Promise<boolean> => {
-    try {
-      const response = await fetch(
-        `${PUBLIC_BACKEND_URL}/base-weights/modifier?profile=${profile}`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
-          body: JSON.stringify(baseWeightsModifier)
-        }
-      );
+  }): Promise<void> => {
+    const response = await fetch(`${PUBLIC_BACKEND_URL}/base-weights/modifier?profile=${profile}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
+      body: JSON.stringify(baseWeightsModifier)
+    });
 
-      return response.ok;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
+    if (response.status !== 200 && response.status !== 204)
+      throw new Error(`Failed to PUT base weights modifier: ${response.statusText}`);
   }
 };
 

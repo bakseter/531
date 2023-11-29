@@ -1,11 +1,25 @@
 import { fail, redirect, type Action } from '@sveltejs/kit';
 import { safeParseInt } from '$lib/utils';
 import BaseWeightsAPI from '$lib/server/base-weights';
+import type { PageServerLoad } from './$types';
+
+const load: PageServerLoad = async (event) => {
+  const session = await event.locals.getSession();
+
+  if (!session?.idToken) throw redirect(307, '/auth/signin');
+
+  const baseWeights = await BaseWeightsAPI.getBaseWeights({
+    idToken: session.idToken,
+    profile: 1
+  });
+
+  if (baseWeights) throw redirect(307, '/cycle/1/week/1');
+};
 
 const actions: Record<string, Action> = {
   default: async ({ request, locals }) => {
-    const idToken = locals.getSession?.idToken;
-    if (!idToken) throw redirect(307, '/auth/signin');
+    const session = await locals.getSession();
+    if (!session?.idToken) throw redirect(307, '/auth/signin');
 
     const data = await request.formData();
 
@@ -25,7 +39,7 @@ const actions: Record<string, Action> = {
 
     return {
       success: await BaseWeightsAPI.putBaseWeights({
-        idToken,
+        idToken: session.idToken,
         profile,
         baseWeights: { dl, bp, sq, op }
       })
@@ -33,4 +47,4 @@ const actions: Record<string, Action> = {
   }
 };
 
-export { actions };
+export { actions, load };

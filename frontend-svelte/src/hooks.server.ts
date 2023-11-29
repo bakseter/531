@@ -26,7 +26,6 @@ const handle = SvelteKitAuth({
             },
             password: { label: 'Password', type: 'password' }
           },
-          // eslint-disable-next-line @typescript-eslint/require-await
           async authorize() {
             return {
               id: '1',
