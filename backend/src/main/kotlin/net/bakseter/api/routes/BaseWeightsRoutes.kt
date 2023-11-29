@@ -52,7 +52,7 @@ fun Route.getBaseWeights() {
         }
 
         if (baseWeights == null) {
-            call.respond(HttpStatusCode.NoContent)
+            call.respond(HttpStatusCode.NotFound)
             return@get
         }
 
@@ -146,7 +146,7 @@ fun Route.getBaseWeightsModifier() {
         }
 
         if (mod == null) {
-            call.respond(HttpStatusCode.NoContent)
+            call.respond(HttpStatusCode.NotFound)
             return@get
         }
 
