@@ -53,12 +53,12 @@ const WorkoutAPI = {
                 },
             );
 
-            if (response.ok) {
+            if (response.status === 200) {
                 const workout = await response.json();
                 return workoutDecoder(workout);
             }
 
-            if (response.status === 404) return true;
+            if (response.status === 404 || response.status === 204) return true;
             if (response.status === 401) return false;
 
             return null;
@@ -120,12 +120,12 @@ const WorkoutAPI = {
                 },
             );
 
-            if (response.ok) {
+            if (response.status === 200) {
                 const json = await response.json();
                 return record({ date: date })(json).date;
             }
 
-            if (response.status === 404) return true;
+            if (response.status === 404 || response.status === 204) return true;
             if (response.status === 401) return false;
 
             return null;
@@ -181,7 +181,7 @@ const WorkoutAPI = {
                 headers: { Authorization: `Bearer ${idToken}` },
             });
 
-            if (response.ok) {
+            if (response.status === 200) {
                 const json = await response.json();
                 return record({ count: number })(json).count;
             }
