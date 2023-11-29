@@ -38,7 +38,7 @@ const BaseWeightsAPI = {
                 return baseWeightsDecoder(json);
             }
 
-            if (response.status === 404) return true;
+            if (response.status === 404 || response.status === 204) return true;
             if (response.status === 401) return false;
 
             return null;
@@ -96,7 +96,7 @@ const BaseWeightsAPI = {
                 return baseWeightsModifierDecoder(json);
             }
 
-            if (response.status === 404) return true;
+            if (response.status === 404 || response.status === 204) return true;
             if (response.status === 401) return false;
 
             return null;

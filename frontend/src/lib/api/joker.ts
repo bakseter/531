@@ -34,7 +34,7 @@ const JokerAPI = {
             );
 
             if (ok) return 'on';
-            if (status === 404) return 'off';
+            if (status === 404 || status === 204) return 'off';
             if (status === 401) return 'reauth';
 
             return null;
