@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import MenuLink from '$lib/components/MenuLink.svelte';
   import { cycles } from '$lib/constants';
 

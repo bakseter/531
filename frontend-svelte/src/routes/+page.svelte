@@ -1,4 +1,5 @@
-<script>
+<script lang="ts">
+  import { enhance } from '$app/forms';
   import { comps } from '$lib/constants';
   import { exerciseToText } from '$lib/utils';
 </script>
@@ -7,7 +8,7 @@
   <div class="flex mx-auto">
     <div class="grid grid-cols-1 gap-2 py-8">
       <h3 class="text-center">Please enter your base weights below 👇</h3>
-      <form method="POST">
+      <form method="POST" use:enhance>
         <div class="grid grid-cols-1 gap-1">
           {#each comps as value}
             <div>
@@ -15,7 +16,7 @@
                 {exerciseToText(value)}
               </label>
               <input
-                id={value}
+                name={value}
                 type="number"
                 step=".25"
                 key={`input-${value}`}
