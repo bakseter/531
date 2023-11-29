@@ -38,7 +38,7 @@ const BaseWeightsAPI = {
                 return baseWeightsDecoder(json);
             }
 
-            if (response.status === 404) return true;
+            if (response.status === 404 || response.status === 204) return true;
             if (response.status === 401) return false;
 
             return null;
@@ -59,14 +59,14 @@ const BaseWeightsAPI = {
         baseWeights: BaseWeights;
     }): Promise<boolean | null> => {
         try {
-            const response = await fetch(`${BACKEND_URL}/base-weights?profile=${profile}`, {
+            const { status } = await fetch(`${BACKEND_URL}/base-weights?profile=${profile}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
                 body: JSON.stringify(baseWeights),
             });
 
-            if (response.ok) return true;
-            if (response.status === 401) return false;
+            if (status === 200) return true;
+            if (status === 401) return false;
 
             return null;
         } catch (error) {
@@ -96,7 +96,7 @@ const BaseWeightsAPI = {
                 return baseWeightsModifierDecoder(json);
             }
 
-            if (response.status === 404) return true;
+            if (response.status === 404 || response.status === 204) return true;
             if (response.status === 401) return false;
 
             return null;
@@ -117,14 +117,14 @@ const BaseWeightsAPI = {
         baseWeightsModifier: BaseWeightsModifier;
     }): Promise<boolean | null> => {
         try {
-            const response = await fetch(`${BACKEND_URL}/base-weights/modifier?profile=${profile}`, {
+            const { status } = await fetch(`${BACKEND_URL}/base-weights/modifier?profile=${profile}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
                 body: JSON.stringify(baseWeightsModifier),
             });
 
-            if (response.ok) return true;
-            if (response.status === 401) return false;
+            if (status === 200) return true;
+            if (status === 401) return false;
 
             return null;
         } catch (error) {

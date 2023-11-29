@@ -26,15 +26,15 @@ const JokerAPI = {
         num: number;
     }): Promise<'on' | 'off' | 'reauth' | null> => {
         try {
-            const { ok, status } = await fetch(
+            const { status } = await fetch(
                 `${BACKEND_URL}/joker/${num}?profile=${profile}&cycle=${cycle}&week=${week}&day=${day}`,
                 {
                     headers: { Authorization: `Bearer ${idToken}` },
                 },
             );
 
-            if (ok) return 'on';
-            if (status === 404) return 'off';
+            if (status === 200) return 'on';
+            if (status === 404 || status === 204) return 'off';
             if (status === 401) return 'reauth';
 
             return null;
@@ -61,7 +61,7 @@ const JokerAPI = {
         num: number;
     }): Promise<boolean | null> => {
         try {
-            const { ok, status } = await fetch(
+            const { status } = await fetch(
                 `${BACKEND_URL}/joker/${num}?profile=${profile}&cycle=${cycle}&week=${week}&day=${day}`,
                 {
                     method: 'PUT',
@@ -69,7 +69,7 @@ const JokerAPI = {
                 },
             );
 
-            if (ok) return true;
+            if (status === 200) return true;
             if (status === 401) return false;
 
             return null;
