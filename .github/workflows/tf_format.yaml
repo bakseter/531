@@ -10,7 +10,7 @@ defaults:
 
 jobs:
   terraform_format:
-    name: 'Terraform format'
+    name: "Terraform format"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

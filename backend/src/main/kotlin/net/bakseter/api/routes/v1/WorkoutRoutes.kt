@@ -1,4 +1,4 @@
-package net.bakseter.api.routes
+package net.bakseter.api.routes.v1
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
@@ -11,6 +11,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.put
+import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 import net.bakseter.api.schema.DateJson
 import net.bakseter.api.schema.Workout
@@ -23,19 +24,27 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.joda.time.DateTime
 
-fun Application.workoutRoutes(authConfig: String) {
+fun Application.workoutRoutesV1(authConfig: String) {
     routing {
         authenticate(authConfig) {
-            getWorkout()
-            putWorkout()
-            getDate()
-            putDate()
-            getWorkoutCount()
+            route("/v1") {
+                getWorkoutV1()
+                putWorkoutV1()
+                getDateV1()
+                putDateV1()
+                getWorkoutCountV1()
+            }
+
+            getWorkoutV1()
+            putWorkoutV1()
+            getDateV1()
+            putDateV1()
+            getWorkoutCountV1()
         }
     }
 }
 
-fun Route.getWorkout() {
+fun Route.getWorkoutV1() {
     get("/workout") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
         if (email == null) {
@@ -60,7 +69,7 @@ fun Route.getWorkout() {
         }
 
         if (workout == null) {
-            call.respond(HttpStatusCode.NotFound)
+            call.respond(HttpStatusCode.NoContent)
             return@get
         }
 
@@ -76,7 +85,7 @@ fun Route.getWorkout() {
     }
 }
 
-fun Route.putWorkout() {
+fun Route.putWorkoutV1() {
     put("/workout") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
         if (email == null) {
@@ -129,7 +138,7 @@ fun Route.putWorkout() {
     }
 }
 
-fun Route.putDate() {
+fun Route.putDateV1() {
     put("/workout/date") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
         if (email == null) {
@@ -186,7 +195,7 @@ fun Route.putDate() {
     }
 }
 
-fun Route.getDate() {
+fun Route.getDateV1() {
     get("/workout/date") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
         if (email == null) {
@@ -213,7 +222,7 @@ fun Route.getDate() {
         val date = workout?.get(Workout.date)
 
         if (date == null) {
-            call.respond(HttpStatusCode.NotFound)
+            call.respond(HttpStatusCode.NoContent)
             return@get
         }
 
@@ -224,7 +233,7 @@ fun Route.getDate() {
     }
 }
 
-fun Route.getWorkoutCount() {
+fun Route.getWorkoutCountV1() {
     get("/workout/count") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
         if (email == null) {

@@ -4,10 +4,9 @@ on:
   pull_request:
     branches: [master]
 
-
 jobs:
   lint_format_next:
-    name: 'Lint & format Next.js'
+    name: "Lint & format Next.js"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -21,7 +20,7 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
-          path: '**/frontend/node_modules'
+          path: "**/frontend/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/frontend/yarn.lock') }}
 
       - name: Install dependencies
@@ -37,7 +36,7 @@ jobs:
         working-directory: frontend
 
   lint_format_check_svelte:
-    name: 'Lint, format & check Svelte'
+    name: "Lint, format & check Svelte"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -51,7 +50,7 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
-          path: '**/frontend-svelte/node_modules'
+          path: "**/frontend-svelte/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/frontend-svelte/yarn.lock') }}
 
       - name: Install dependencies

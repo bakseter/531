@@ -1,4 +1,4 @@
-package net.bakseter.api.routes
+package net.bakseter.api.routes.v1
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
@@ -11,6 +11,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.put
+import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 import net.bakseter.api.schema.BaseWeights
 import net.bakseter.api.schema.BaseWeightsJson
@@ -22,18 +23,25 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
-fun Application.baseWeightsRoutes(authConfig: String) {
+fun Application.baseWeightsRoutesV1(authConfig: String) {
     routing {
         authenticate(authConfig) {
-            getBaseWeights()
-            putBaseWeights()
-            getBaseWeightsModifier()
-            putBaseWeightsModifier()
+            route("/v1") {
+                getBaseWeightsV1()
+                putBaseWeightsV1()
+                getBaseWeightsModifierV1()
+                putBaseWeightsModifierV1()
+            }
+
+            getBaseWeightsV1()
+            putBaseWeightsV1()
+            getBaseWeightsModifierV1()
+            putBaseWeightsModifierV1()
         }
     }
 }
 
-fun Route.getBaseWeights() {
+fun Route.getBaseWeightsV1() {
     get("/base-weights") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
         if (email == null) {
@@ -52,7 +60,7 @@ fun Route.getBaseWeights() {
         }
 
         if (baseWeights == null) {
-            call.respond(HttpStatusCode.NotFound)
+            call.respond(HttpStatusCode.NoContent)
             return@get
         }
 
@@ -68,7 +76,7 @@ fun Route.getBaseWeights() {
     }
 }
 
-fun Route.putBaseWeights() {
+fun Route.putBaseWeightsV1() {
     put("/base-weights") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
 
@@ -123,7 +131,7 @@ fun Route.putBaseWeights() {
     }
 }
 
-fun Route.getBaseWeightsModifier() {
+fun Route.getBaseWeightsModifierV1() {
     get("/base-weights/modifier/{cycle}") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
         if (email == null) {
@@ -146,7 +154,7 @@ fun Route.getBaseWeightsModifier() {
         }
 
         if (mod == null) {
-            call.respond(HttpStatusCode.NotFound)
+            call.respond(HttpStatusCode.NoContent)
             return@get
         }
 
@@ -162,7 +170,7 @@ fun Route.getBaseWeightsModifier() {
     }
 }
 
-fun Route.putBaseWeightsModifier() {
+fun Route.putBaseWeightsModifierV1() {
     put("/base-weights/modifier") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
         if (email == null) {

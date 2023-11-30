@@ -1,4 +1,5 @@
 <script lang="ts">
+  import DateBoxForm from '$lib/components/DateBoxForm.svelte';
   import type { Week, Day, BaseWeights } from '$lib/types';
   import {
     weekToPercentages,
@@ -19,6 +20,7 @@
   export let cycle: number;
   export let week: Week;
   export let day: Day;
+  export let date: Date | undefined;
   export let jokersWeightAdd;
   export let weekPercents = weekToPercentages(week, jokersWeightAdd).map((percentage, index) => ({
     index,
@@ -37,7 +39,7 @@
   <div class="grid grid-flow-col items-center">
     <h3 class="font-bold my-2 inline">{exerciseToText(dayToExercise(day))}</h3>
     <div class="my-2">
-      date {cycle}
+      <DateBoxForm {cycle} {week} {day} {date} />
     </div>
   </div>
   <div class="grid grid-cols-1 items-center">

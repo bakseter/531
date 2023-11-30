@@ -1,25 +1,28 @@
 import { fail, redirect, type Action } from '@sveltejs/kit';
-import { safeParseInt } from '$lib/utils';
+import { safeParseISODate, safeParseInt } from '$lib/utils';
+import { safeDayDecoder, safeWeekDecoder } from '$lib/types';
 import BaseWeightsAPI from '$lib/server/base-weights';
+import WorkoutAPI from '$lib/server/workout';
 import type { PageServerLoad } from './$types';
 
 const load: PageServerLoad = async (event) => {
-  const session = await event.locals.getSession();
+  const idToken = (await event.locals.getSession())?.idToken;
+  if (!idToken) throw redirect(307, '/auth/signin');
 
-  if (!session?.idToken) throw redirect(307, '/auth/signin');
+  const profile = 1;
 
   const baseWeights = await BaseWeightsAPI.getBaseWeights({
-    idToken: session.idToken,
-    profile: 1
+    idToken,
+    profile
   });
 
   if (baseWeights) throw redirect(307, '/cycle/1/week/1');
 };
 
 const actions: Record<string, Action> = {
-  default: async ({ request, locals }) => {
-    const session = await locals.getSession();
-    if (!session?.idToken) throw redirect(307, '/auth/signin');
+  baseWeights: async ({ request, locals }) => {
+    const idToken = (await locals.getSession())?.idToken;
+    if (!idToken) throw redirect(307, '/auth/signin');
 
     const data = await request.formData();
 
@@ -39,9 +42,41 @@ const actions: Record<string, Action> = {
 
     return {
       success: await BaseWeightsAPI.putBaseWeights({
-        idToken: session.idToken,
+        idToken,
         profile,
         baseWeights: { dl, bp, sq, op }
+      })
+    };
+  },
+
+  date: async ({ request, locals }) => {
+    const idToken = (await locals.getSession())?.idToken;
+    if (!idToken) throw redirect(307, '/auth/signin');
+
+    const data = await request.formData();
+
+    const date = safeParseISODate(data.get('date'));
+    if (!date) return fail(400, { date, missing: true });
+
+    const cycle = safeParseInt(data.get('cycle'));
+    if (!cycle) return fail(400, { cycle, missing: true });
+
+    const week = safeWeekDecoder(data.get('week'));
+    if (!week) return fail(400, { week, missing: true });
+
+    const day = safeDayDecoder(data.get('day'));
+    if (!day) return fail(400, { day, missing: true });
+
+    const profile = 1;
+
+    return {
+      success: await WorkoutAPI.putDate({
+        idToken,
+        profile,
+        date,
+        cycle,
+        week,
+        day
       })
     };
   }
