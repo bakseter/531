@@ -1,5 +1,7 @@
 import type { CompExercise, BaseWeights, Week, Day } from '$lib/types';
 import { jokers } from '$lib/constants';
+import { parseISO } from 'date-fns';
+import { string } from 'typescript-json-decoder';
 
 const addToBaseWeights = (baseWeights: BaseWeights, cycle: number): BaseWeights => ({
   dl: baseWeights.dl + (cycle - 1) * 5,
@@ -107,9 +109,18 @@ const weekToSetsReps = (week: Week): Array<number> => {
 const percentageToText = (percentage: number): string => `${(percentage * 100).toFixed(0)}%`;
 
 const safeParseInt = (value: unknown): number | undefined => {
+  if (typeof value === 'number') return value;
   if (typeof value === 'string') {
     const parsed = Number.parseInt(value);
     if (Number.isInteger(parsed)) return parsed;
+  }
+};
+
+const safeParseISODate = (value: unknown): Date | undefined => {
+  try {
+    return parseISO(string(value));
+  } catch (error) {
+    return undefined;
   }
 };
 
@@ -121,5 +132,6 @@ export {
   weekToSetsReps,
   addToBaseWeights,
   weekToDefiningRep,
-  safeParseInt
+  safeParseInt,
+  safeParseISODate
 };

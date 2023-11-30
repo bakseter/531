@@ -1,5 +1,4 @@
-import type { Profile } from '$lib/types';
-import { PUBLIC_BACKEND_URL } from '$env/static/public';
+import { PUBLIC_API_VERSION, PUBLIC_BACKEND_URL } from '$env/static/public';
 import {
   type BaseWeights,
   baseWeightsDecoder,
@@ -7,20 +6,24 @@ import {
   baseWeightsModifierDecoder
 } from '$lib/types';
 
+const BACKEND_URL = `${PUBLIC_BACKEND_URL}/${PUBLIC_API_VERSION}`;
+
 const BaseWeightsAPI = {
   getBaseWeights: async ({
     idToken,
     profile
   }: {
     idToken: string;
-    profile: Profile;
+    profile: number;
   }): Promise<BaseWeights | undefined> => {
-    const response = await fetch(`${PUBLIC_BACKEND_URL}/base-weights?profile=${profile}`, {
+    const response = await fetch(`${BACKEND_URL}/base-weights?profile=${profile}`, {
       headers: { Authorization: `Bearer ${idToken}` }
     });
 
     if (response.status !== 200 && response.status !== 204)
-      throw new Error(`Failed to GET base weights: ${response.status}, ${response.statusText}`);
+      throw new Error(
+        `Failed to GET base weights: ${response.status}, ${response.statusText} @ ${response.url}`
+      );
     if (response.status === 204) return undefined;
 
     const json = await response.json();
@@ -33,10 +36,10 @@ const BaseWeightsAPI = {
     baseWeights
   }: {
     idToken: string;
-    profile: Profile;
+    profile: number;
     baseWeights: BaseWeights;
   }): Promise<void> => {
-    const response = await fetch(`${PUBLIC_BACKEND_URL}/base-weights?profile=${profile}`, {
+    const response = await fetch(`${BACKEND_URL}/base-weights?profile=${profile}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
       body: JSON.stringify(baseWeights)
@@ -52,11 +55,11 @@ const BaseWeightsAPI = {
     cycle
   }: {
     idToken: string;
-    profile: Profile;
+    profile: number;
     cycle: number;
   }): Promise<BaseWeightsModifier | undefined> => {
     const response = await fetch(
-      `${PUBLIC_BACKEND_URL}/base-weights/modifier/${cycle}?profile=${profile}`,
+      `${BACKEND_URL}/base-weights/modifier/${cycle}?profile=${profile}`,
       {
         headers: { Authorization: `Bearer ${idToken}` }
       }
@@ -76,10 +79,10 @@ const BaseWeightsAPI = {
     baseWeightsModifier
   }: {
     idToken: string;
-    profile: Profile;
+    profile: number;
     baseWeightsModifier: BaseWeightsModifier;
   }): Promise<void> => {
-    const response = await fetch(`${PUBLIC_BACKEND_URL}/base-weights/modifier?profile=${profile}`, {
+    const response = await fetch(`${BACKEND_URL}/base-weights/modifier?profile=${profile}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
       body: JSON.stringify(baseWeightsModifier)

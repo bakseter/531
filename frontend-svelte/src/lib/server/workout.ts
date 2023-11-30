@@ -1,7 +1,9 @@
 import { record, number, date } from 'typescript-json-decoder';
 import { formatISO } from 'date-fns';
-import { PUBLIC_BACKEND_URL } from '$env/static/public';
-import { workoutDecoder, type Profile, type Week, type Day, type Workout } from '$lib/types';
+import { PUBLIC_API_VERSION, PUBLIC_BACKEND_URL } from '$env/static/public';
+import { workoutDecoder, type Week, type Day, type Workout } from '$lib/types';
+
+const BACKEND_URL = `${PUBLIC_BACKEND_URL}/${PUBLIC_API_VERSION}`;
 
 const WorkoutAPI = {
   getWorkout: async ({
@@ -12,14 +14,14 @@ const WorkoutAPI = {
     day
   }: {
     idToken: string;
-    profile: Profile;
+    profile: number;
     cycle: number;
     week: Week;
     day: Day;
   }): Promise<Workout | undefined> => {
     try {
       const response = await fetch(
-        `${PUBLIC_BACKEND_URL}/workout?profile=${profile}&cycle=${cycle}&week=${week}&day=${day}`,
+        `${BACKEND_URL}/workout?profile=${profile}&cycle=${cycle}&week=${week}&day=${day}`,
         {
           headers: {
             Authorization: `Bearer ${idToken}`
@@ -42,11 +44,11 @@ const WorkoutAPI = {
     workout
   }: {
     idToken: string;
-    profile: Profile;
+    profile: number;
     workout: Workout;
   }): Promise<boolean> => {
     try {
-      const { ok } = await fetch(`${PUBLIC_BACKEND_URL}/workout?profile=${profile}`, {
+      const { ok } = await fetch(`${BACKEND_URL}/workout?profile=${profile}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -70,25 +72,21 @@ const WorkoutAPI = {
     day
   }: {
     idToken: string;
-    profile: Profile;
+    profile: number;
     cycle: number;
     week: Week;
     day: Day;
   }): Promise<Date | undefined> => {
-    try {
-      const response = await fetch(
-        `${PUBLIC_BACKEND_URL}/workout/date?profile=${profile}&cycle=${cycle}&week=${week}&day=${day}`,
-        {
-          headers: { Authorization: `Bearer ${idToken}` }
-        }
-      );
-
-      if (response.ok) {
-        const json = await response.json();
-        return record({ date: date })(json).date;
+    const response = await fetch(
+      `${BACKEND_URL}/workout/date?profile=${profile}&cycle=${cycle}&week=${week}&day=${day}`,
+      {
+        headers: { Authorization: `Bearer ${idToken}` }
       }
-    } catch (error) {
-      console.error(error);
+    );
+
+    if (response.status === 200) {
+      const json = await response.json();
+      return record({ date: date })(json).date;
     }
   },
 
@@ -101,30 +99,25 @@ const WorkoutAPI = {
     date
   }: {
     idToken: string;
-    profile: Profile;
+    profile: number;
     cycle: number;
     week: Week;
     day: Day;
     date: Date;
-  }): Promise<boolean> => {
-    try {
-      const { ok } = await fetch(
-        `${PUBLIC_BACKEND_URL}/workout/date?profile=${profile}&cycle=${cycle}&week=${week}&day=${day}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${idToken}`
-          },
-          body: JSON.stringify({ date: formatISO(date) })
-        }
-      );
+  }): Promise<void> => {
+    const { status } = await fetch(
+      `${BACKEND_URL}/workout/date?profile=${profile}&cycle=${cycle}&week=${week}&day=${day}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${idToken}`
+        },
+        body: JSON.stringify({ date: formatISO(date) })
+      }
+    );
 
-      return ok;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
+    if (status !== 200) throw new Error('Failed to update date');
   },
 
   getWorkoutCount: async ({
@@ -132,10 +125,10 @@ const WorkoutAPI = {
     profile
   }: {
     idToken: string;
-    profile: Profile;
+    profile: number;
   }): Promise<number | undefined> => {
     try {
-      const response = await fetch(`${PUBLIC_BACKEND_URL}/workout/count?profile=${profile}`, {
+      const response = await fetch(`${BACKEND_URL}/workout/count?profile=${profile}`, {
         headers: { Authorization: `Bearer ${idToken}` }
       });
 

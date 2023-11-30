@@ -1,4 +1,4 @@
-package net.bakseter.api.routes
+package net.bakseter.api.routes.v2
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
@@ -10,6 +10,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.put
+import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 import net.bakseter.api.schema.Joker
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -19,16 +20,18 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
-fun Application.jokerRoutes(authConfig: String) {
+fun Application.jokerRoutesV2(authConfig: String) {
     routing {
         authenticate(authConfig) {
-            getJoker()
-            putJoker()
+            route("/v2") {
+                getJokerV2()
+                putJokerV2()
+            }
         }
     }
 }
 
-fun Route.getJoker() {
+fun Route.getJokerV2() {
     get("/joker/{num}") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
         if (email == null) {
@@ -54,7 +57,7 @@ fun Route.getJoker() {
         }
 
         if (joker == null) {
-            call.respond(HttpStatusCode.NotFound)
+            call.respond(HttpStatusCode.NoContent)
             return@get
         }
 
@@ -62,7 +65,7 @@ fun Route.getJoker() {
     }
 }
 
-fun Route.putJoker() {
+fun Route.putJokerV2() {
     put("/joker/{num}") {
         val email = call.principal<JWTPrincipal>()?.payload?.getClaim("email")?.asString()?.lowercase()
 

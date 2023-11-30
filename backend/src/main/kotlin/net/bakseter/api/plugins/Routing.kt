@@ -9,9 +9,12 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
-import net.bakseter.api.routes.baseWeightsRoutes
-import net.bakseter.api.routes.jokerRoutes
-import net.bakseter.api.routes.workoutRoutes
+import net.bakseter.api.routes.v1.baseWeightsRoutesV1
+import net.bakseter.api.routes.v1.jokerRoutesV1
+import net.bakseter.api.routes.v1.workoutRoutesV1
+import net.bakseter.api.routes.v2.baseWeightsRoutesV2
+import net.bakseter.api.routes.v2.jokerRoutesV2
+import net.bakseter.api.routes.v2.workoutRoutesV2
 import java.util.Date
 
 fun Application.configureRouting(dev: Boolean, devSecret: String, devAudience: String, devIssuer: String) {
@@ -22,9 +25,13 @@ fun Application.configureRouting(dev: Boolean, devSecret: String, devAudience: S
         getToken(dev = dev, secret = devSecret, audience = devAudience, issuer = devIssuer)
     }
 
-    workoutRoutes(authConfig)
-    baseWeightsRoutes(authConfig)
-    jokerRoutes(authConfig)
+    workoutRoutesV1(authConfig)
+    baseWeightsRoutesV1(authConfig)
+    jokerRoutesV1(authConfig)
+
+    workoutRoutesV2(authConfig)
+    baseWeightsRoutesV2(authConfig)
+    jokerRoutesV2(authConfig)
 }
 
 fun Route.getStatus() {
@@ -52,6 +59,7 @@ fun Route.getToken(dev: Boolean, secret: String, audience: String, issuer: Strin
                 .withClaim("email", email)
                 .withExpiresAt(Date(System.currentTimeMillis() + (1000 * 60 * 60)))
                 .sign(Algorithm.HMAC256(secret))
+
         call.respond(token)
     }
 }

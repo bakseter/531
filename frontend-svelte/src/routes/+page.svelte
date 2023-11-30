@@ -8,7 +8,7 @@
   <div class="flex mx-auto">
     <div class="grid grid-cols-1 gap-2 py-8">
       <h3 class="text-center">Please enter your base weights below 👇</h3>
-      <form method="POST" use:enhance>
+      <form method="POST" action="?/baseWeights" use:enhance>
         <div class="grid grid-cols-1 gap-1">
           {#each comps as value}
             <div>

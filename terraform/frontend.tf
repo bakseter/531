@@ -92,6 +92,13 @@ resource "vercel_project_environment_variable" "svelte_backend_url_dev" {
   target     = ["preview", "development"]
 }
 
+resource "vercel_project_environment_variable" "svelte_api_version" {
+  project_id = vercel_project.svelte_project.id
+  key        = "PUBLIC_API_VERSION"
+  value      = "v2"
+  target     = ["production", "preview", "development"]
+}
+
 resource "vercel_project_environment_variable" "svelte_auth_secret" {
   project_id = vercel_project.svelte_project.id
   key        = "AUTH_SECRET"

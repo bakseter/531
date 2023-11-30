@@ -22,8 +22,8 @@
       "automerge": true
     },
     {
-        "matchPackagePatterns": ["digitalocean", "vercel"],
-        "dependencyDashboardApproval": true
+      "matchPackagePatterns": ["digitalocean", "vercel"],
+      "dependencyDashboardApproval": true
     }
   ]
 }

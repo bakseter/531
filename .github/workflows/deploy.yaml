@@ -9,7 +9,7 @@ permissions:
   actions: read
 
 env:
-  IMAGE_NAME: 'ghcr.io/${{ github.repository }}/backend'
+  IMAGE_NAME: "ghcr.io/${{ github.repository }}/backend"
 
 jobs:
   docker_push:
