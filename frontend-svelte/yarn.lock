@@ -20,18 +20,6 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@auth/core@0.18.3":
-  version "0.18.3"
-  resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.18.3.tgz#e85c2e8f3dbcee47ff7759d94a762781acedb505"
-  integrity sha512-YXQWxi3pKxngt+2vo3dq8+wDANlUH8nhQgX6EVdd3Enfe3vweBtHqzaWrtWzQnVb8wdGxdhxaoOlYroEBE+/yw==
-  dependencies:
-    "@panva/hkdf" "^1.1.1"
-    cookie "0.5.0"
-    jose "^5.1.0"
-    oauth4webapi "^2.3.0"
-    preact "10.11.3"
-    preact-render-to-string "5.2.3"
-
 "@auth/core@0.18.4":
   version "0.18.4"
   resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.18.4.tgz#5c91f7835dc24329d5486a2939d766608a7aacb8"
@@ -44,12 +32,12 @@
     preact "10.11.3"
     preact-render-to-string "5.2.3"
 
-"@auth/sveltekit@0.3.14":
-  version "0.3.14"
-  resolved "https://registry.yarnpkg.com/@auth/sveltekit/-/sveltekit-0.3.14.tgz#c164674b12c804ca658607d45c9b90f7cf749d68"
-  integrity sha512-Ealyi4uM4V42tk4UhhRQ+iZKah0OOp12siXwgDsCj1uBOCeZwL97RkvdMDX7pg18zBP/h2qFAuMWjW5q7bSYxA==
+"@auth/sveltekit@0.3.15":
+  version "0.3.15"
+  resolved "https://registry.yarnpkg.com/@auth/sveltekit/-/sveltekit-0.3.15.tgz#7877cdf8f483b427acfd8c12f6ae76976229d604"
+  integrity sha512-GlnqV6m8/wXaeUntwy+X2yBKG134WrIdpGCZuK8RaI3iHsy883ix9Hbgkp6oVsHGYcIUeuLgGA6BOsMuJL6/Ag==
   dependencies:
-    "@auth/core" "0.18.3"
+    "@auth/core" "0.18.4"
 
 "@babel/runtime@^7.21.0":
   version "7.23.2"
@@ -645,15 +633,15 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==
 
-cookie@0.5.0, cookie@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.5.0.tgz#d1f5d71adec6558c58f389987c366aa47e994f8b"
-  integrity sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==
-
 cookie@0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.6.0.tgz#2798b04b071b0ecbff0dbb62a505a8efa4e19051"
   integrity sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==
+
+cookie@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.5.0.tgz#d1f5d71adec6558c58f389987c366aa47e994f8b"
+  integrity sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==
 
 cross-spawn@^7.0.2:
   version "7.0.3"
