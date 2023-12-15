@@ -32,12 +32,25 @@
     preact "10.11.3"
     preact-render-to-string "5.2.3"
 
-"@auth/sveltekit@0.3.15":
-  version "0.3.15"
-  resolved "https://registry.yarnpkg.com/@auth/sveltekit/-/sveltekit-0.3.15.tgz#7877cdf8f483b427acfd8c12f6ae76976229d604"
-  integrity sha512-GlnqV6m8/wXaeUntwy+X2yBKG134WrIdpGCZuK8RaI3iHsy883ix9Hbgkp6oVsHGYcIUeuLgGA6BOsMuJL6/Ag==
+"@auth/core@0.18.5":
+  version "0.18.5"
+  resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.18.5.tgz#7025d5c533588f9b01965c34ab32abf262987525"
+  integrity sha512-Ql8YobXp57mbXqHNaaroIAgBopKaxWI+3Tlu1rGcXW5KPzXdfTqijZ4HOuZvWKqmhbMWQ9xS9r8uG4fMonZYwg==
   dependencies:
-    "@auth/core" "0.18.4"
+    "@panva/hkdf" "^1.1.1"
+    "@types/cookie" "0.6.0"
+    cookie "0.6.0"
+    jose "^5.1.0"
+    oauth4webapi "^2.3.0"
+    preact "10.11.3"
+    preact-render-to-string "5.2.3"
+
+"@auth/sveltekit@0.3.16":
+  version "0.3.16"
+  resolved "https://registry.yarnpkg.com/@auth/sveltekit/-/sveltekit-0.3.16.tgz#e68b933259a9028126a73ec212d9240764b361cf"
+  integrity sha512-p0GpzNfdQeWjn87HuWLNhQ/gq6w0JOm/e3Qp5bQ73sMfkyIVtaCmkRmXWqbTZ8tFaZdr5IGveHy3FtEIPrrMEQ==
+  dependencies:
+    "@auth/core" "0.18.5"
 
 "@babel/runtime@^7.21.0":
   version "7.23.2"
@@ -320,6 +333,11 @@
     magic-string "^0.30.3"
     svelte-hmr "^0.15.3"
     vitefu "^0.2.4"
+
+"@types/cookie@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@types/cookie/-/cookie-0.6.0.tgz#eac397f28bf1d6ae0ae081363eca2f425bedf0d5"
+  integrity sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==
 
 "@types/cookie@^0.5.1":
   version "0.5.4"
