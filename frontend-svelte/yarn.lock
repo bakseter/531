@@ -20,10 +20,10 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@auth/core@0.18.6":
-  version "0.18.6"
-  resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.18.6.tgz#cb97103285a670656fc4b38a2952962aa9959a99"
-  integrity sha512-AI7tnyNOg5zVS2elA44O03MWS6jyp69S8habJts63IyiCIoSkhqcZX4EcEJ0287m0hxzOltPCV9Zq2aqXbrNSA==
+"@auth/core@0.19.0":
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/@auth/core/-/core-0.19.0.tgz#d51dcd980ce054006ddcda9fddf4de06ba33a9ce"
+  integrity sha512-BkFg2SoNftMN6A2Sn2g1lLFLTO74qMtFKsZmSCEF9d1csqSaEXIv50k6OrfniODWi5tZP8bcfSxGodv75khlOA==
   dependencies:
     "@panva/hkdf" "^1.1.1"
     "@types/cookie" "0.6.0"
@@ -33,12 +33,12 @@
     preact "10.11.3"
     preact-render-to-string "5.2.3"
 
-"@auth/sveltekit@0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@auth/sveltekit/-/sveltekit-0.4.0.tgz#51792f941aac0b2751266941c169be34871029a5"
-  integrity sha512-3mX14XZo8TDhivD2uvn4kGr8e4okpRPNBazRjNqBr8orOTi0hWic5I9eaYTR1nsK/ktHGnJ5lZ9iZ9npDCZyaA==
+"@auth/sveltekit@0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@auth/sveltekit/-/sveltekit-0.5.0.tgz#424828fe476d8d088a2a0a456793fb4a14899c52"
+  integrity sha512-oSfeevQE06KSpA2gucwDarXLzJ6rA/s9XWsH3cq6vrEgxxgeFS+t3CB2QuJHzoBg3UXRkg6EBpxrPY/9tCkYrA==
   dependencies:
-    "@auth/core" "0.18.6"
+    "@auth/core" "0.19.0"
 
 "@esbuild/android-arm64@0.18.20":
   version "0.18.20"
