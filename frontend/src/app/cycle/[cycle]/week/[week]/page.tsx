@@ -1,3 +1,4 @@
+import type { Metadata, ResolvingMetadata } from 'next';
 import Workout from '@components/workout';
 import { days } from '@utils/constants';
 import { safeParseInt } from '@utils/helpers';
@@ -8,6 +9,11 @@ interface WeekPageProps {
         cycle: string;
     };
 }
+
+const generateMetadata = ({ params }: WeekPageProps, parent: ResolvingMetadata): Metadata => ({
+    title: `Cycle ${params.cycle} | Week ${params.week}`,
+    ...parent,
+});
 
 const WeekPage = ({ params }: WeekPageProps) => {
     const cycle = safeParseInt(params.cycle);
@@ -21,4 +27,5 @@ const WeekPage = ({ params }: WeekPageProps) => {
     ));
 };
 
+export { generateMetadata };
 export default WeekPage;

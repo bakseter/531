@@ -1,3 +1,4 @@
+import type { Metadata, ResolvingMetadata } from 'next';
 import { weeks } from '@utils/constants';
 import MenuLink from '@components/menu-link';
 
@@ -6,6 +7,11 @@ interface CyclePageProps {
         cycle: string;
     };
 }
+
+const generateMetadata = ({ params }: CyclePageProps, parent: ResolvingMetadata): Metadata => ({
+    title: `Cycle ${params.cycle}`,
+    ...parent,
+});
 
 const CyclePage = ({ params }: CyclePageProps) => (
     <div className="flex flex-col items-center py-16">
@@ -24,4 +30,5 @@ const CyclePage = ({ params }: CyclePageProps) => (
     </div>
 );
 
+export { generateMetadata };
 export default CyclePage;
