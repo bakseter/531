@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { getServerSession } from 'next-auth/next';
 import { Open_Sans, Roboto_Mono } from 'next/font/google'; // eslint-disable-line camelcase
+import type { Metadata, Viewport } from 'next';
 import SessionProviderWrapper from '@components/session-provider-wrapper';
 import { BaseWeightsProvider } from '@hooks/use-base-weights';
 import { ProfileProvider } from '@hooks/use-profile';
@@ -19,6 +20,28 @@ const robotoMono = Roboto_Mono({
     variable: '--font-roboto-mono',
 });
 
+const metadata: Metadata = {
+    robots: 'follow, index',
+    description: '5/3/1 Program',
+    title: '5/3/1',
+    openGraph: {
+        type: 'website',
+    },
+    manifest: '/site.webmanifest',
+    icons: {
+        icon: '/icons/icon-48x48.png',
+        apple: '/icons/icon-512x512.png',
+    },
+    appleWebApp: {
+        capable: true,
+        statusBarStyle: 'black',
+    },
+};
+
+const viewport: Viewport = {
+    themeColor: '#ffffff',
+};
+
 interface LayoutProps {
     children: ReactNode;
 }
@@ -28,29 +51,16 @@ const Layout = async ({ children }: LayoutProps) => {
 
     return (
         <html lang="nb" className={`${openSans.variable} ${robotoMono.variable}`}>
-            <head>
-                <meta name="robots" content="follow, index" />
-                <meta name="description" content="5/3/1 Program" />
-                <meta property="og:type" content="website" />
-                <meta name="apple-mobile-web-app-capable" content="yes" />
-                <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-                <meta name="theme-color" content="#ffffff" />
-
-                <link rel="apple-touch-icon" type="image/png" sizes="512x512" href="/icons/icon-512x512.png" />
-                <link rel="icon" type="image/png" sizes="48x48" href="/icons/icon-48x48.png" />
-                <link rel="manifest" href="/site.webmanifest" />
-            </head>
-            <body>
-                <div className="md:container md:mx-auto">
-                    <SessionProviderWrapper session={session ?? undefined}>
-                        <ProfileProvider>
-                            <BaseWeightsProvider>{children}</BaseWeightsProvider>
-                        </ProfileProvider>
-                    </SessionProviderWrapper>
-                </div>
+            <body className="md:container md:mx-auto">
+                <SessionProviderWrapper session={session ?? undefined}>
+                    <ProfileProvider>
+                        <BaseWeightsProvider>{children}</BaseWeightsProvider>
+                    </ProfileProvider>
+                </SessionProviderWrapper>
             </body>
         </html>
     );
 };
 
+export { metadata, viewport };
 export default Layout;

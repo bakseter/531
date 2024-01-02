@@ -94,9 +94,9 @@ const Workout = ({ cycle, week, day }: Props) => {
                             return (
                                 <>
                                     {index % 3 === 0 && index <= 6 && (
-                                        <div className="px-2 py-4 pt-8" key={`padding-box-${index}`}>
+                                        <span className="px-2 py-4 pt-8" key={`padding-box-${index}`}>
                                             {headingText && <p className="font-bold">{headingText}</p>}
-                                        </div>
+                                        </span>
                                     )}
                                     <tr key={`table-row-${index}`}>
                                         <td className={index % 2 === 0 ? tableRowStyle : tableRowStyleAlt}>{`1x${
