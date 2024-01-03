@@ -1,8 +1,14 @@
 package net.bakseter.api.schema
 
+import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
+
+@Serializable
+data class JokerCount(
+    val count: Int
+)
 
 object Joker : Table("joker") {
     val email: Column<String> = text("email")

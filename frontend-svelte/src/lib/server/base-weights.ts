@@ -1,4 +1,4 @@
-import { PUBLIC_API_VERSION, PUBLIC_BACKEND_URL } from '$env/static/public';
+import { PUBLIC_BACKEND_API_VERSION, PUBLIC_BACKEND_URL } from '$env/static/public';
 import {
   type BaseWeights,
   baseWeightsDecoder,
@@ -6,7 +6,7 @@ import {
   baseWeightsModifierDecoder
 } from '$lib/types';
 
-const BACKEND_URL = `${PUBLIC_BACKEND_URL}/${PUBLIC_API_VERSION}`;
+const BACKEND_URL = `${PUBLIC_BACKEND_URL}/${PUBLIC_BACKEND_API_VERSION}`;
 
 const BaseWeightsAPI = {
   getBaseWeights: async ({

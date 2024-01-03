@@ -1,9 +1,9 @@
 import NextAuth from 'next-auth';
 import Google from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
+import { backendUrl } from '@utils/constants';
 
 const isProd = (process.env.VERCEL_ENV ?? 'development') === 'production';
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:8080';
 const testEmail = 'test@mctest.com';
 const testName = 'Test McTest';
 
@@ -42,7 +42,7 @@ export const {
         async jwt({ token, account }) {
             if (!isProd) {
                 try {
-                    const response = await fetch(`${BACKEND_URL}/token/${encodeURIComponent(testEmail)}`);
+                    const response = await fetch(`${backendUrl}/token/${encodeURIComponent(testEmail)}`);
                     const testToken = await response.text();
 
                     token.idToken = testToken;

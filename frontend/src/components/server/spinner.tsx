@@ -1,9 +1,11 @@
+type SpinnerSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
 interface SpinnerProps {
-    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    size?: SpinnerSize;
 }
 
 const Spinner = ({ size = 'md' }: SpinnerProps) => {
-    const sizes = {
+    const sizes: Record<SpinnerSize, string> = {
         xs: 'w-4 h-4',
         sm: 'w-6 h-6',
         md: 'w-8 h-8',

@@ -1,7 +1,6 @@
 package net.bakseter.api.routes.v1
 
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.Application
 import io.ktor.server.application.call
 import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.jwt.JWTPrincipal
@@ -11,8 +10,6 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.put
-import io.ktor.server.routing.route
-import io.ktor.server.routing.routing
 import net.bakseter.api.schema.DateJson
 import net.bakseter.api.schema.Workout
 import net.bakseter.api.schema.WorkoutCountJson
@@ -24,23 +21,13 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.joda.time.DateTime
 
-fun Application.workoutRoutesV1(authConfig: String) {
-    routing {
-        authenticate(authConfig) {
-            route("/v1") {
-                getWorkoutV1()
-                putWorkoutV1()
-                getDateV1()
-                putDateV1()
-                getWorkoutCountV1()
-            }
-
-            getWorkoutV1()
-            putWorkoutV1()
-            getDateV1()
-            putDateV1()
-            getWorkoutCountV1()
-        }
+fun Route.workoutRoutesV1(authConfig: String) {
+    authenticate(authConfig) {
+        getWorkoutV1()
+        putWorkoutV1()
+        getDateV1()
+        putDateV1()
+        getWorkoutCountV1()
     }
 }
 

@@ -20,7 +20,8 @@
             "@api/*": ["./lib/api/*"],
             "@utils/*": ["./lib/utils/*"],
             "@hooks/*": ["./lib/hooks/*"],
-            "@styles/*": ["./styles/*"]
+            "@styles/*": ["./styles/*"],
+            "@actions/*": ["./app/actions/*"]
         },
         "plugins": [
             {

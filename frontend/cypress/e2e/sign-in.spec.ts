@@ -1,8 +1,6 @@
 import signIn from '../support/e2e';
 
-Cypress.on('uncaught:exception', (err, runnable) => {
-    return false;
-});
+Cypress.on('uncaught:exception', () => false);
 
 describe('Sign in tests', () => {
     describe('720p resolution', () => {
@@ -19,7 +17,7 @@ describe('Sign in tests', () => {
             cy.get('input[name="sq"]').type('100', { force: true });
             cy.get('input[name="op"]').type('100', { force: true });
 
-            cy.get('input[type="submit"]').click();
+            cy.get('button[type="submit"]').click();
         });
 
         it('Check front page', () => {

@@ -1,11 +1,13 @@
-'use client';
-
-import { useParams } from 'next/navigation';
-import BaseWeightsModifierForm from '@components/base-weights-modifier-form';
+import BaseWeightsModifierForm from '@components/server/base-weights-modifier-form';
 import { safeParseInt } from '@utils/helpers';
 
-const CycleEditPage = () => {
-    const params = useParams();
+interface Props {
+    params: {
+        cycle: string;
+    };
+}
+
+const CycleEditPage = ({ params }: Props) => {
     const currentCycle = safeParseInt(params.cycle);
 
     if (!currentCycle) throw new Error("Invalid cycle '${currentCycle}'");

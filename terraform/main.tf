@@ -1,8 +1,9 @@
 locals {
-  location    = "norwayeast"
-  db_user     = "postgres"
-  db_name     = "postgres"
-  backend_url = "https://${azurerm_container_app.backend.ingress.0.fqdn}"
+  location            = "norwayeast"
+  db_user             = "postgres"
+  db_name             = "postgres"
+  backend_url         = "https://${azurerm_container_app.backend.ingress.0.fqdn}"
+  backend_api_version = "v2"
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -165,6 +166,13 @@ resource "vercel_project_environment_variable" "next_backend_url" {
   target     = ["production", "preview", "development"]
 }
 
+resource "vercel_project_environment_variable" "next_backend_api_version" {
+  project_id = vercel_project.next_project.id
+  key        = "NEXT_PUBLIC_BACKEND_API_VERSION"
+  value      = local.backend_api_version
+  target     = ["production", "preview", "development"]
+}
+
 resource "vercel_project_environment_variable" "next_auth_secret" {
   project_id = vercel_project.next_project.id
   key        = "AUTH_SECRET"
@@ -213,10 +221,10 @@ resource "vercel_project_environment_variable" "svelte_backend_url" {
   target     = ["production", "preview", "development"]
 }
 
-resource "vercel_project_environment_variable" "svelte_api_version" {
+resource "vercel_project_environment_variable" "svelte_backend_api_version" {
   project_id = vercel_project.svelte_project.id
-  key        = "PUBLIC_API_VERSION"
-  value      = "v2"
+  key        = "PUBLIC_BACKEND_API_VERSION"
+  value      = local.backend_api_version
   target     = ["production", "preview", "development"]
 }
 

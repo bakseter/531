@@ -9,8 +9,8 @@ interface SessionProviderWrapperProps {
     session?: Session;
 }
 
-const SessionProviderWrapper = ({ children, session }: SessionProviderWrapperProps) => {
-    return <SessionProvider session={session}>{children}</SessionProvider>;
-};
+const SessionProviderWrapper = ({ children, session }: SessionProviderWrapperProps) => (
+    <SessionProvider session={session}>{children}</SessionProvider>
+);
 
 export default SessionProviderWrapper;
