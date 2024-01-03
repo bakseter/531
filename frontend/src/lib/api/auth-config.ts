@@ -1,23 +1,23 @@
-import NextAuth, { type NextAuthOptions } from 'next-auth';
-import GoogleProvider from 'next-auth/providers/google';
-import CredentialsProvider from 'next-auth/providers/credentials';
-
-const clientId = process.env.GOOGLE_CLIENT_ID as string;
-const clientSecret = process.env.GOOGLE_CLIENT_SECRET as string;
+import NextAuth from 'next-auth';
+import Google from 'next-auth/providers/google';
+import Credentials from 'next-auth/providers/credentials';
 
 const isProd = (process.env.VERCEL_ENV ?? 'development') === 'production';
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:8080';
 const testEmail = 'test@mctest.com';
 const testName = 'Test McTest';
 
-export const authOptions: NextAuthOptions = {
+export const {
+    handlers: { GET, POST },
+    auth,
+} = NextAuth({
     session: {
         maxAge: 3600,
     },
     providers: [
         process.env.VERCEL_ENV === 'production'
-            ? GoogleProvider({ clientId, clientSecret })
-            : CredentialsProvider({
+            ? Google
+            : Credentials({
                   name: 'Credentials',
                   credentials: {
                       username: {
@@ -67,6 +67,4 @@ export const authOptions: NextAuthOptions = {
             return session;
         },
     },
-};
-
-export default NextAuth(authOptions);
+});
