@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import BaseWeightsForm from '@components/base-weights-form';
+import BaseWeightsForm from '@components/server/base-weights-form';
 import BaseWeightsAPI from '@api/base-weights';
 import WorkoutAPI from '@api/workout';
 import { auth } from '@api/auth-config';

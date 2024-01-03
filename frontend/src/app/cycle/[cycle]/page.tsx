@@ -1,19 +1,19 @@
 import type { Metadata, ResolvingMetadata } from 'next';
 import { weeks } from '@utils/constants';
-import MenuLink from '@components/menu-link';
+import MenuLink from '@components/server/menu-link';
 
-interface CyclePageProps {
+interface Props {
     params: {
         cycle: string;
     };
 }
 
-const generateMetadata = ({ params }: CyclePageProps, parent: ResolvingMetadata): Metadata => ({
-    title: `Cycle ${params.cycle}`,
+const generateMetadata = ({ params: { cycle } }: Props, parent: ResolvingMetadata): Metadata => ({
+    title: `Cycle ${cycle}`,
     ...parent,
 });
 
-const CyclePage = ({ params }: CyclePageProps) => (
+const CyclePage = ({ params: { cycle } }: Props) => (
     <div className="flex flex-col items-center py-16">
         <h3 className="pb-6">Please select a week 👇</h3>
         <div className="flex flex-row">
@@ -21,7 +21,7 @@ const CyclePage = ({ params }: CyclePageProps) => (
                 <MenuLink
                     className="bg-sky-500 rounded-md p-4 m-4"
                     key={`page-link-week-${week}`}
-                    href={`/cycle/${params.cycle}/week/${week}`}
+                    href={`/cycle/${cycle}/week/${week}`}
                 >
                     Week {week}
                 </MenuLink>

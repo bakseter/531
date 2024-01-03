@@ -1,9 +1,9 @@
 import { record, number, date } from 'typescript-json-decoder';
 import { formatISO } from 'date-fns';
-import { PUBLIC_API_VERSION, PUBLIC_BACKEND_URL } from '$env/static/public';
+import { PUBLIC_BACKEND_API_VERSION, PUBLIC_BACKEND_URL } from '$env/static/public';
 import { workoutDecoder, type Week, type Day, type Workout } from '$lib/types';
 
-const BACKEND_URL = `${PUBLIC_BACKEND_URL}/${PUBLIC_API_VERSION}`;
+const BACKEND_URL = `${PUBLIC_BACKEND_URL}/${PUBLIC_BACKEND_API_VERSION}`;
 
 const WorkoutAPI = {
   getWorkout: async ({

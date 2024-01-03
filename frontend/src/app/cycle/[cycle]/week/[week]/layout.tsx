@@ -1,21 +1,21 @@
-'use client';
-
-import { useParams } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { weeks } from '@utils/constants';
 import { safeParseInt } from '@utils/helpers';
-import MenuLink from '@components/menu-link';
+import MenuLink from '@components/server/menu-link';
 
 interface WeekLayoutProps {
     children: ReactNode;
+    params: {
+        cycle: string;
+        week: string;
+    };
 }
 
-const WeekLayout = ({ children }: WeekLayoutProps) => {
+const WeekLayout = ({ children, params: { cycle, week } }: WeekLayoutProps) => {
     const weekPrefix = '📆';
 
-    const params = useParams();
-    const currentCycle = params.cycle;
-    const currentWeek = safeParseInt(params.week);
+    const currentCycle = cycle;
+    const currentWeek = safeParseInt(week);
 
     if (typeof currentCycle !== 'string') throw new Error('params.cycle is not a string');
     if (!currentWeek) throw new Error('params.week is not a number');

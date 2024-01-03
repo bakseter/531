@@ -5,6 +5,7 @@
 
   export let data: {
     cycle: number;
+    week: number;
     day: number;
     baseWeights: BaseWeights;
     dates: Array<Date | undefined>;

@@ -1,21 +1,21 @@
 import type { Metadata, ResolvingMetadata } from 'next';
-import Workout from '@components/workout';
+import Workout from '@components/server/workout';
 import { days } from '@utils/constants';
 import { safeParseInt } from '@utils/helpers';
 
-interface WeekPageProps {
+interface Props {
     params: {
-        week: string;
         cycle: string;
+        week: string;
     };
 }
 
-const generateMetadata = ({ params }: WeekPageProps, parent: ResolvingMetadata): Metadata => ({
-    title: `Cycle ${params.cycle} | Week ${params.week}`,
+const generateMetadata = ({ params: { week, cycle } }: Props, parent: ResolvingMetadata): Metadata => ({
+    title: `Cycle ${cycle} | Week ${week}`,
     ...parent,
 });
 
-const WeekPage = ({ params }: WeekPageProps) => {
+const WeekPage = ({ params }: Props) => {
     const cycle = safeParseInt(params.cycle);
     const week = safeParseInt(params.week);
     if ((week !== 1 && week !== 2 && week !== 3) || !cycle) throw new Error('breh');

@@ -1,22 +1,20 @@
-'use client';
-
-import { useParams } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { cycles } from '@utils/constants';
 import { safeParseInt } from '@utils/helpers';
-import MenuLink from '@components/menu-link';
+import MenuLink from '@components/server/menu-link';
 
-interface CyclePageProps {
+interface Props {
     children: ReactNode;
+    params: {
+        cycle: string;
+    };
 }
 
-const CycleLayout = ({ children }: CyclePageProps) => {
+const CycleLayout = ({ children, params: { cycle } }: Props) => {
     const cyclePrefix = '🔄';
     const profileHeader = '👤';
 
-    const params = useParams();
-    const currentCycle = safeParseInt(params.cycle);
-
+    const currentCycle = safeParseInt(cycle);
     if (!currentCycle) throw new Error('params.cycle is not a number');
 
     return (

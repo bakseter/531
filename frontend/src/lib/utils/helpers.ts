@@ -1,6 +1,5 @@
 import type { CompExercise, BaseWeights } from '@api/base-weights';
 import type { Week, Day } from '@api/workout';
-import { jokers } from '@utils/constants';
 
 const addToBaseWeights = (baseWeights: BaseWeights, cycle: number): BaseWeights => ({
     dl: baseWeights.dl + (cycle - 1) * 5,
@@ -57,10 +56,11 @@ const exerciseToText = (exercise: CompExercise): string => {
     }
 };
 
-const jokerWeightsExtend = (lastVal: number, customJokersLengthAdd?: number): Array<number> =>
-    new Array(jokers.length + (customJokersLengthAdd ?? 0))
-        .fill(lastVal)
-        .map((value: number, index) => value + 0.05 * (index + 1));
+const jokerWeightsExtend = (lastVal: number, jokersAmount?: number): Array<number> => {
+    if (!jokersAmount || jokersAmount < 0) return [];
+
+    return new Array(jokersAmount).fill(lastVal).map((value: number, index) => value + 0.05 * (index + 1));
+};
 
 const weekToPercentages = (week: Week, customJokersLengthAdd?: number): Array<number> => {
     const warmupWeights = [0.4, 0.5, 0.6];
@@ -89,17 +89,7 @@ const weekToSetsReps = (week: Week): Array<number> => {
     const defRep = weekToDefiningRep(week);
     const defReps = week === 3 ? [5, 3, defRep] : [defRep, defRep, defRep];
 
-    switch (week) {
-        case 1: {
-            return [...warmupReps, ...defReps, ...jokers.map(() => 5)];
-        }
-        case 2: {
-            return [...warmupReps, ...defReps, ...jokers.map(() => 3)];
-        }
-        case 3: {
-            return [...warmupReps, ...defReps, ...jokers.map(() => 1)];
-        }
-    }
+    return [...warmupReps, ...defReps];
 };
 
 const percentageToText = (percentage: number): string => `${(percentage * 100).toFixed(0)}%`;

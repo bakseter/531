@@ -1,7 +1,6 @@
 package net.bakseter.api.routes.v1
 
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.Application
 import io.ktor.server.application.call
 import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.jwt.JWTPrincipal
@@ -10,8 +9,6 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.put
-import io.ktor.server.routing.route
-import io.ktor.server.routing.routing
 import net.bakseter.api.schema.Joker
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
@@ -20,17 +17,10 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
-fun Application.jokerRoutesV1(authConfig: String) {
-    routing {
-        authenticate(authConfig) {
-            route("/v1") {
-                getJokerV1()
-                putJokerV1()
-            }
-
-            getJokerV1()
-            putJokerV1()
-        }
+fun Route.jokerRoutesV1(authConfig: String) {
+    authenticate(authConfig) {
+        getJokerV1()
+        putJokerV1()
     }
 }
 

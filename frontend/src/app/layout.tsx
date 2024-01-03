@@ -1,11 +1,9 @@
+import '@styles/globals.css';
 import type { ReactNode } from 'react';
 import { Open_Sans, Roboto_Mono } from 'next/font/google'; // eslint-disable-line camelcase
 import type { Metadata, Viewport } from 'next';
 import { auth } from '@api/auth-config';
-import SessionProviderWrapper from '@components/session-provider-wrapper';
-import { BaseWeightsProvider } from '@hooks/use-base-weights';
-import { ProfileProvider } from '@hooks/use-profile';
-import '@styles/globals.css';
+import SessionProviderWrapper from '@components/client/session-provider-wrapper';
 
 const openSans = Open_Sans({
     subsets: ['latin'],
@@ -51,11 +49,7 @@ const Layout = async ({ children }: LayoutProps) => {
     return (
         <html lang="nb" className={`${openSans.variable} ${robotoMono.variable}`}>
             <body className="md:container md:mx-auto">
-                <SessionProviderWrapper session={session ?? undefined}>
-                    <ProfileProvider>
-                        <BaseWeightsProvider>{children}</BaseWeightsProvider>
-                    </ProfileProvider>
-                </SessionProviderWrapper>
+                <SessionProviderWrapper session={session ?? undefined}>{children}</SessionProviderWrapper>
             </body>
         </html>
     );

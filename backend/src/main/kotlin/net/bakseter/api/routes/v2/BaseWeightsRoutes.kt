@@ -1,7 +1,6 @@
 package net.bakseter.api.routes.v2
 
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.Application
 import io.ktor.server.application.call
 import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.jwt.JWTPrincipal
@@ -11,8 +10,6 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.put
-import io.ktor.server.routing.route
-import io.ktor.server.routing.routing
 import net.bakseter.api.schema.BaseWeights
 import net.bakseter.api.schema.BaseWeightsJson
 import net.bakseter.api.schema.BaseWeightsModifier
@@ -23,16 +20,12 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
-fun Application.baseWeightsRoutesV2(authConfig: String) {
-    routing {
-        authenticate(authConfig) {
-            route("/v2") {
-                getBaseWeightsV2()
-                putBaseWeightsV2()
-                getBaseWeightsModifierV2()
-                putBaseWeightsModifierV2()
-            }
-        }
+fun Route.baseWeightsRoutesV2(authConfig: String) {
+    authenticate(authConfig) {
+        getBaseWeightsV2()
+        putBaseWeightsV2()
+        getBaseWeightsModifierV2()
+        putBaseWeightsModifierV2()
     }
 }
 

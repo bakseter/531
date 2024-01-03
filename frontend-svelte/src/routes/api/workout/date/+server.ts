@@ -4,9 +4,9 @@ import { safeParseISODate, safeParseInt } from '$lib/utils';
 import { safeWeekDecoder, safeDayDecoder } from '$lib/types';
 import { formatISO } from 'date-fns';
 import type { RequestHandler } from '@sveltejs/kit';
-import { PUBLIC_BACKEND_URL, PUBLIC_API_VERSION } from '$env/static/public';
+import { PUBLIC_BACKEND_URL, PUBLIC_BACKEND_API_VERSION } from '$env/static/public';
 
-const BACKEND_URL = `${PUBLIC_BACKEND_URL}/${PUBLIC_API_VERSION}`;
+const BACKEND_URL = `${PUBLIC_BACKEND_URL}/${PUBLIC_BACKEND_API_VERSION}`;
 
 const PUT: RequestHandler = async ({ locals, url, request }) => {
   const idToken = (await locals.getSession())?.idToken;
