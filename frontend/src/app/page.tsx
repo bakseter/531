@@ -1,22 +1,22 @@
-'use client';
-
-import { useEffect } from 'react';
-import { useSession, signIn } from 'next-auth/react';
 import { redirect } from 'next/navigation';
-import { useBaseWeights } from '@hooks/use-base-weights';
 import BaseWeightsForm from '@components/base-weights-form';
+import BaseWeightsAPI from '@api/base-weights';
+import WorkoutAPI from '@api/workout';
+import { auth } from '@api/auth-config';
 
-const IndexPage = () => {
-    const { baseWeights } = useBaseWeights();
-    const { status } = useSession();
+const IndexPage = async () => {
+    const session = await auth();
+    if (!session?.idToken) redirect('/api/auth/signin');
 
-    useEffect(() => {
-        if (status === 'unauthenticated') void signIn();
-    }, [status]);
+    const baseWeights = await BaseWeightsAPI.getBaseWeights({ idToken: session.idToken, profile: 1 });
+    const count = (await WorkoutAPI.getWorkoutCount({ idToken: session.idToken, profile: 1 })) ?? 0;
 
-    if (baseWeights) redirect('/cycle/1/week/1');
+    if (!baseWeights && count === 0) return <BaseWeightsForm isFirstTime />;
 
-    return <BaseWeightsForm isFirstTime />;
+    const cycle = Math.floor(count / 12) + 1;
+    const week = Math.floor((count % 12) / 3) + 1;
+
+    redirect(`/cycle/${cycle}/week/${week}`);
 };
 
 export default IndexPage;

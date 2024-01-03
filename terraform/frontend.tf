@@ -39,21 +39,21 @@ resource "vercel_project_environment_variable" "next_backend_url_dev" {
 
 resource "vercel_project_environment_variable" "next_auth_secret" {
   project_id = vercel_project.next_project.id
-  key        = "NEXTAUTH_SECRET"
+  key        = "AUTH_SECRET"
   value      = var.auth_secret
   target     = ["production", "preview", "development"]
 }
 
-resource "vercel_project_environment_variable" "next_google_client_id" {
+resource "vercel_project_environment_variable" "next_google_id" {
   project_id = vercel_project.next_project.id
-  key        = "GOOGLE_CLIENT_ID"
+  key        = "AUTH_GOOGLE_ID"
   value      = var.google_client_id
   target     = ["production", "preview", "development"]
 }
 
-resource "vercel_project_environment_variable" "next_google_client_secret" {
+resource "vercel_project_environment_variable" "next_google_secret" {
   project_id = vercel_project.next_project.id
-  key        = "GOOGLE_CLIENT_SECRET"
+  key        = "AUTH_GOOGLE_SECRET"
   value      = var.google_client_secret
   target     = ["production", "preview", "development"]
 }

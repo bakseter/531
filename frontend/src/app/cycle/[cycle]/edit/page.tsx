@@ -8,7 +8,7 @@ const CycleEditPage = () => {
     const params = useParams();
     const currentCycle = safeParseInt(params.cycle);
 
-    if (!currentCycle) throw new Error('breh');
+    if (!currentCycle) throw new Error("Invalid cycle '${currentCycle}'");
 
     return <BaseWeightsModifierForm cycle={currentCycle} />;
 };
