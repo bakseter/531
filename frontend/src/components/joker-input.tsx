@@ -5,6 +5,7 @@ import { signOut, useSession } from 'next-auth/react';
 import { type Week, type Day } from '@api/workout';
 import JokerAPI from '@api/joker';
 import { useProfile } from '@hooks/use-profile';
+import Spinner from '@components/spinner';
 
 interface Props {
     cycle: number;
@@ -94,7 +95,7 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
                 Joker {num}
             </label>
             <div>
-                {loading && <p>Loading...</p>}
+                {loading && <Spinner size="xs" />}
                 {error && <p>🚨</p>}
             </div>
         </div>

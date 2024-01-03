@@ -88,7 +88,7 @@ const BaseWeightsModifierForm = ({ cycle }: Props) => {
                             <select className="text-center p-1" {...register(exercise, { valueAsNumber: true })}>
                                 <option value={0}>+ 0 kg</option>
                                 {[1, 2, 3, 4, 5].map((_, index) => (
-                                    <option key={`select-option-${index}`} value={index + 1}>
+                                    <option key={`bm-mod-select-${exercise}-option-${index}`} value={index + 1}>
                                         + {2.5 * (index + 1)} kg
                                     </option>
                                 ))}

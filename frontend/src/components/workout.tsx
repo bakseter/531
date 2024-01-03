@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import JokerInput from '@components/joker-input';
 import RepsInputForm from '@components/reps-input-form';
 import Spinner from '@components/spinner';
@@ -45,24 +45,16 @@ const Workout = ({ cycle, week, day }: Props) => {
     const tableRowStyle = 'p-2';
     const tableRowStyleAlt = `${tableRowStyle} bg-slate-200`;
 
-    const repsField = ({ index, percentage }: { index: number; percentage: number }) => {
+    const RepsField = ({ index }: { index: number }) => {
         if (index === jokerCutoff) {
-            return <RepsInputForm key={`reps-input-${cycle}-${week}-${day}`} cycle={cycle} week={week} day={day} />;
+            return <RepsInputForm cycle={cycle} week={week} day={day} />;
         }
 
         if (index > jokerCutoff) {
-            return (
-                <JokerInput
-                    key={`joker-input-${cycle}-${week}-${day}-${index}-${percentage}`}
-                    cycle={cycle}
-                    week={week}
-                    day={day}
-                    num={index - jokerCutoff}
-                />
-            );
+            return <JokerInput cycle={cycle} week={week} day={day} num={index - jokerCutoff} />;
         }
 
-        return <p key={`n/a-${percentage}-${index}`}>–</p>;
+        return <p>–</p>;
     };
 
     const baseWeights = baseWeightsForCycle?.find((bw) => bw.cycle === cycle)?.baseWeights;
@@ -92,13 +84,11 @@ const Workout = ({ cycle, week, day }: Props) => {
                             const headingText = indexToHeading(index);
 
                             return (
-                                <>
-                                    {index % 3 === 0 && index <= 6 && (
-                                        <span className="px-2 py-4 pt-8" key={`padding-box-${index}`}>
-                                            {headingText && <p className="font-bold">{headingText}</p>}
-                                        </span>
+                                <Fragment key={`week-to-percentages-${percentage}-${index}`}>
+                                    {index % 3 === 0 && index <= 6 && headingText && (
+                                        <tr className="px-2 py-4 pt-8 font-bold">{headingText}</tr>
                                     )}
-                                    <tr key={`table-row-${index}`}>
+                                    <tr>
                                         <td className={index % 2 === 0 ? tableRowStyle : tableRowStyleAlt}>{`1x${
                                             reps(index) ?? weekToDefiningRep(week)
                                         }${index === 5 ? '+' : ''}`}</td>
@@ -114,10 +104,10 @@ const Workout = ({ cycle, week, day }: Props) => {
                                                 ),
                                         )} kg`}</td>
                                         <td className={index % 2 === 0 ? tableRowStyle : tableRowStyleAlt}>
-                                            {repsField({ index, percentage })}
+                                            <RepsField index={index} />
                                         </td>
                                     </tr>
-                                </>
+                                </Fragment>
                             );
                         })}
                     </tbody>

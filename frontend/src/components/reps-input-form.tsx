@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useState, useEffect } from 'react';
+import { Fragment, useId, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { signOut, useSession } from 'next-auth/react';
 import WorkoutAPI, { type Workout, type Week, type Day } from '@api/workout';
@@ -90,12 +90,12 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
     const maxReps = 15;
 
     return (
-        <>
+        <Fragment key={`reps-input-form-${cycle}-${week}-${day}`}>
             <form onChange={handleSubmit(onSubmit)}>
                 <select id={id} {...register('reps', { valueAsNumber: true })}>
                     <option value={0}></option>
                     {[...new Array(maxReps).keys()].map((_, index) => (
-                        <option key={`select-option-${index}`} value={index + 1}>
+                        <option value={index + 1} key={`reps-input-form-option-${cycle}-${week}-${day}-${index}`}>
                             {index + 1}
                         </option>
                     ))}
@@ -105,7 +105,7 @@ const RepsInputForm = ({ cycle, week, day }: Props) => {
                 </label>
             </form>
             {error && <p>🚨</p>}
-        </>
+        </Fragment>
     );
 };
 

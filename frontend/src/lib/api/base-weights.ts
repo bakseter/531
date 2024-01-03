@@ -26,7 +26,7 @@ const BaseWeightsAPI = {
     }: {
         idToken: string;
         profile: Profile;
-    }): Promise<BaseWeights | boolean | null> => {
+    }): Promise<BaseWeights | undefined> => {
         try {
             const response = await fetch(`${BACKEND_URL}/base-weights?profile=${profile}`, {
                 headers: { Authorization: `Bearer ${idToken}` },
@@ -37,15 +37,9 @@ const BaseWeightsAPI = {
 
                 return baseWeightsDecoder(json);
             }
-
-            if (response.status === 404 || response.status === 204) return true;
-            if (response.status === 401) return false;
-
-            return null;
         } catch (error) {
             // eslint-disable-next-line no-console
             console.error(error);
-            return null;
         }
     },
 

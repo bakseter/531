@@ -49,16 +49,7 @@ const BaseWeightsProvider = ({ children }: { children: ReactNode }) => {
                 const response = await BaseWeightsAPI.getBaseWeights({ idToken: session.idToken, profile });
                 setLoading(false);
 
-                if (response === null) {
-                    setError('could not get base weights');
-                    return;
-                }
-
-                if (response === true) return;
-                if (response === false) {
-                    await signOut();
-                    return;
-                }
+                if (!response) return;
 
                 setBaseWeights(response);
             } catch (error) {
