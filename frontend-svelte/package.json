@@ -32,7 +32,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@auth/sveltekit": "0.5.1",
+    "@auth/sveltekit": "0.5.2",
     "date-fns": "3.1.0",
     "typescript-json-decoder": "1.0.11"
   }
