@@ -2,10 +2,8 @@ locals {
   location    = "norwayeast"
   db_user     = "postgres"
   db_name     = "postgres"
-  backend_url = "https://${azurerm_container_group.cg.fqdn}"
+  backend_url = "https://${azurerm_container_app.backend.ingress.0.fqdn}"
 }
-
-# Backend
 
 resource "azurerm_resource_group" "rg" {
   name     = "531-${var.environment}"
@@ -16,86 +14,82 @@ resource "azurerm_resource_group" "rg" {
   }
 }
 
-## Caddy storage
+# Backend
 
-resource "azurerm_storage_account" "cstore" {
-  name                      = substr(replace(azurerm_resource_group.rg.name, "-", ""), 0, 20)
-  resource_group_name       = azurerm_resource_group.rg.name
-  location                  = local.location
-  account_tier              = "Standard"
-  account_replication_type  = "LRS"
-  enable_https_traffic_only = true
+resource "azurerm_container_app_environment" "backend_env" {
+  name                = "env-${azurerm_resource_group.rg.name}"
+  location            = local.location
+  resource_group_name = azurerm_resource_group.rg.name
 
   tags = {
     "environment" = var.environment
   }
 }
 
-resource "azurerm_storage_share" "cshare" {
-  name                 = substr(replace(azurerm_resource_group.rg.name, "-", ""), 0, 20)
-  storage_account_name = azurerm_storage_account.cstore.name
-  quota                = 1
-}
+resource "azurerm_container_app" "backend" {
+  name                         = "app-${azurerm_resource_group.rg.name}"
+  container_app_environment_id = azurerm_container_app_environment.backend_env.id
+  resource_group_name          = azurerm_resource_group.rg.name
+  revision_mode                = "Single"
 
-## Containers
+  template {
+    container {
+      name   = "backend"
+      image  = "ghcr.io/bakseter/531/backend:latest"
+      cpu    = "0.25"
+      memory = "0.5Gi"
 
-resource "azurerm_container_group" "cg" {
-  name                = "${azurerm_resource_group.rg.name}-cg"
-  location            = local.location
-  resource_group_name = azurerm_resource_group.rg.name
-  ip_address_type     = "Public"
-  os_type             = "Linux"
-  dns_name_label      = azurerm_resource_group.rg.name
+      liveness_probe {
+        transport = "HTTP"
+        path      = "/status"
+        port      = "8080"
+      }
 
-  container {
-    name  = "${azurerm_resource_group.rg.name}-backend"
-    image = var.backend_image
+      readiness_probe {
+        transport = "HTTP"
+        path      = "/status"
+        port      = "8080"
+      }
 
-    cpu    = 0.5
-    memory = 0.5
+      env {
+        name  = "MIGRATE_DB"
+        value = "true"
+      }
 
-    environment_variables = {
-      "MIGRATE_DB"        = "true"
-      "DATABASE_URL"      = "jdbc:postgresql://${azurerm_postgresql_flexible_server.db.fqdn}:5432/${local.db_name}"
-      "DATABASE_USERNAME" = local.db_user
+      env {
+        name  = "DATABASE_URL"
+        value = "jdbc:postgresql://${azurerm_postgresql_flexible_server.db.fqdn}:5432/${local.db_name}"
+      }
+
+      env {
+        name  = "DATABASE_USERNAME"
+        value = local.db_user
+      }
+
+      env {
+        name        = "DATABASE_PASSWORD"
+        secret_name = "database-password"
+      }
     }
 
-    secure_environment_variables = {
-      "DATABASE_PASSWORD" = var.db_password
+    min_replicas    = 0
+    max_replicas    = 1
+    revision_suffix = substr(var.revision_suffix, 0, 10)
+  }
+
+  ingress {
+    target_port      = "8080"
+    external_enabled = true
+
+    traffic_weight {
+      percentage      = 100
+      latest_revision = true
     }
   }
 
-  container {
-    name  = "${azurerm_resource_group.rg.name}-caddy"
-    image = "caddy:2.7.6-alpine"
-
-    cpu    = 0.5
-    memory = 0.5
-
-    ports {
-      port     = 443
-      protocol = "TCP"
-    }
-
-    ports {
-      port     = 80
-      protocol = "TCP"
-    }
-
-    volume {
-      name                 = "caddy-data"
-      mount_path           = "/data"
-      storage_account_name = azurerm_storage_account.cstore.name
-      storage_account_key  = azurerm_storage_account.cstore.primary_access_key
-      share_name           = azurerm_storage_share.cshare.name
-    }
-
-    commands = ["caddy", "reverse-proxy", "--from", "${azurerm_resource_group.rg.name}.${local.location}.azurecontainer.io", "--to", "localhost:8080"]
-  }
-
-  exposed_port {
-    port     = 443
-    protocol = "TCP"
+  secret {
+    name  = "database-password"
+    value = var.db_password
   }
 
   tags = {
