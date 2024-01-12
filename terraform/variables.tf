@@ -18,7 +18,7 @@ variable "db_password" {
   type = string
 }
 
-variable "backend_image" {
+variable "revision_suffix" {
   type = string
 }
 
