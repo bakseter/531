@@ -20,10 +20,6 @@
         "@typescript-eslint/*"
       ],
       "automerge": true
-    },
-    {
-      "matchPackagePatterns": ["digitalocean", "vercel"],
-      "dependencyDashboardApproval": true
     }
   ]
 }
