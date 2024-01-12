@@ -3,6 +3,7 @@ name: Deploy backend
 on:
   push:
     branches: [master]
+    paths: ["backend/**", "terraform/**", ".github/workflows/deploy.yaml"]
 
 permissions:
   packages: write
