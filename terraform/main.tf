@@ -72,7 +72,7 @@ resource "azurerm_container_app" "backend" {
       }
     }
 
-    min_replicas    = 0
+    min_replicas    = 1
     max_replicas    = 1
     revision_suffix = substr(var.revision_suffix, 0, 10)
   }
