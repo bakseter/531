@@ -12,7 +12,7 @@ interface WeekLayoutProps {
 }
 
 const WeekLayout = ({ children, params: { cycle, week } }: WeekLayoutProps) => {
-    const weekPrefix = '📆';
+    const weekPrefix = String.fromCodePoint(0x1f4c5); // 📆
 
     const currentCycle = cycle;
     const currentWeek = safeParseInt(week);
