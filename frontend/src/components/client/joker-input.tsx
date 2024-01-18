@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useState, useId } from 'react';
-import { type Week, type Day } from '@api/workout';
-import { setJoker, getJoker } from '@actions/joker';
-import Spinner from '@components/server/spinner';
+import { setJoker, getJoker } from '@/actions/joker';
+import type { Week, Day } from '@/schema/workout';
+import Spinner from '@/components/server/spinner';
 
 interface Props {
     cycle: number;
@@ -21,7 +21,7 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
     useEffect(() => {
         const fetchReps = async () => {
             setLoading(true);
-            const joker = await getJoker(cycle, week, day, num);
+            const joker = await getJoker({ cycle, week, day, num });
             setLoading(false);
 
             if (!joker) return;
@@ -33,7 +33,7 @@ const JokerInput = ({ cycle, week, day, num }: Props) => {
 
     const handleOnChange = async () => {
         setLoading(true);
-        await setJoker(cycle, week, day, num);
+        await setJoker({ cycle, week, day, num });
         setChecked(!checked);
         setLoading(false);
     };

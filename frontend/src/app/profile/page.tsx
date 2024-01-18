@@ -1,12 +1,11 @@
 import { redirect } from 'next/navigation';
-import { auth } from '@api/auth-config';
-import BaseWeightsForm from '@components/server/base-weights-form';
-import ProfileInputForm from '@components/client/profile-input-form';
-import Button from '@components/server/button';
+import { auth } from '@/api/auth';
+import BaseWeightsForm from '@/components/server/base-weights-form';
+import Button from '@/components/server/button';
+import ProfileInputForm from '@/components/client/profile-input-form';
 
 const ProfilePage = async () => {
     const session = await auth();
-
     if (!session?.user) redirect('/api/auth/signin');
 
     return (

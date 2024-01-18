@@ -2,9 +2,9 @@
 
 import { formatISO } from 'date-fns';
 import { record, date as dateDecoder } from 'typescript-json-decoder';
-import { auth } from '@api/auth-config';
-import type { Week, Day } from '@api/workout';
-import { backendUrl } from '@utils/constants';
+import type { Week, Day } from '@/schema/workout';
+import { auth } from '@/api/auth';
+import { backendUrl } from '@/utils/constants';
 
 const profile = 1;
 

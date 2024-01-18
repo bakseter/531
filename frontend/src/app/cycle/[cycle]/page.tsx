@@ -1,6 +1,6 @@
 import type { Metadata, ResolvingMetadata } from 'next';
-import { weeks } from '@utils/constants';
-import MenuLink from '@components/server/menu-link';
+import MenuLink from '@/components/server/menu-link';
+import { weeks } from '@/utils/constants';
 
 interface Props {
     params: {

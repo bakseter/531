@@ -1,8 +1,9 @@
 'use server';
 
-import { workoutDecoder, type Week, type Day } from '@api/workout';
-import { auth } from '@api/auth-config';
-import { backendUrl } from '@utils/constants';
+import { record, number } from 'typescript-json-decoder';
+import { auth } from '@/api/auth';
+import { backendUrl } from '@/utils/constants';
+import { workoutDecoder, type Week, type Day } from '@/schema/workout';
 
 const profile = 1;
 
@@ -43,4 +44,18 @@ const getReps = async ({ cycle, week, day }: { cycle: number; week: Week; day: D
     if (response.status !== 204) throw new Error(`something went wrong: ${response.status}`);
 };
 
-export { setReps, getReps };
+const getWorkoutCount = async (): Promise<number | undefined> => {
+    const session = await auth();
+    if (!session?.idToken) throw new Error('no session');
+
+    const response = await fetch(`${backendUrl}/workout/count?profile=${profile}`, {
+        headers: { Authorization: `Bearer ${session.idToken}` },
+    });
+
+    if (response.status === 200) {
+        const json = await response.json();
+        return record({ count: number })(json).count;
+    }
+};
+
+export { setReps, getReps, getWorkoutCount };

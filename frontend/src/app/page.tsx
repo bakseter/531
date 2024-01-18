@@ -1,15 +1,15 @@
 import { redirect } from 'next/navigation';
-import BaseWeightsForm from '@components/server/base-weights-form';
-import BaseWeightsAPI from '@api/base-weights';
-import WorkoutAPI from '@api/workout';
-import { auth } from '@api/auth-config';
+import { getBaseWeights } from '@/actions/base-weights';
+import { getWorkoutCount } from '@/actions/workout';
+import { auth } from '@/api/auth';
+import BaseWeightsForm from '@/components/server/base-weights-form';
 
 const IndexPage = async () => {
     const session = await auth();
     if (!session?.idToken) redirect('/api/auth/signin');
 
-    const baseWeights = await BaseWeightsAPI.getBaseWeights({ idToken: session.idToken, profile: 1 });
-    const count = (await WorkoutAPI.getWorkoutCount({ idToken: session.idToken, profile: 1 })) ?? 0;
+    const baseWeights = await getBaseWeights();
+    const count = (await getWorkoutCount()) ?? 0;
 
     if (!baseWeights && count === 0) return <BaseWeightsForm isFirstTime />;
 

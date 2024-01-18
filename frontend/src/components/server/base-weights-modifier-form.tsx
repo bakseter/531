@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation';
-import { auth } from '@api/auth-config';
-import BaseWeightsAPI, { comps, baseWeightsModifierDecoder } from '@api/base-weights';
-import { exerciseToText } from '@utils/helpers';
-import { backendUrl } from '@utils/constants';
-import Button from '@components/server/button';
+import { getBaseWeightsModifier, getBaseWeightsForCycle, putBaseWeightsModifier } from '@/actions/base-weights';
+import { comps, baseWeightsModifierDecoder } from '@/schema/base-weights';
+import { auth } from '@/api/auth';
+import Button from '@/components/server/button';
+import { exerciseToText } from '@/utils/helpers';
 
 interface Props {
     cycle: number;
@@ -24,23 +24,13 @@ const BaseWeightsModifierForm = async ({ cycle }: Props) => {
             cycle,
         };
 
-        const baseWeightsMod = baseWeightsModifierDecoder(rawBaseWeightsMod);
+        const baseWeightsModifier = baseWeightsModifierDecoder(rawBaseWeightsMod);
 
-        const { status } = await fetch(`${backendUrl}/base-weights/modifier?profile=1`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.idToken}` },
-            body: JSON.stringify(baseWeightsMod),
-        });
-
-        if (status !== 200 && status !== 202) throw new Error(`something went wrong: ${status}`);
+        await putBaseWeightsModifier({ baseWeightsModifier });
     };
 
-    const baseWeightsMod = await BaseWeightsAPI.getBaseWeightsModifier({ idToken: session.idToken, profile: 1, cycle });
-    const baseWeights = await BaseWeightsAPI.getBaseWeights({ idToken: session.idToken, profile: 1 });
-    const baseWeightsForCycle = await BaseWeightsAPI.getBaseWeightsForCycle({
-        idToken: session.idToken,
-        profile: 1,
-        baseWeights,
+    const baseWeightsMod = await getBaseWeightsModifier({ cycle });
+    const baseWeightsForCycle = await getBaseWeightsForCycle({
         cycle,
     });
 
