@@ -1,7 +1,7 @@
 import type { Metadata, ResolvingMetadata } from 'next';
-import Workout from '@components/server/workout';
-import { days } from '@utils/constants';
-import { safeParseInt } from '@utils/helpers';
+import Workout from '@/components/server/workout';
+import { days } from '@/utils/constants';
+import { safeParseInt } from '@/utils/helpers';
 
 interface Props {
     params: {

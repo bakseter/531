@@ -3,9 +3,9 @@
 import { type ChangeEvent, useId, useState, useEffect } from 'react';
 import { format, parse } from 'date-fns';
 import { nb } from 'date-fns/locale';
-import { type Week, type Day } from '@api/workout';
-import { getDate, setDate } from '@actions/date';
-import Spinner from '@components/server/spinner';
+import { getDate, setDate } from '@/actions/date';
+import type { Week, Day } from '@/schema/workout';
+import Spinner from '@/components/server/spinner';
 
 interface Props {
     cycle: number;

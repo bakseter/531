@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, Fragment } from 'react';
-import { weekToSetsReps, percentageToText, weekToPercentages, dayToExercise, weekToDefiningRep } from '@utils/helpers';
-import { type Week, type Day } from '@api/workout';
-import type { BaseWeights } from '@api/base-weights';
-import JokerInput from '@components/client/joker-input';
-import RepsInput from '@components/client/reps-input';
-import Button from '@components/server/button';
+import type { Week, Day } from '@/schema/workout';
+import type { BaseWeights } from '@/schema/base-weights';
+import JokerInput from '@/components/client/joker-input';
+import RepsInput from '@/components/client/reps-input';
+import Button from '@/components/server/button';
+import { weekToSetsReps, percentageToText, weekToPercentages, dayToExercise, weekToDefiningRep } from '@/utils/helpers';
 
 const indexToHeading = (i: number): string | undefined => {
     if (i === 0) return 'Warmup';

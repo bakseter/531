@@ -1,11 +1,9 @@
-import { redirect } from 'next/navigation';
-import { auth } from '@api/auth-config';
-import { type Week, type Day } from '@api/workout';
-import { exerciseToText, dayToExercise } from '@utils/helpers';
-import BaseWeightsAPI from '@api/base-weights';
-import JokerAPI from '@api/joker';
-import WorkoutTable from '@components/client/workout-table';
-import DateBoxForm from '@components/server/date-box-form';
+import { getJokerAmount } from '@/actions/joker';
+import { getBaseWeightsForCycle } from '@/actions/base-weights';
+import type { Week, Day } from '@/schema/workout';
+import WorkoutTable from '@/components/client/workout-table';
+import DateBoxForm from '@/components/server/date-box-form';
+import { exerciseToText, dayToExercise } from '@/utils/helpers';
 
 interface Props {
     cycle: number;
@@ -14,18 +12,11 @@ interface Props {
 }
 
 const Workout = async ({ cycle, week, day }: Props) => {
-    const session = await auth();
-    if (!session?.idToken) redirect('/api/auth/signin');
-
-    const baseWeights = await BaseWeightsAPI.getBaseWeights({ idToken: session.idToken, profile: 1 });
-    const baseWeightsForCycle = await BaseWeightsAPI.getBaseWeightsForCycle({
-        idToken: session.idToken,
-        profile: 1,
-        baseWeights,
+    const baseWeightsForCycle = await getBaseWeightsForCycle({
         cycle,
     });
 
-    const jokerAmount = await JokerAPI.getJokerAmount({ idToken: session.idToken, profile: 1, cycle, week, day });
+    const jokerAmount = await getJokerAmount({ cycle, week, day });
 
     return (
         <>

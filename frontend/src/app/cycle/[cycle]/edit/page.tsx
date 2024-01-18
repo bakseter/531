@@ -1,5 +1,5 @@
-import BaseWeightsModifierForm from '@components/server/base-weights-modifier-form';
-import { safeParseInt } from '@utils/helpers';
+import BaseWeightsModifierForm from '@/components/server/base-weights-modifier-form';
+import { safeParseInt } from '@/utils/helpers';
 
 interface Props {
     params: {

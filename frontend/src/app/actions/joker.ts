@@ -1,14 +1,25 @@
 'use server';
 
-import { type Week, type Day } from '@api/workout';
-import { auth } from '@api/auth-config';
-import { backendUrl } from '@utils/constants';
+import { record, number } from 'typescript-json-decoder';
+import { type Week, type Day } from '@/schema/workout';
+import { auth } from '@/api/auth';
+import { backendUrl } from '@/utils/constants';
 
-const setJoker = async (cycle: number, week: Week, day: Day, num: number): Promise<void> => {
+const profile = 1;
+
+const setJoker = async ({
+    cycle,
+    week,
+    day,
+    num,
+}: {
+    cycle: number;
+    week: Week;
+    day: Day;
+    num: number;
+}): Promise<void> => {
     const session = await auth();
     if (!session?.idToken) throw new Error('no session');
-
-    const profile = 1;
 
     const { status } = await fetch(
         `${backendUrl}/joker/${num}?profile=${profile}&cycle=${cycle}&week=${week}&day=${day}`,
@@ -21,11 +32,19 @@ const setJoker = async (cycle: number, week: Week, day: Day, num: number): Promi
     if (status !== 200 && status !== 202) throw new Error('Failed to update joker');
 };
 
-const getJoker = async (cycle: number, week: Week, day: Day, num: number): Promise<true | undefined> => {
+const getJoker = async ({
+    cycle,
+    week,
+    day,
+    num,
+}: {
+    cycle: number;
+    week: Week;
+    day: Day;
+    num: number;
+}): Promise<true | undefined> => {
     const session = await auth();
     if (!session?.idToken) throw new Error('no session');
-
-    const profile = 1;
 
     const { status } = await fetch(
         `${backendUrl}/joker/${num}?profile=${profile}&cycle=${cycle}&week=${week}&day=${day}`,
@@ -37,4 +56,29 @@ const getJoker = async (cycle: number, week: Week, day: Day, num: number): Promi
     if (status === 200) return true;
 };
 
-export { setJoker, getJoker };
+const getJokerAmount = async ({
+    cycle,
+    week,
+    day,
+}: {
+    cycle: number;
+    week: Week;
+    day: Day;
+}): Promise<number | undefined> => {
+    const session = await auth();
+    if (!session?.idToken) throw new Error('no session');
+
+    const response = await fetch(
+        `${backendUrl}/joker/count?profile=${profile}&cycle=${cycle}&week=${week}&day=${day}`,
+        {
+            headers: { Authorization: `Bearer ${session.idToken}` },
+        },
+    );
+
+    if (response.status === 200) {
+        const json = await response.json();
+        return record({ count: number })(json).count;
+    }
+};
+
+export { setJoker, getJoker, getJokerAmount };

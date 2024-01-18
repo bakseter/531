@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
-import { weeks } from '@utils/constants';
-import { safeParseInt } from '@utils/helpers';
-import MenuLink from '@components/server/menu-link';
+import MenuLink from '@/components/server/menu-link';
+import { weeks } from '@/utils/constants';
+import { safeParseInt } from '@/utils/helpers';
 
 interface WeekLayoutProps {
     children: ReactNode;

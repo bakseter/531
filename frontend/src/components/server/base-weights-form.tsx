@@ -1,9 +1,10 @@
 import { redirect } from 'next/navigation';
-import BaseWeightsAPI, { type CompExercise, comps, baseWeightsDecoder } from '@api/base-weights';
-import BaseWeightsFormInput from '@components/client/base-weights-form-input';
-import { auth } from '@api/auth-config';
-import { backendUrl } from '@utils/constants';
-import Button from '@components/server/button';
+import { getBaseWeights } from '@/actions/base-weights';
+import { type CompExercise, comps, baseWeightsDecoder } from '@/schema/base-weights';
+import { auth } from '@/api/auth';
+import Button from '@/components/server/button';
+import BaseWeightsFormInput from '@/components/client/base-weights-form-input';
+import { backendUrl } from '@/utils/constants';
 
 interface Props {
     isFirstTime?: boolean;
@@ -36,7 +37,7 @@ const BaseWeightsForm = async ({ isFirstTime = false }: Props) => {
         if (isFirstTime) redirect('/cycle/1/week/1');
     };
 
-    const baseWeights = await BaseWeightsAPI.getBaseWeights({ idToken: session.idToken, profile: 1 });
+    const baseWeights = await getBaseWeights();
 
     return (
         <div className="grid grid-cols-1">

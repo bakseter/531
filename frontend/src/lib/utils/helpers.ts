@@ -1,5 +1,5 @@
-import type { CompExercise, BaseWeights } from '@api/base-weights';
-import type { Week, Day } from '@api/workout';
+import type { CompExercise, BaseWeights } from '@/schema/base-weights';
+import type { Week, Day } from '@/schema/workout';
 
 const addToBaseWeights = (baseWeights: BaseWeights, cycle: number): BaseWeights => ({
     dl: baseWeights.dl + (cycle - 1) * 5,
@@ -101,6 +101,18 @@ const safeParseInt = (value: unknown): number | undefined => {
     }
 };
 
+const intCoerciveDecoder = (value: unknown): number => {
+    if (typeof value === 'number') return value;
+    if (typeof value === 'string') return Number.parseInt(value, 10);
+    throw new Error(`Expected number or string, got ${typeof value}`);
+};
+
+const floatCoerciveDecoder = (value: unknown): number => {
+    if (typeof value === 'number') return value;
+    if (typeof value === 'string') return Number.parseFloat(value);
+    throw new Error(`Expected number or string, got ${typeof value}`);
+};
+
 export {
     dayToExercise,
     exerciseToText,
@@ -110,4 +122,6 @@ export {
     addToBaseWeights,
     weekToDefiningRep,
     safeParseInt,
+    intCoerciveDecoder,
+    floatCoerciveDecoder,
 };
