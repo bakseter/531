@@ -18,7 +18,7 @@ jobs:
           node-version: 18
 
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: "**/frontend/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/frontend/yarn.lock') }}
@@ -48,7 +48,7 @@ jobs:
           node-version: 18
 
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: "**/frontend-svelte/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/frontend-svelte/yarn.lock') }}
