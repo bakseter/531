@@ -14,7 +14,7 @@ const IndexPage = async () => {
     if (!baseWeights && count === 0) return <BaseWeightsForm isFirstTime />;
 
     const cycle = Math.floor(count / 12) + 1;
-    const week = Math.floor((count % 12) / 3) + 1;
+    const week = Math.min(Math.floor((count % 12) / 3) + 1, 3);
 
     redirect(`/cycle/${cycle}/week/${week}`);
 };
