@@ -19,7 +19,15 @@
         "trailingComma": "all",
         "singleQuote": true,
         "printWidth": 120,
-        "tabWidth": 4
+        "tabWidth": 4,
+        "overrides": [
+            {
+                "files": "*.json",
+                "options": {
+                    "trailingComma": "none"
+                }
+            }
+        ]
     },
     "eslintConfig": {
         "parser": "@typescript-eslint/parser",
@@ -139,7 +147,7 @@
         "eslint-plugin-prettier": "5.1.3",
         "eslint-plugin-unicorn": "50.0.1",
         "postcss": "8.4.33",
-        "prettier": "3.2.2",
+        "prettier": "3.2.4",
         "tailwindcss": "3.4.1",
         "typescript": "5.3.3",
         "webpack": "5.89.0"
