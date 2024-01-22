@@ -62,26 +62,26 @@ const jokerWeightsExtend = (lastVal: number, jokersAmount?: number): Array<numbe
     return new Array(jokersAmount).fill(lastVal).map((value: number, index) => value + 0.05 * (index + 1));
 };
 
-const weekToPercentages = (week: Week, customJokersLengthAdd?: number): Array<number> => {
-    const warmupWeights = [0.4, 0.5, 0.6];
-
-    const normalWeights = ((week: Week): Array<number> => {
-        switch (week) {
-            case 1: {
-                return [0.65, 0.75, 0.85];
-            }
-            case 2: {
-                return [0.7, 0.8, 0.9];
-            }
-            case 3: {
-                return [0.75, 0.85, 0.95];
-            }
+const weekToBasePercentages = (week: Week): [number, number, number] => {
+    switch (week) {
+        case 1: {
+            return [0.65, 0.75, 0.85];
         }
-    })(week);
+        case 2: {
+            return [0.7, 0.8, 0.9];
+        }
+        case 3: {
+            return [0.75, 0.85, 0.95];
+        }
+    }
+};
 
-    const jokerWeights = jokerWeightsExtend(normalWeights[normalWeights.length - 1], customJokersLengthAdd);
+const weekToPercentages = (week: Week, customJokersLengthAdd?: number): Array<number> => {
+    const warmupPercentages = [0.4, 0.5, 0.6];
+    const basePercentages = weekToBasePercentages(week);
+    const jokerPercentages = jokerWeightsExtend(basePercentages[basePercentages.length - 1], customJokersLengthAdd);
 
-    return [...warmupWeights, ...normalWeights, ...jokerWeights];
+    return [...warmupPercentages, ...basePercentages, ...jokerPercentages];
 };
 
 const weekToSetsReps = (week: Week): Array<number> => {
@@ -116,6 +116,7 @@ const floatCoerciveDecoder = (value: unknown): number => {
 export {
     dayToExercise,
     exerciseToText,
+    weekToBasePercentages,
     weekToPercentages,
     percentageToText,
     weekToSetsReps,
