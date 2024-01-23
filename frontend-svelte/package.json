@@ -33,7 +33,7 @@
   "type": "module",
   "dependencies": {
     "@auth/sveltekit": "0.5.2",
-    "date-fns": "3.2.0",
+    "date-fns": "3.3.0",
     "typescript-json-decoder": "1.0.11"
   }
 }
