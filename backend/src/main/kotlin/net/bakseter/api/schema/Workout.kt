@@ -11,17 +11,17 @@ data class WorkoutJson(
     val cycle: Int,
     val week: Int,
     val day: Int,
-    val reps: Int
+    val reps: Int,
 )
 
 @Serializable
 data class DateJson(
-    val date: String
+    val date: String,
 )
 
 @Serializable
 data class WorkoutCountJson(
-    val count: Int
+    val count: Int,
 )
 
 val validWeeks = listOf(1, 2, 3)

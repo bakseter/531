@@ -7,7 +7,7 @@ import org.jetbrains.exposed.sql.Table
 
 @Serializable
 data class JokerCount(
-    val count: Int
+    val count: Int,
 )
 
 object Joker : Table("joker") {
@@ -28,7 +28,7 @@ object Joker : Table("joker") {
             week to Workout.week,
             day to Workout.day,
             onUpdate = ReferenceOption.RESTRICT,
-            onDelete = ReferenceOption.RESTRICT
+            onDelete = ReferenceOption.RESTRICT,
         )
     }
 }

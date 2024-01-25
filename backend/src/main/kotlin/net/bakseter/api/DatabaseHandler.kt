@@ -12,18 +12,19 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
 
-val tables: Array<Table> = arrayOf(
-    Workout,
-    BaseWeights,
-    Joker,
-    BaseWeightsModifier
-)
+val tables: Array<Table> =
+    arrayOf(
+        Workout,
+        BaseWeights,
+        Joker,
+        BaseWeightsModifier,
+    )
 
 class DatabaseHandler(
     private val migrateDb: Boolean,
     private val dbUrl: String,
     private val dbUsername: String,
-    private val dbPassword: String
+    private val dbPassword: String,
 ) {
     private val maxPoolSize = 7
 
@@ -36,7 +37,7 @@ class DatabaseHandler(
                 driverClassName = "org.postgresql.Driver"
                 connectionTimeout = 1000
                 maximumPoolSize = maxPoolSize
-            }
+            },
         )
     }
 

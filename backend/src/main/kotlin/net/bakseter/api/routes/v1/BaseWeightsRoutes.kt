@@ -43,9 +43,10 @@ fun Route.getBaseWeightsV1() {
             return@get
         }
 
-        val baseWeights = transaction {
-            BaseWeights.select { BaseWeights.email eq email and (BaseWeights.profile eq profile) }.firstOrNull()
-        }
+        val baseWeights =
+            transaction {
+                BaseWeights.select { BaseWeights.email eq email and (BaseWeights.profile eq profile) }.firstOrNull()
+            }
 
         if (baseWeights == null) {
             call.respond(HttpStatusCode.NoContent)
@@ -58,8 +59,8 @@ fun Route.getBaseWeightsV1() {
                 dl = baseWeights[BaseWeights.dl],
                 bp = baseWeights[BaseWeights.bp],
                 sq = baseWeights[BaseWeights.sq],
-                op = baseWeights[BaseWeights.op]
-            )
+                op = baseWeights[BaseWeights.op],
+            ),
         )
     }
 }
@@ -82,9 +83,10 @@ fun Route.putBaseWeightsV1() {
         try {
             val baseWeightsJson = call.receive<BaseWeightsJson>()
 
-            val baseWeights = transaction {
-                BaseWeights.select { BaseWeights.email eq email and (BaseWeights.profile eq profile) }.firstOrNull()
-            }
+            val baseWeights =
+                transaction {
+                    BaseWeights.select { BaseWeights.email eq email and (BaseWeights.profile eq profile) }.firstOrNull()
+                }
 
             if (baseWeights == null) {
                 transaction {
@@ -135,11 +137,12 @@ fun Route.getBaseWeightsModifierV1() {
             return@get
         }
 
-        val mod = transaction {
-            BaseWeightsModifier.select {
-                BaseWeightsModifier.email eq email and (BaseWeightsModifier.profile eq profile and (BaseWeightsModifier.cycle eq cycle))
-            }.firstOrNull()
-        }
+        val mod =
+            transaction {
+                BaseWeightsModifier.select {
+                    BaseWeightsModifier.email eq email and (BaseWeightsModifier.profile eq profile and (BaseWeightsModifier.cycle eq cycle))
+                }.firstOrNull()
+            }
 
         if (mod == null) {
             call.respond(HttpStatusCode.NoContent)
@@ -152,8 +155,8 @@ fun Route.getBaseWeightsModifierV1() {
                 dl = mod[BaseWeightsModifier.dl],
                 bp = mod[BaseWeightsModifier.bp],
                 sq = mod[BaseWeightsModifier.sq],
-                op = mod[BaseWeightsModifier.op]
-            )
+                op = mod[BaseWeightsModifier.op],
+            ),
         )
     }
 }
@@ -175,10 +178,16 @@ fun Route.putBaseWeightsModifierV1() {
         try {
             val baseWeightsModJson = call.receive<BaseWeightsModifierJson>()
 
-            val baseWeightsMod = transaction {
-                BaseWeightsModifier.select { BaseWeightsModifier.email eq email and (BaseWeightsModifier.profile eq profile and (BaseWeightsModifier.cycle eq baseWeightsModJson.cycle)) }
-                    .firstOrNull()
-            }
+            val baseWeightsMod =
+                transaction {
+                    BaseWeightsModifier.select {
+                        BaseWeightsModifier.email eq email and
+                            (
+                                BaseWeightsModifier.profile eq profile and
+                                    (BaseWeightsModifier.cycle eq baseWeightsModJson.cycle)
+                            )
+                    }.firstOrNull()
+                }
 
             if (baseWeightsMod == null) {
                 transaction {
@@ -198,7 +207,13 @@ fun Route.putBaseWeightsModifierV1() {
             }
 
             transaction {
-                BaseWeightsModifier.update({ BaseWeightsModifier.email eq email and (BaseWeightsModifier.profile eq profile and (BaseWeightsModifier.cycle eq baseWeightsModJson.cycle)) }) {
+                BaseWeightsModifier.update({
+                    BaseWeightsModifier.email eq email and
+                        (
+                            BaseWeightsModifier.profile eq profile and
+                                (BaseWeightsModifier.cycle eq baseWeightsModJson.cycle)
+                        )
+                }) {
                     it[dl] = baseWeightsModJson.dl
                     it[bp] = baseWeightsModJson.bp
                     it[sq] = baseWeightsModJson.sq

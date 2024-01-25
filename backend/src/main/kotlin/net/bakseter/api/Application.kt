@@ -28,7 +28,7 @@ fun Application.module() {
         migrateDb,
         databaseUrl,
         databaseUsername,
-        databasePassword
+        databasePassword,
     ).init()
 
     configureAuthentication(devSecret = devSecret, devAudience = devAudience, devIssuer = devIssuer)

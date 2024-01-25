@@ -21,6 +21,10 @@
         "@typescript-eslint/*"
       ],
       "automerge": true
+    },
+    {
+      "matchPackagePatterns": ["^org.jetbrains.kotlin.*"],
+      "groupName": "Kotlin packages"
     }
   ]
 }

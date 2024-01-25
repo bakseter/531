@@ -49,11 +49,22 @@ fun Route.getWorkoutV1() {
             return@get
         }
 
-        val workout = transaction {
-            Workout.select {
-                Workout.email eq email and (Workout.profile eq profile and (Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day))))
-            }.firstOrNull()
-        }
+        val workout =
+            transaction {
+                Workout.select {
+                    Workout.email eq email and
+                        (
+                            Workout.profile eq profile and
+                                (
+                                    Workout.cycle eq cycle and
+                                        (
+                                            Workout.week eq week and
+                                                (Workout.day eq day)
+                                        )
+                                )
+                        )
+                }.firstOrNull()
+            }
 
         if (workout == null) {
             call.respond(HttpStatusCode.NoContent)
@@ -66,8 +77,8 @@ fun Route.getWorkoutV1() {
                 cycle = workout[Workout.cycle],
                 week = workout[Workout.week],
                 day = workout[Workout.day],
-                reps = workout[Workout.reps]
-            )
+                reps = workout[Workout.reps],
+            ),
         )
     }
 }
@@ -89,11 +100,19 @@ fun Route.putWorkoutV1() {
         try {
             val workoutJson = call.receive<WorkoutJson>()
 
-            val workout = transaction {
-                Workout.select {
-                    Workout.cycle eq workoutJson.cycle and (Workout.profile eq profile and (Workout.week eq workoutJson.week and (Workout.day eq workoutJson.day)))
-                }.firstOrNull()
-            }
+            val workout =
+                transaction {
+                    Workout.select {
+                        Workout.cycle eq workoutJson.cycle and
+                            (
+                                Workout.profile eq profile and
+                                    (
+                                        Workout.week eq workoutJson.week and
+                                            (Workout.day eq workoutJson.day)
+                                    )
+                            )
+                    }.firstOrNull()
+                }
 
             if (workout == null) {
                 transaction {
@@ -112,7 +131,16 @@ fun Route.putWorkoutV1() {
             }
 
             transaction {
-                Workout.update({ Workout.cycle eq workoutJson.cycle and (Workout.profile eq profile and (Workout.week eq workoutJson.week and (Workout.day eq workoutJson.day))) }) {
+                Workout.update({
+                    Workout.cycle eq workoutJson.cycle and
+                        (
+                            Workout.profile eq profile and
+                                (
+                                    Workout.week eq workoutJson.week and
+                                        (Workout.day eq workoutJson.day)
+                                )
+                        )
+                }) {
                     it[reps] = workoutJson.reps
                 }
             }
@@ -146,11 +174,22 @@ fun Route.putDateV1() {
         try {
             val dateJson = call.receive<DateJson>()
 
-            val workout = transaction {
-                Workout.select {
-                    Workout.email eq email and (Workout.profile eq profile and (Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day))))
-                }.firstOrNull()
-            }
+            val workout =
+                transaction {
+                    Workout.select {
+                        Workout.email eq email and
+                            (
+                                Workout.profile eq profile and
+                                    (
+                                        Workout.cycle eq cycle and
+                                            (
+                                                Workout.week eq week and
+                                                    (Workout.day eq day)
+                                            )
+                                    )
+                            )
+                    }.firstOrNull()
+                }
 
             if (workout == null) {
                 transaction {
@@ -169,7 +208,19 @@ fun Route.putDateV1() {
             }
 
             transaction {
-                Workout.update({ Workout.email eq email and (Workout.profile eq profile and (Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day)))) }) {
+                Workout.update({
+                    Workout.email eq email and
+                        (
+                            Workout.profile eq profile and
+                                (
+                                    Workout.cycle eq cycle and
+                                        (
+                                            Workout.week eq week and
+                                                (Workout.day eq day)
+                                        )
+                                )
+                        )
+                }) {
                     it[date] = DateTime(dateJson.date)
                 }
             }
@@ -200,11 +251,22 @@ fun Route.getDateV1() {
             return@get
         }
 
-        val workout = transaction {
-            Workout.select {
-                Workout.email eq email and (Workout.profile eq profile and (Workout.cycle eq cycle and (Workout.week eq week and (Workout.day eq day))))
-            }.firstOrNull()
-        }
+        val workout =
+            transaction {
+                Workout.select {
+                    Workout.email eq email and
+                        (
+                            Workout.profile eq profile and
+                                (
+                                    Workout.cycle eq cycle and
+                                        (
+                                            Workout.week eq week and
+                                                (Workout.day eq day)
+                                        )
+                                )
+                        )
+                }.firstOrNull()
+            }
 
         val date = workout?.get(Workout.date)
 
@@ -215,7 +277,7 @@ fun Route.getDateV1() {
 
         call.respond(
             HttpStatusCode.OK,
-            DateJson(date.toString())
+            DateJson(date.toString()),
         )
     }
 }
@@ -234,15 +296,16 @@ fun Route.getWorkoutCountV1() {
             return@get
         }
 
-        val count = transaction {
-            Workout.select {
-                Workout.email eq email and (Workout.profile eq profile)
-            }.count().toInt()
-        }
+        val count =
+            transaction {
+                Workout.select {
+                    Workout.email eq email and (Workout.profile eq profile)
+                }.count().toInt()
+            }
 
         call.respond(
             HttpStatusCode.OK,
-            WorkoutCountJson(count)
+            WorkoutCountJson(count),
         )
     }
 }
