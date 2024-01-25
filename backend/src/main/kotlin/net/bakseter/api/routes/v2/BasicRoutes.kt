@@ -9,7 +9,12 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import java.util.Date
 
-fun Route.basicRoutesV2(dev: Boolean, secret: String, audience: String, issuer: String) {
+fun Route.basicRoutesV2(
+    dev: Boolean,
+    secret: String,
+    audience: String,
+    issuer: String,
+) {
     getStatusV2()
     getTokenV2(dev = dev, secret = secret, audience = audience, issuer = issuer)
 }
@@ -18,7 +23,12 @@ fun Route.getStatusV2() {
     get("/status") { call.respond(HttpStatusCode.OK) }
 }
 
-fun Route.getTokenV2(dev: Boolean, secret: String, audience: String, issuer: String) {
+fun Route.getTokenV2(
+    dev: Boolean,
+    secret: String,
+    audience: String,
+    issuer: String,
+) {
     get("/token/{email}") {
         if (!dev) {
             call.respond(HttpStatusCode.Forbidden, "Only available in dev environment! >:(")

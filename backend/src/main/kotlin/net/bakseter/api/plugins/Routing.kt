@@ -12,7 +12,12 @@ import net.bakseter.api.routes.v2.basicRoutesV2
 import net.bakseter.api.routes.v2.jokerRoutesV2
 import net.bakseter.api.routes.v2.workoutRoutesV2
 
-fun Application.configureRouting(dev: Boolean, devSecret: String, devAudience: String, devIssuer: String) {
+fun Application.configureRouting(
+    dev: Boolean,
+    devSecret: String,
+    devAudience: String,
+    devIssuer: String,
+) {
     val authConfig = if (dev) "auth-cred" else "auth-user"
 
     routing {

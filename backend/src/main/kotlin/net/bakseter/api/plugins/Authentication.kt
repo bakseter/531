@@ -11,12 +11,17 @@ import io.ktor.server.auth.jwt.jwt
 import java.net.URL
 import java.util.concurrent.TimeUnit
 
-fun Application.configureAuthentication(devSecret: String, devAudience: String, devIssuer: String) {
+fun Application.configureAuthentication(
+    devSecret: String,
+    devAudience: String,
+    devIssuer: String,
+) {
     val jwkIssuer = "https://www.googleapis.com/oauth2/v3/certs"
-    val jwkProvider = JwkProviderBuilder(URL(jwkIssuer))
-        .cached(10, 24, TimeUnit.HOURS)
-        .rateLimited(10, 1, TimeUnit.MINUTES)
-        .build()
+    val jwkProvider =
+        JwkProviderBuilder(URL(jwkIssuer))
+            .cached(10, 24, TimeUnit.HOURS)
+            .rateLimited(10, 1, TimeUnit.MINUTES)
+            .build()
 
     install(Authentication) {
         val issuer = "https://accounts.google.com"
@@ -38,7 +43,7 @@ fun Application.configureAuthentication(devSecret: String, devAudience: String, 
                     .require(Algorithm.HMAC256(devSecret))
                     .withAudience(devAudience)
                     .withIssuer(devIssuer)
-                    .build()
+                    .build(),
             )
             validate { credential ->
                 if (credential.payload.getClaim("email").asString() != "") {
