@@ -122,7 +122,7 @@
         }
     },
     "dependencies": {
-        "@ducanh2912/next-pwa": "10.2.2",
+        "@ducanh2912/next-pwa": "10.2.3",
         "@vercel/analytics": "1.1.2",
         "date-fns": "3.3.1",
         "eslint": "8.56.0",
