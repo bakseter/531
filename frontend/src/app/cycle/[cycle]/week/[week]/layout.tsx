@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import MenuLink from '@/components/server/menu-link';
 import { weeks } from '@/utils/constants';
-import { safeParseInt } from '@/utils/helpers';
+import { intCoerciveDecoder } from '@/utils/helpers';
 
 interface WeekLayoutProps {
     children: ReactNode;
@@ -15,7 +15,7 @@ const WeekLayout = ({ children, params: { cycle, week } }: WeekLayoutProps) => {
     const weekPrefix = String.fromCodePoint(0x1f4c5); // 📆
 
     const currentCycle = cycle;
-    const currentWeek = safeParseInt(week);
+    const currentWeek = intCoerciveDecoder(week);
 
     if (typeof currentCycle !== 'string') throw new Error('params.cycle is not a string');
     if (!currentWeek) throw new Error('params.week is not a number');

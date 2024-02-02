@@ -1,7 +1,7 @@
 import type { Metadata, ResolvingMetadata } from 'next';
 import Workout from '@/components/server/workout';
 import { days } from '@/utils/constants';
-import { safeParseInt } from '@/utils/helpers';
+import { intCoerciveDecoder } from '@/utils/helpers';
 
 interface Props {
     params: {
@@ -16,8 +16,8 @@ const generateMetadata = ({ params: { week, cycle } }: Props, parent: ResolvingM
 });
 
 const WeekPage = ({ params }: Props) => {
-    const cycle = safeParseInt(params.cycle);
-    const week = safeParseInt(params.week);
+    const cycle = intCoerciveDecoder(params.cycle);
+    const week = intCoerciveDecoder(params.week);
     if ((week !== 1 && week !== 2 && week !== 3) || !cycle) throw new Error('breh');
 
     return days.map((day) => (

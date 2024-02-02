@@ -1,5 +1,6 @@
 import type { CompExercise, BaseWeights } from '@/schema/base-weights';
 import type { Week, Day } from '@/schema/workout';
+import { warmupCutoff } from '@/utils/constants';
 
 const addToBaseWeights = (baseWeights: BaseWeights, cycle: number): BaseWeights => ({
     dl: baseWeights.dl + (cycle - 1) * 5,
@@ -94,13 +95,6 @@ const weekToSetsReps = (week: Week): Array<number> => {
 
 const percentageToText = (percentage: number): string => `${(percentage * 100).toFixed(0)}%`;
 
-const safeParseInt = (value: unknown): number | undefined => {
-    if (typeof value === 'string') {
-        const parsed = Number.parseInt(value);
-        if (Number.isInteger(parsed)) return parsed;
-    }
-};
-
 const intCoerciveDecoder = (value: unknown): number => {
     if (typeof value === 'number') return value;
     if (typeof value === 'string') return Number.parseInt(value, 10);
@@ -113,6 +107,25 @@ const floatCoerciveDecoder = (value: unknown): number => {
     throw new Error(`Expected number or string, got ${typeof value}`);
 };
 
+const roundToNearest = (index: number) => (index <= warmupCutoff ? 5 : 2.5);
+
+const calculateWeightFromPercentage = ({
+    baseWeightsForCycle,
+    day,
+    percentage,
+    index,
+}: {
+    baseWeightsForCycle: BaseWeights;
+    day: Day;
+    percentage: number;
+    index: number;
+}): number =>
+    Math.max(
+        20,
+        roundToNearest(index) *
+            Math.ceil((baseWeightsForCycle[dayToExercise(day)] * percentage) / roundToNearest(index)),
+    );
+
 export {
     dayToExercise,
     exerciseToText,
@@ -122,7 +135,8 @@ export {
     weekToSetsReps,
     addToBaseWeights,
     weekToDefiningRep,
-    safeParseInt,
     intCoerciveDecoder,
     floatCoerciveDecoder,
+    jokerWeightsExtend,
+    calculateWeightFromPercentage,
 };

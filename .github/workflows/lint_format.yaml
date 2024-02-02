@@ -1,12 +1,12 @@
-name: Lint & format
+name: Lint, format & test
 
 on:
   pull_request:
     branches: [master]
 
 jobs:
-  lint_format_next:
-    name: "Lint & format Next.js"
+  lint_format_test_next:
+    name: "Lint, format & test Next.js"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -33,6 +33,10 @@ jobs:
 
       - name: Run prettier check
         run: yarn pcheck
+        working-directory: frontend
+
+      - name: Run tests
+        run: yarn vitest run
         working-directory: frontend
 
   lint_format_check_svelte:

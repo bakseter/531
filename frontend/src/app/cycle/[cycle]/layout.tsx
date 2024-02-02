@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import MenuLink from '@/components/server/menu-link';
 import { cycles } from '@/utils/constants';
-import { safeParseInt } from '@/utils/helpers';
+import { intCoerciveDecoder } from '@/utils/helpers';
 
 interface Props {
     children: ReactNode;
@@ -14,7 +14,7 @@ const CycleLayout = ({ children, params: { cycle } }: Props) => {
     const cyclePrefix = String.fromCodePoint(0x1f504); // 🔄
     const profileHeader = String.fromCodePoint(0x1f464); // 👤
 
-    const currentCycle = safeParseInt(cycle);
+    const currentCycle = intCoerciveDecoder(cycle);
     if (!currentCycle) throw new Error('params.cycle is not a number');
 
     return (
