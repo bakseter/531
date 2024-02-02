@@ -1,5 +1,5 @@
 import BaseWeightsModifierForm from '@/components/server/base-weights-modifier-form';
-import { safeParseInt } from '@/utils/helpers';
+import { intCoerciveDecoder } from '@/utils/helpers';
 
 interface Props {
     params: {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const CycleEditPage = ({ params }: Props) => {
-    const currentCycle = safeParseInt(params.cycle);
+    const currentCycle = intCoerciveDecoder(params.cycle);
 
     if (!currentCycle) throw new Error("Invalid cycle '${currentCycle}'");
 

@@ -6,7 +6,14 @@ import type { BaseWeights } from '@/schema/base-weights';
 import JokerInput from '@/components/client/joker-input';
 import RepsInput from '@/components/client/reps-input';
 import Button from '@/components/server/button';
-import { weekToSetsReps, percentageToText, weekToPercentages, dayToExercise, weekToDefiningRep } from '@/utils/helpers';
+import {
+    weekToSetsReps,
+    percentageToText,
+    weekToPercentages,
+    weekToDefiningRep,
+    calculateWeightFromPercentage,
+} from '@/utils/helpers';
+import { jokerCutoff } from '@/utils/constants';
 
 const indexToHeading = (i: number): string | undefined => {
     if (i === 0) return 'Warmup';
@@ -23,11 +30,7 @@ interface Props {
 }
 
 const WorkoutTable = ({ cycle, week, day, baseWeightsForCycle, initialJokerAmount = 0 }: Props) => {
-    const jokerCutoff = 5;
-    const warmupCutoff = 2;
-
     const reps = (index: number): number | undefined => weekToSetsReps(week)[index] ?? weekToDefiningRep(week);
-    const roundToNearest = (index: number) => (index <= warmupCutoff ? 5 : 2.5);
 
     const [jokerAmount, setJokerAmount] = useState<number>(initialJokerAmount);
 
@@ -72,14 +75,12 @@ const WorkoutTable = ({ cycle, week, day, baseWeightsForCycle, initialJokerAmoun
                                         {percentageToText(percentage)}
                                     </td>
                                     <td className={index % 2 === 0 ? tableRowStyle : tableRowStyleAlt}>
-                                        {`${Math.max(
-                                            20,
-                                            roundToNearest(index) *
-                                                Math.ceil(
-                                                    (baseWeightsForCycle[dayToExercise(day)] * percentage) /
-                                                        roundToNearest(index),
-                                                ),
-                                        )} kg`}
+                                        {`${calculateWeightFromPercentage({
+                                            baseWeightsForCycle,
+                                            day,
+                                            percentage,
+                                            index,
+                                        })} kg`}
                                     </td>
                                     <td className={index % 2 === 0 ? tableRowStyle : tableRowStyleAlt}>
                                         <RepsField index={index} />
