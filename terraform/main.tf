@@ -116,16 +116,16 @@ resource "azurerm_postgresql_flexible_server" "db" {
 
   zone = 1
 
-  tags = {
-    "environment" = var.environment
-  }
-
   lifecycle {
     ignore_changes = [
       zone
     ]
 
     prevent_destroy = true
+  }
+
+  tags = {
+    "environment" = var.environment
   }
 }
 
@@ -138,8 +138,6 @@ resource "azurerm_postgresql_flexible_server_firewall_rule" "db_firewall" {
 
 
 # Frontend
-
-## Next.js
 
 resource "vercel_project" "next_project" {
   name                       = "531-frontend"
@@ -190,61 +188,6 @@ resource "vercel_project_environment_variable" "next_google_id" {
 resource "vercel_project_environment_variable" "next_google_secret" {
   project_id = vercel_project.next_project.id
   key        = "AUTH_GOOGLE_SECRET"
-  value      = var.google_client_secret
-  target     = ["production", "preview", "development"]
-}
-
-## SvelteKit
-
-resource "vercel_project" "svelte_project" {
-  name                       = "531-svelte"
-  framework                  = "sveltekit-1"
-  root_directory             = "frontend-svelte"
-  serverless_function_region = "arn1"
-  install_command            = "yarn --frozen-lockfile"
-
-  git_repository = {
-    type = "github"
-    repo = "bakseter/531"
-  }
-}
-
-resource "vercel_project_domain" "svelte_domain" {
-  project_id = vercel_project.svelte_project.id
-  domain     = "svelte.bakseter.net"
-}
-
-resource "vercel_project_environment_variable" "svelte_backend_url" {
-  project_id = vercel_project.svelte_project.id
-  key        = "PUBLIC_BACKEND_URL"
-  value      = local.backend_url
-  target     = ["production", "preview", "development"]
-}
-
-resource "vercel_project_environment_variable" "svelte_backend_api_version" {
-  project_id = vercel_project.svelte_project.id
-  key        = "PUBLIC_BACKEND_API_VERSION"
-  value      = local.backend_api_version
-  target     = ["production", "preview", "development"]
-}
-
-resource "vercel_project_environment_variable" "svelte_auth_secret" {
-  project_id = vercel_project.svelte_project.id
-  key        = "AUTH_SECRET"
-  value      = var.auth_secret
-  target     = ["production", "preview", "development"]
-}
-
-resource "vercel_project_environment_variable" "svelte_google_client_id" {
-  project_id = vercel_project.svelte_project.id
-  key        = "GOOGLE_CLIENT_ID"
-  value      = var.google_client_id
-  target     = ["production", "preview", "development"]
-}
-
-resource "vercel_project_environment_variable" "svelte_google_client_secret" {
-  project_id = vercel_project.svelte_project.id
-  key        = "GOOGLE_CLIENT_SECRET"
   value      = var.google_client_secret
   target     = ["production", "preview", "development"]
 }
