@@ -1,9 +1,5 @@
 terraform {
   required_providers {
-    digitalocean = {
-      source  = "digitalocean/digitalocean"
-      version = "2.34.1"
-    }
     vercel = {
       source  = "vercel/vercel"
       version = "1.0.0"
@@ -26,13 +22,6 @@ provider "vercel" {
   api_token = var.vercel_token
 }
 
-provider "digitalocean" {
-  token = var.do_token
-}
-
 provider "azurerm" {
   features {}
-
-  subscription_id = "5c316fca-0ca0-412a-a54e-39c1b6eb882b"
 }
-
