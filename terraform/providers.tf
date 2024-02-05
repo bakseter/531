@@ -10,11 +10,12 @@ terraform {
     }
   }
 
-  backend "azurerm" {
-    resource_group_name  = "531-tfstate"
-    storage_account_name = "531tfstate12533"
-    container_name       = "tfstate"
-    key                  = "azure.terraform.tfstate"
+  cloud {
+    organization = "bakseter"
+
+    workspaces {
+      name = "531-prod"
+    }
   }
 }
 
@@ -24,4 +25,7 @@ provider "vercel" {
 
 provider "azurerm" {
   features {}
+
+  subscription_id = var.subscription_id
+  tenant_id       = var.tenant_id
 }
