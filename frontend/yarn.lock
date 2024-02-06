@@ -1144,10 +1144,10 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@ducanh2912/next-pwa@10.2.4":
-  version "10.2.4"
-  resolved "https://registry.yarnpkg.com/@ducanh2912/next-pwa/-/next-pwa-10.2.4.tgz#f37d1e09c1828832ee317e6389bdfe5063056140"
-  integrity sha512-vcZ2ZP+phToqmnbpKhhA8t/kqv+8QfEcVntRW8Xa4ZhnD3FiMM5zdYoeNQKgtQc42Mj2D2V/uucuFKlalnbiYA==
+"@ducanh2912/next-pwa@10.2.5":
+  version "10.2.5"
+  resolved "https://registry.yarnpkg.com/@ducanh2912/next-pwa/-/next-pwa-10.2.5.tgz#7f175300a942ceb2d55d078e98a83ccbdafb4794"
+  integrity sha512-DkF0IUNBjJ2eOQ/lxDuEtT7oIfLIcOE6HthM5ESkZBLq9P05O2PEhaIpOLARPF9RNXlvBBJxX0sJNUeVehMTIw==
   dependencies:
     clean-webpack-plugin "4.0.0"
     fast-glob "3.3.2"
