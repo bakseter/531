@@ -3,8 +3,11 @@ import { getBaseWeights } from '@/actions/base-weights';
 import { getWorkoutCount } from '@/actions/workout';
 import { auth } from '@/api/auth';
 import BaseWeightsForm from '@/components/server/base-weights-form';
+import { backendUrl } from '@/utils/constants';
 
 const IndexPage = async () => {
+    void fetch(`${backendUrl}/status`);
+
     const session = await auth();
     if (!session?.idToken) redirect('/api/auth/signin');
 
