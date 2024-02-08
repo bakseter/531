@@ -36,7 +36,7 @@ jobs:
           cd backend
           docker build \
             --cache-from "$IMAGE_NAME" \
-            -t "$IMAGE_NAME:$GITHUB_SHA" \
+            -t "$IMAGE_NAME:${{ github.sha }}" \
             --build-arg BUILDKIT_INLINE_CACHE=1 \
             .
         env:
@@ -44,7 +44,7 @@ jobs:
 
       - name: Pull Docker image
         if: github.event_name != 'pull_request'
-        run: docker pull "$IMAGE_NAME:$GITHUB_SHA"
+        run: docker pull "$IMAGE_NAME:${{ github.sha }}"
 
       - name: Scan image with Trivy
         uses: aquasecurity/trivy-action@0.17.0

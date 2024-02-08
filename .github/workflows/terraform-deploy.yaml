@@ -74,4 +74,4 @@ jobs:
         if: fromJSON(steps.apply-run.outputs.payload).data.attributes.actions.IsConfirmable
         with:
           run: ${{ steps.apply-run.outputs.run_id }}
-          comment: "Applying changes from GitHub Actions ${{ github.sha }}"
+          comment: "Applying changes from GitHub Actions, commit ${{ github.sha }}"
