@@ -31,6 +31,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build backend with cache
+        if: github.event_name == 'pull_request'
         run: |
           cd backend
           docker build \
@@ -41,8 +42,12 @@ jobs:
         env:
           DOCKER_BUILDKIT: 1
 
+      - name: Pull Docker image
+        if: github.event_name != 'pull_request'
+        run: docker pull "$IMAGE_NAME:$GITHUB_SHA"
+
       - name: Scan image with Trivy
-        uses: aquasecurity/trivy-action@0.16.1
+        uses: aquasecurity/trivy-action@0.17.0
         with:
           image-ref: "${{ env.IMAGE_NAME }}:${{ github.sha }}"
           format: "sarif"
