@@ -5,21 +5,32 @@
   "prHourlyLimit": 0,
   "stabilityDays": 3,
   "prCreation": "not-pending",
-  "ignoreDeps": ["openjdk", "postgres", "node"],
+  "ignoreDeps": ["eclipse-temurin", "postgres", "node"],
   "updateInternalDeps": true,
   "rangeStrategy": "pin",
-  "ignorePaths": ["frontend-svelte"],
   "packageRules": [
     {
       "matchDepTypes": ["devDependencies"],
       "matchPackagePatterns": [
         "@types/*",
-        "eslint",
         "eslint-plugin-*",
         "eslint-config-*",
         "prettier",
-        "@typescript-eslint/*"
+        "@typescript-eslint/*",
+        "@babel/core",
+        "@testing-library/react",
+        "@vitejs/plugin-react",
+        "cypress",
+        "jsdom",
+        "vite-tsconfig-paths",
+        "vitest",
+        "webpack"
       ],
+      "automerge": true
+    },
+    {
+      "matchDepTypes": ["dependencies"],
+      "matchPackagePatterns": ["eslint", "@vercel/analytics"],
       "automerge": true
     },
     {
