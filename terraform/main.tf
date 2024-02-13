@@ -181,6 +181,7 @@ resource "vercel_project_environment_variable" "next_auth_secret" {
   key        = "AUTH_SECRET"
   value      = var.auth_secret
   target     = ["production", "preview", "development"]
+  sensitive  = true
 }
 
 resource "vercel_project_environment_variable" "next_google_id" {
@@ -188,6 +189,7 @@ resource "vercel_project_environment_variable" "next_google_id" {
   key        = "AUTH_GOOGLE_ID"
   value      = var.google_client_id
   target     = ["production", "preview", "development"]
+  sensitive  = true
 }
 
 resource "vercel_project_environment_variable" "next_google_secret" {
@@ -195,4 +197,5 @@ resource "vercel_project_environment_variable" "next_google_secret" {
   key        = "AUTH_GOOGLE_SECRET"
   value      = var.google_client_secret
   target     = ["production", "preview", "development"]
+  sensitive  = true
 }
