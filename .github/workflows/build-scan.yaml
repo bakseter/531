@@ -3,8 +3,6 @@ name: Build backend & scan image with Trivy
 on:
   pull_request:
     branches: [master]
-  push:
-    branches: [master]
   schedule:
     - cron: '3 4 * * 5'
 
@@ -31,20 +29,15 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build backend with cache
-        if: github.event_name == 'pull_request'
         run: |
-          cd backend
           docker build \
             --cache-from "$IMAGE_NAME" \
             -t "$IMAGE_NAME:${{ github.sha }}" \
             --build-arg BUILDKIT_INLINE_CACHE=1 \
             .
+        working-directory: backend
         env:
           DOCKER_BUILDKIT: 1
-
-      - name: Pull Docker image
-        if: github.event_name != 'pull_request'
-        run: docker pull "$IMAGE_NAME:${{ github.sha }}"
 
       - name: Scan image with Trivy
         uses: aquasecurity/trivy-action@0.17.0
