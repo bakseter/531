@@ -7,7 +7,7 @@ interface PingerProps {
     intervalSeconds?: number;
 }
 
-const Pinger = ({ intervalSeconds = 60 }: PingerProps) => {
+const Pinger = ({ intervalSeconds = 30 }: PingerProps) => {
     useEffect(() => {
         const interval = setInterval(() => fetch(`${backendUrl}/status`), intervalSeconds * 1000);
         return () => void clearInterval(interval);
