@@ -29,16 +29,26 @@ jobs:
 
       - name: Build backend with cache and push to registry
         run: |
-          cd backend
           docker build \
             --cache-from "$IMAGE_NAME" \
             -t "$IMAGE_NAME:latest" \
             -t "$IMAGE_NAME:${{ github.sha }}" \
             --build-arg BUILDKIT_INLINE_CACHE=1 \
             .
-          docker push "$IMAGE_NAME" --all-tags
+        working-directory: backend
         env:
           DOCKER_BUILDKIT: 1
+
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@0.17.0
+        with:
+          image-ref: "${{ env.IMAGE_NAME }}:${{ github.sha }}"
+          format: "table"
+          exit-code: 1
+
+      - name: Push image to registry
+        run: docker push "$IMAGE_NAME" --all-tags
+        working-directory: backend
 
   deploy_tf:
     name: "Deploy to Azure Container Instances with Terraform"
@@ -48,7 +58,7 @@ jobs:
       contents: read
     env:
       TF_CLOUD_ORGANIZATION: "bakseter"
-      TF_WORKSPACE: "531-prod"
+      TF_WORKSPACE: "${{ github.repository }}-prod"
       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
       TF_VAR_revision_suffix: '"${{ github.sha }}"'
     steps:
