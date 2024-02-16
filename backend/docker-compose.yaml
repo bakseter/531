@@ -1,8 +1,8 @@
-version: '3.9'
+version: "3.9"
 services:
   backend:
     build: .
-    image: 'ghcr.io/bakseter/531/backend:${BACKEND_TAG:-latest}'
+    image: "ghcr.io/bakseter/531/backend:${BACKEND_TAG:-latest}"
     # Don't start backend before database is up.
     depends_on:
       database:
@@ -10,12 +10,12 @@ services:
     links:
       - database
     ports:
-      - '${PORT:-8080}:${PORT:-8080}'
+      - "${PORT:-8080}:${PORT:-8080}"
     environment:
-      DATABASE_USERNAME: 'postgres'
-      DATABASE_PASSWORD: '${DB_PASSWORD:-password}'
-      DATABASE_URL: 'jdbc:postgresql://database:5432/postgres'
-      DEV_ISSUER: 'http://localhost:${PORT:-8080}'
+      DATABASE_USERNAME: "postgres"
+      DATABASE_PASSWORD: "${DB_PASSWORD:-password}"
+      DATABASE_URL: "jdbc:postgresql://database:5432/postgres"
+      DEV_ISSUER: "http://localhost:${PORT:-8080}"
       DEV: ${DEV:-true}
       MIGRATE_DB:
 
@@ -23,14 +23,14 @@ services:
     image: postgres:15.4-alpine
     restart: always
     ports:
-      - '5432:5432'
+      - "5432:5432"
     # Check if database is ready.
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
     environment:
-      POSTGRES_USER: 'postgres'
-      POSTGRES_PASSWORD: '${DB_PASSWORD:-password}'
-      POSTGRES_DB: 'postgres'
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "${DB_PASSWORD:-password}"
+      POSTGRES_DB: "postgres"

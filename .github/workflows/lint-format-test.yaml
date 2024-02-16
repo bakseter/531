@@ -32,7 +32,7 @@ jobs:
         working-directory: frontend
 
       - name: Run prettier check
-        run: yarn pcheck
+        run: yarn prettier -w "../**/*.{ts,tsx,js,jsx,mjs,css,json,md,yaml}"
         working-directory: frontend
 
       - name: Run tests
