@@ -3,6 +3,7 @@ name: ktlint
 on:
   pull_request:
     branches: [master]
+    paths: ["backend/**", ".github/workflows/ktlint.yaml"]
 
 jobs:
   ktlint_checks:

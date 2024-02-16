@@ -11,8 +11,8 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "format": "prettier -w \"**/*.{ts,tsx,js,jsx,json,md}\"",
-        "pcheck": "prettier -c \"**/*.{ts,tsx,js,jsx,json,md}\"",
+        "format": "prettier -w \"**/*.{ts,tsx,js,jsx,mjs,css,json,md}\"",
+        "pcheck": "prettier -c \"**/*.{ts,tsx,js,jsx,mjs,css,json,md}\"",
         "test": "vitest"
     },
     "prettier": {
