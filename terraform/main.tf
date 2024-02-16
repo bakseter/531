@@ -4,15 +4,17 @@ locals {
   db_name             = "postgres"
   backend_url         = "https://${azurerm_container_app.backend.ingress.0.fqdn}"
   backend_api_version = "v2"
+  tags = {
+    "environment" = var.environment
+    "managed-by"  = "Terraform"
+  }
 }
 
 resource "azurerm_resource_group" "rg" {
   name     = "531-${var.environment}"
   location = local.location
 
-  tags = {
-    "environment" = var.environment
-  }
+  tags = local.tags
 }
 
 # Backend
@@ -22,9 +24,7 @@ resource "azurerm_container_app_environment" "backend_env" {
   location            = local.location
   resource_group_name = azurerm_resource_group.rg.name
 
-  tags = {
-    "environment" = var.environment
-  }
+  tags = local.tags
 }
 
 resource "azurerm_container_app" "backend" {
@@ -37,8 +37,8 @@ resource "azurerm_container_app" "backend" {
     container {
       name   = "backend"
       image  = "ghcr.io/bakseter/531/backend:latest"
-      cpu    = "0.25"
-      memory = "0.5Gi"
+      cpu    = "0.5"
+      memory = "1Gi"
 
       liveness_probe {
         transport = "HTTP"
@@ -98,9 +98,7 @@ resource "azurerm_container_app" "backend" {
     value = var.db_password
   }
 
-  tags = {
-    "environment" = var.environment
-  }
+  tags = local.tags
 }
 
 # Database
@@ -129,9 +127,7 @@ resource "azurerm_postgresql_flexible_server" "db" {
     prevent_destroy = true
   }
 
-  tags = {
-    "environment" = var.environment
-  }
+  tags = local.tags
 }
 
 resource "azurerm_postgresql_flexible_server_firewall_rule" "db_firewall" {
