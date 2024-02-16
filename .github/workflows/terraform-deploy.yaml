@@ -3,19 +3,18 @@ name: Deploy backend
 on:
   push:
     branches: [master]
-    paths: ["backend/**", "terraform/**", ".github/workflows/deploy.yaml"]
-
-permissions:
-  packages: write
-  actions: read
-
-env:
-  IMAGE_NAME: "ghcr.io/${{ github.repository }}/backend"
+    paths: ["backend/**", "terraform/**", ".github/workflows/terraform-deploy.yaml"]
 
 jobs:
   docker_push:
     name: "Build with Docker and push to registry"
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      actions: read
+    env:
+      IMAGE_NAME: "ghcr.io/${{ github.repository }}/backend"
+      TRIVY_SARIF: "trivy.sarif"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -43,8 +42,14 @@ jobs:
         uses: aquasecurity/trivy-action@0.17.0
         with:
           image-ref: "${{ env.IMAGE_NAME }}:${{ github.sha }}"
-          format: "table"
-          exit-code: 1
+          format: "sarif"
+          exit-code: 0
+          output: "${{ env.TRIVY_SARIF }}"
+
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: "${{ env.TRIVY_SARIF }}"
 
       - name: Push image to registry
         run: docker push "$IMAGE_NAME" --all-tags
