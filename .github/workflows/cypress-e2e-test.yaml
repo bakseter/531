@@ -148,7 +148,6 @@ jobs:
           config: video=false
           browser: firefox
         env:
-          NEXTAUTH_URL: http://localhost:3000
           NEXTAUTH_SECRET: very-secret-string-123
 
       - name: Upload Cypress screenshots (only on failure)
