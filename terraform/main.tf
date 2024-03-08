@@ -145,7 +145,7 @@ resource "vercel_project" "next_project" {
   framework                  = "nextjs"
   root_directory             = "frontend"
   serverless_function_region = "arn1"
-  install_command            = "yarn --frozen-lockfile"
+  install_command            = "pnpm i"
 
   git_repository = {
     type = "github"
