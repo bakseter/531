@@ -12,29 +12,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Setup frontend dependencies
+        uses: ./.github/actions/pnpm
         with:
-          node-version: 18
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: "**/frontend/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/frontend/yarn.lock') }}
-
-      - name: Install dependencies
-        run: yarn --frozen-lockfile
-        working-directory: frontend
+          working-directory: "frontend"
 
       - name: Run linter
-        run: yarn lint
+        run: pnpm lint
         working-directory: frontend
 
       - name: Run prettier check
-        run: yarn prettier -w "../**/*.{ts,tsx,js,jsx,mjs,css,json,md,yaml}"
+        run: pnpm prettier -w "../**/*.{ts,tsx,js,jsx,mjs,css,json,md,yaml}"
         working-directory: frontend
 
       - name: Run tests
-        run: yarn vitest run
+        run: pnpm vitest run
         working-directory: frontend

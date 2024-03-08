@@ -1,0 +1,46 @@
+name: "pnpm install"
+description: "Setup pnpm with cache and install dependencies"
+
+inputs:
+  node-version:
+    required: false
+    type: "string"
+    default: 18
+  pnpm-version:
+    required: false
+    type: "string"
+    default: 8
+  working-directory:
+    required: false
+    type: "string"
+    default: "."
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - uses: pnpm/action-setup@v3
+      name: Install pnpm
+      with:
+        version: ${{ inputs.pnpm-version }}
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v3
+      name: Setup pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm i
+      working-directory: ${{ inputs.working-directory }}

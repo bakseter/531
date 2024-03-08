@@ -82,8 +82,6 @@ jobs:
         with:
           files: |
             frontend/**
-            yarn.lock
-            package.json
             .github/workflows/docker_tests_and_previews.yaml
           files_ignore: |
             *.md
@@ -136,14 +134,19 @@ jobs:
         env:
           BACKEND_TAG: ${{ steps.changed-files-backend.outputs.any_changed == 'true' && github.sha || 'latest' }}
 
+      - name: Setup frontend dependencies
+        uses: ./.github/actions/pnpm
+        with:
+          working-directory: "frontend"
+
       - name: Run Cypress end-to-end tests
         if: steps.changed-files-frontend.outputs.any_changed == 'true' || steps.changed-files-backend.outputs.any_changed == 'true'
         uses: cypress-io/github-action@v6.6.1
         with:
           working-directory: frontend
-          install-command: yarn --frozen-lockfile
-          build: yarn build
-          start: yarn start
+          install-command: pnpm i
+          build: pnpm build
+          start: pnpm start
           wait-on: "http://localhost:3000, http://localhost:8080/status"
           config: video=false
           browser: firefox
