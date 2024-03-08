@@ -4,6 +4,7 @@ terraform {
       source  = "vercel/vercel"
       version = "1.2.0"
     }
+
     azurerm = {
       source  = "hashicorp/azurerm"
       version = "3.94.0"
