@@ -1,0 +1,43 @@
+name: "Trivy scan"
+description: "Scan Docker image for vulnerabilities with Trivy"
+
+inputs:
+  image-ref:
+    required: true
+    type: "string"
+    description: "Reference to the Docker image to be scanned."
+  exit-code:
+    required: false
+    default: 0
+    type: "number"
+    description: "Sets the exit code for the Trivy scanning step."
+  upload-results:
+    required: false
+    default: true
+    type: "boolean"
+    description: "Determines if results from the scan are uploaded GitHub."
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+env:
+  TRIVY_SARIF: "trivy.sarif"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Scan image with Trivy
+      uses: aquasecurity/trivy-action@0.18.0
+      with:
+        image-ref: "'${{ inputs.image-ref }}'"
+        format: "sarif"
+        exit-code: ${{ inputs.exit-code }}
+        output: ${{ env.TRIVY_SARIF }}
+
+    - name: Upload Trivy scan results
+      if: always() && ${{ inputs.upload-results }}
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: ${{ env.TRIVY_SARIF }}
