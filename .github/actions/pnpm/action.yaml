@@ -4,16 +4,19 @@ description: "Setup pnpm with cache and install dependencies"
 inputs:
   node-version:
     required: false
-    type: "string"
     default: 18
+    type: "string"
+    description: "Sets the version of Node.js to use."
   pnpm-version:
     required: false
-    type: "string"
     default: 8
+    type: "string"
+    description: "Sets the version of pnpm to use."
   working-directory:
     required: false
-    type: "string"
     default: "."
+    type: "string"
+    description: "Sets the working directory for pnpm."
 
 runs:
   using: "composite"

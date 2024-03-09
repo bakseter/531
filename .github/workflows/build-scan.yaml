@@ -17,7 +17,6 @@ jobs:
       security-events: write
     env:
       IMAGE_NAME: "ghcr.io/${{ github.repository }}/backend"
-      TRIVY_SARIF: "trivy-results.sarif"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -41,12 +40,9 @@ jobs:
           DOCKER_BUILDKIT: 1
 
       - name: Scan image with Trivy
-        uses: aquasecurity/trivy-action@0.18.0
+        uses: ./.github/actions/trivy
         with:
           image-ref: "${{ env.IMAGE_NAME }}:${{ github.sha }}"
-          format: "sarif"
-          exit-code: 0
-          output: "${{ env.TRIVY_SARIF }}"
 
       - name: Upload Trivy scan results
         uses: github/codeql-action/upload-sarif@v3

@@ -51,21 +51,11 @@ jobs:
       actions: read
       contents: read
       security-events: write
-    env:
-      TRIVY_SARIF: "trivy.sarif"
     steps:
       - name: Scan image with Trivy
-        uses: aquasecurity/trivy-action@0.18.0
+        uses: ./.github/actions/trivy
         with:
           image-ref: "${{ env.IMAGE_NAME }}:${{ github.sha }}"
-          format: "sarif"
-          exit-code: 0
-          output: "${{ env.TRIVY_SARIF }}"
-
-      - name: Upload Trivy scan results
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: "${{ env.TRIVY_SARIF }}"
 
   deploy_tf:
     name: "Deploy to Azure Container Instances with Terraform"
