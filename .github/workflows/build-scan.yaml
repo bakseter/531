@@ -3,7 +3,6 @@ name: Build backend & scan image with Trivy
 on:
   pull_request:
     branches: [master]
-    paths: ["backend/**", ".github/workflows/build-scan.yaml"]
   schedule:
     - cron: "3 4 * * 5"
 

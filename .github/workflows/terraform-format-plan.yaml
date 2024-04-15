@@ -3,7 +3,6 @@ name: Terraform format & plan
 on:
   pull_request:
     branches: [master]
-    paths: ["terraform/**", ".github/workflows/terraform_format_plan.yaml"]
 
 jobs:
   terraform_format:
