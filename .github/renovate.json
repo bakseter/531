@@ -30,7 +30,7 @@
     },
     {
       "matchDepTypes": ["dependencies"],
-      "matchPackagePatterns": ["eslint", "@vercel/analytics"],
+      "matchPackagePatterns": ["@vercel/analytics"],
       "automerge": true
     },
     {
