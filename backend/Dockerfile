@@ -32,8 +32,7 @@ FROM eclipse-temurin:21-jdk-alpine
 
 WORKDIR /opt/app
 
-RUN apk update
-RUN apk add --no-cache expat-dev
+RUN apk update && apk add --no-cache expat-dev libssl3
 
 COPY --from=build /opt/build/build/libs/531-backend-0.0.1-all.jar /opt/app/build/libs/
 
