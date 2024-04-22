@@ -82,7 +82,7 @@ jobs:
         with:
           files: |
             frontend/**
-            .github/workflows/docker_tests_and_previews.yaml
+            .github/workflows/cypress-e2e-test.yaml
           files_ignore: |
             *.md
             *.png
