@@ -6,7 +6,7 @@ on:
 
 jobs:
   lint_format_test:
-    name: "Lint, format & test"
+    name: 'Lint, format & test'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -15,7 +15,7 @@ jobs:
       - name: Setup frontend dependencies
         uses: ./.github/actions/pnpm
         with:
-          working-directory: "frontend"
+          working-directory: 'frontend'
 
       - name: Run linter
         run: pnpm lint

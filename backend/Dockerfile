@@ -27,12 +27,14 @@ COPY src/main src/main
 # Add or remove '--info' as needed.
 RUN ./gradlew shadowJar --build-cache --no-rebuild --no-daemon
 
+
 # Run the server
 FROM eclipse-temurin:21-jdk-alpine
 
 WORKDIR /opt/app
 
-RUN apk update && apk add --no-cache expat-dev libssl3
+RUN apk update && \
+    apk add --no-cache expat-dev libssl3
 
 COPY --from=build /opt/build/build/libs/531-backend-0.0.1-all.jar /opt/app/build/libs/
 

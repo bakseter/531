@@ -6,7 +6,7 @@ on:
 
 jobs:
   ktlint_checks:
-    name: "ktlint checks"
+    name: 'ktlint checks'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -15,9 +15,9 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: "17"
-          distribution: "adopt"
-          cache: "gradle"
+          java-version: '17'
+          distribution: 'adopt'
+          cache: 'gradle'
 
       - name: Run ktlint checks
         working-directory: backend

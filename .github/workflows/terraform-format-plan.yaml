@@ -6,7 +6,7 @@ on:
 
 jobs:
   terraform_format:
-    name: "Terraform format"
+    name: 'Terraform format'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -21,14 +21,14 @@ jobs:
           terraform fmt -check -recursive
 
   terraform_plan:
-    name: "Terraform plan"
+    name: 'Terraform plan'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
     env:
-      TF_CLOUD_ORGANIZATION: "bakseter"
-      TF_WORKSPACE: "531-prod"
+      TF_CLOUD_ORGANIZATION: 'bakseter'
+      TF_WORKSPACE: '531-prod'
       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
       TF_VAR_revision_suffix: '"${{ github.sha }}"'
     steps:
@@ -40,7 +40,7 @@ jobs:
         id: plan-upload
         with:
           workspace: ${{ env.TF_WORKSPACE }}
-          directory: "./terraform"
+          directory: './terraform'
           speculative: true
 
       - name: Create Terraform run
