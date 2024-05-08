@@ -15,7 +15,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 fun Route.jokerRoutesV2(authConfig: String) {
@@ -47,7 +47,7 @@ fun Route.getJokerV2() {
 
         val joker =
             transaction {
-                Joker.select {
+                Joker.selectAll().where {
                     Joker.email eq email and
                         (
                             Joker.profile eq profile and
@@ -96,7 +96,7 @@ fun Route.putJokerV2() {
 
         val joker =
             transaction {
-                Joker.select {
+                Joker.selectAll().where {
                     Joker.email eq email and
                         (
                             Joker.profile eq profile and
@@ -173,7 +173,7 @@ fun Route.getJokerAmountV2() {
 
         val count =
             transaction {
-                Joker.select {
+                Joker.selectAll().where {
                     Joker.email eq email and
                         (
                             Joker.profile eq profile and

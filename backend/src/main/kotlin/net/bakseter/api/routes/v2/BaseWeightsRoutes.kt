@@ -16,7 +16,7 @@ import net.bakseter.api.schema.BaseWeightsModifier
 import net.bakseter.api.schema.BaseWeightsModifierJson
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
@@ -45,9 +45,7 @@ fun Route.getBaseWeightsV2() {
 
         val baseWeights =
             transaction {
-                BaseWeights.select {
-                    BaseWeights.email eq email and (BaseWeights.profile eq profile)
-                }.firstOrNull()
+                BaseWeights.selectAll().where { BaseWeights.email eq email and (BaseWeights.profile eq profile) }.firstOrNull()
             }
 
         if (baseWeights == null) {
@@ -87,9 +85,7 @@ fun Route.putBaseWeightsV2() {
 
             val baseWeights =
                 transaction {
-                    BaseWeights.select {
-                        BaseWeights.email eq email and (BaseWeights.profile eq profile)
-                    }.firstOrNull()
+                    BaseWeights.selectAll().where { BaseWeights.email eq email and (BaseWeights.profile eq profile) }.firstOrNull()
                 }
 
             if (baseWeights == null) {
@@ -143,7 +139,7 @@ fun Route.getBaseWeightsModifierV2() {
 
         val mod =
             transaction {
-                BaseWeightsModifier.select {
+                BaseWeightsModifier.selectAll().where {
                     BaseWeightsModifier.email eq email and
                         (
                             BaseWeightsModifier.profile eq profile and
@@ -188,7 +184,7 @@ fun Route.putBaseWeightsModifierV2() {
 
             val baseWeightsMod =
                 transaction {
-                    BaseWeightsModifier.select {
+                    BaseWeightsModifier.selectAll().where {
                         BaseWeightsModifier.email eq email and
                             (
                                 BaseWeightsModifier.profile eq profile and
