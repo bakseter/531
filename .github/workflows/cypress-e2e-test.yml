@@ -127,6 +127,11 @@ jobs:
         with:
           working-directory: 'frontend'
 
+      - name: Force Cypress install, workaround
+        run: |
+          cd frontend
+          pnpm cypress install
+
       - name: Run Cypress end-to-end tests
         if: steps.changed-files-frontend.outputs.any_changed == 'true' || steps.changed-files-backend.outputs.any_changed == 'true'
         uses: cypress-io/github-action@v6.6.1
