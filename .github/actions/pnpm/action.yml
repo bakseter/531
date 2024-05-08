@@ -1,22 +1,22 @@
-name: "pnpm install"
-description: "Setup pnpm with cache and install dependencies"
+name: 'pnpm install'
+description: 'Setup pnpm with cache and install dependencies'
 
 inputs:
   node-version:
     required: false
-    type: "string"
+    type: 'string'
     default: 18
   pnpm-version:
     required: false
-    type: "string"
+    type: 'string'
     default: 8
   working-directory:
     required: false
-    type: "string"
-    default: "."
+    type: 'string'
+    default: '.'
 
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: Setup Node
       uses: actions/setup-node@v4
@@ -27,7 +27,7 @@ runs:
       name: Install pnpm
       with:
         version: ${{ inputs.pnpm-version }}
-        run_install: false
+        run_install: 'false'
 
     - name: Get pnpm store directory
       shell: bash

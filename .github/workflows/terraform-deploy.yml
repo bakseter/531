@@ -10,7 +10,7 @@ env:
   IMAGE_NAME: 'ghcr.io/${{ github.repository }}/backend'
 
 jobs:
-  docker_push:
+  docker-push:
     name: 'Build with Docker and push to registry'
     runs-on: ubuntu-latest
     permissions:
@@ -39,10 +39,10 @@ jobs:
           cache-to: 'type=inline'
           context: 'backend'
 
-  scan_image:
+  scan-image:
     name: 'Scan image with Trivy'
     runs-on: ubuntu-latest
-    needs: [docker_push]
+    needs: [docker-push]
     permissions:
       actions: read
       contents: read
@@ -63,10 +63,10 @@ jobs:
         with:
           sarif_file: ${{ env.TRIVY_SARIF }}
 
-  deploy_tf:
+  deploy-tf:
     name: 'Deploy to Azure Container Instances with Terraform'
     runs-on: ubuntu-latest
-    needs: [docker_push]
+    needs: [docker-push]
     permissions:
       contents: read
     env:

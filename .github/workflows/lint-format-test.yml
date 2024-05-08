@@ -5,8 +5,8 @@ on:
     branches: [master]
 
 jobs:
-  lint_format_test:
-    name: 'Lint, format & test'
+  lint-format-test:
+    name: 'Lint, format & test frontend'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

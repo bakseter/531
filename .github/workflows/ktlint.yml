@@ -5,7 +5,7 @@ on:
     branches: [master]
 
 jobs:
-  ktlint_checks:
+  ktlint-checks:
     name: 'ktlint checks'
     runs-on: ubuntu-latest
     steps:
