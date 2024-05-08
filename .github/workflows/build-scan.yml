@@ -7,7 +7,7 @@ on:
     - cron: '3 4 * * 5'
 
 jobs:
-  docker_build_scan:
+  docker-build-scan:
     name: 'Build with Docker & scan with Trivy'
     runs-on: ubuntu-latest
     permissions:
