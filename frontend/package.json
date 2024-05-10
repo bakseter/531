@@ -126,7 +126,7 @@
         "@ducanh2912/next-pwa": "10.2.7",
         "@vercel/analytics": "1.2.2",
         "date-fns": "3.6.0",
-        "eslint": "8.57.0",
+        "eslint": "9.2.0",
         "next": "14.2.3",
         "next-auth": "5.0.0-beta.17",
         "react": "18.3.1",
