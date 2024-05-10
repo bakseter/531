@@ -16,7 +16,7 @@ import net.bakseter.api.schema.WorkoutCountJson
 import net.bakseter.api.schema.WorkoutJson
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.joda.time.DateTime
@@ -51,7 +51,7 @@ fun Route.getWorkoutV1() {
 
         val workout =
             transaction {
-                Workout.select {
+                Workout.selectAll().where {
                     Workout.email eq email and
                         (
                             Workout.profile eq profile and
@@ -102,7 +102,7 @@ fun Route.putWorkoutV1() {
 
             val workout =
                 transaction {
-                    Workout.select {
+                    Workout.selectAll().where {
                         Workout.cycle eq workoutJson.cycle and
                             (
                                 Workout.profile eq profile and
@@ -176,7 +176,7 @@ fun Route.putDateV1() {
 
             val workout =
                 transaction {
-                    Workout.select {
+                    Workout.selectAll().where {
                         Workout.email eq email and
                             (
                                 Workout.profile eq profile and
@@ -253,7 +253,7 @@ fun Route.getDateV1() {
 
         val workout =
             transaction {
-                Workout.select {
+                Workout.selectAll().where {
                     Workout.email eq email and
                         (
                             Workout.profile eq profile and
@@ -298,9 +298,7 @@ fun Route.getWorkoutCountV1() {
 
         val count =
             transaction {
-                Workout.select {
-                    Workout.email eq email and (Workout.profile eq profile)
-                }.count().toInt()
+                Workout.selectAll().where { Workout.email eq email and (Workout.profile eq profile) }.count().toInt()
             }
 
         call.respond(

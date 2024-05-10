@@ -1,7 +1,6 @@
 package net.bakseter.api.schema
 
 import kotlinx.serialization.Serializable
-import net.bakseter.api.schema.BaseWeightsModifier.check
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 
