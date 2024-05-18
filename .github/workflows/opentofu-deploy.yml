@@ -72,6 +72,9 @@ jobs:
     env:
       TF_VAR_revision_suffix: '"${{ github.sha }}"'
       TOFU_PLAN_FILE: 'plan.json'
+    defaults:
+      run:
+        working-directory: './opentofu'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
