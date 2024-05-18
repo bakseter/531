@@ -6,7 +6,7 @@ locals {
   backend_api_version = "v2"
   tags = {
     "environment" = var.environment
-    "managed-by"  = "Terraform"
+    "managed-by"  = "OpenTofu"
   }
 }
 

@@ -36,8 +36,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-terraform.tfstate*
-terraform.tfvars
+**/terraform.tfstate*
+**/terraform.tfvars
+**/*.terraform.lock.hcl
 **/.terraform/*
 .gradle
 .idea

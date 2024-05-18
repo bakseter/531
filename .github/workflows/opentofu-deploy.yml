@@ -70,7 +70,7 @@ jobs:
     permissions:
       contents: read
     env:
-      TF_VAR_revision_suffix: '"${{ github.sha }}"'
+      TF_VAR_revision_suffix: ${{ github.sha }}
       TOFU_PLAN_FILE: 'plan.json'
     defaults:
       run:
