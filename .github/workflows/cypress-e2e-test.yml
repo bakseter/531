@@ -78,7 +78,7 @@ jobs:
         with:
           files: |
             frontend/**
-            .github/workflows/cypress-e2e-test.yaml
+            .github/workflows/cypress-e2e-test.yml
           files_ignore: |
             *.md
             *.png

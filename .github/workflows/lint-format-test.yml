@@ -22,7 +22,7 @@ jobs:
         working-directory: frontend
 
       - name: Run prettier check
-        run: pnpm prettier -w "../**/*.{ts,tsx,js,jsx,mjs,css,json,md,yaml}"
+        run: pnpm prettier -w "../**/*.{ts,tsx,js,jsx,mjs,css,json,md,yaml,yml}"
         working-directory: frontend
 
       - name: Run tests
