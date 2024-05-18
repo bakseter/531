@@ -4,14 +4,14 @@ on:
   push:
     branches: [master]
     paths:
-      ['backend/**', 'terraform/**', '.github/workflows/terraform-deploy.yaml']
+      ['backend/**', 'opentofu/**', '.github/workflows/opentofu-deploy.yaml']
 
 env:
   IMAGE_NAME: 'ghcr.io/${{ github.repository }}/backend'
 
 jobs:
-  docker-push:
-    name: 'Build with Docker and push to registry'
+  build-push:
+    name: 'Build & push'
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -39,10 +39,10 @@ jobs:
           cache-to: 'type=inline'
           context: 'backend'
 
-  scan-image:
-    name: 'Scan image with Trivy'
+  trivy-scan-image:
+    name: 'Trivy scan image'
     runs-on: ubuntu-latest
-    needs: [docker-push]
+    needs: [build-push]
     permissions:
       actions: read
       contents: read
@@ -63,38 +63,29 @@ jobs:
         with:
           sarif_file: ${{ env.TRIVY_SARIF }}
 
-  deploy-tf:
-    name: 'Deploy to Azure Container Instances with Terraform'
+  tofu-deploy:
+    name: 'OpenTofu deploy'
     runs-on: ubuntu-latest
-    needs: [docker-push]
+    needs: [build-push]
     permissions:
       contents: read
     env:
-      TF_CLOUD_ORGANIZATION: 'bakseter'
-      TF_WORKSPACE: '531-prod'
-      TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
       TF_VAR_revision_suffix: '"${{ github.sha }}"'
+      TOFU_PLAN_FILE: 'plan.json'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Upload Terraform configuration
-        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.3.0
-        id: apply-upload
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
         with:
-          workspace: ${{ env.TF_WORKSPACE }}
-          directory: './terraform'
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      - name: Create Terraform run
-        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.3.0
-        id: apply-run
-        with:
-          workspace: ${{ env.TF_WORKSPACE }}
-          configuration_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
+      - name: OpenTofu initialize
+        run: tofu init
 
-      - name: Apply Terraform changes
-        uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.3.0
-        if: fromJSON(steps.apply-run.outputs.payload).data.attributes.actions.IsConfirmable
-        with:
-          run: ${{ steps.apply-run.outputs.run_id }}
-          comment: 'Applying changes from GitHub Actions, commit ${{ github.sha }}'
+      - name: OpenTofu plan
+        run: tofu plan -out='${{ env.TOFU_PLAN_FILE }}'
+
+      - name: OpenTofu apply
+        run: tofu apply '${{ env.TOFU_PLAN_FILE }}' -auto-approve

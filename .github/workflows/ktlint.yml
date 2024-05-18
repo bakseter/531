@@ -5,8 +5,8 @@ on:
     branches: [master]
 
 jobs:
-  ktlint-checks:
-    name: 'ktlint checks'
+  ktlint:
+    name: 'ktlint'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

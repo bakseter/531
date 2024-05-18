@@ -6,7 +6,7 @@ on:
 
 jobs:
   lint-format-test:
-    name: 'Lint, format & test frontend'
+    name: 'Lint, format & test'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
