@@ -5,11 +5,11 @@ inputs:
   node-version:
     required: false
     type: 'string'
-    default: 18
+    default: '20'
   pnpm-version:
     required: false
     type: 'string'
-    default: 9
+    default: '9'
   working-directory:
     required: false
     type: 'string'
