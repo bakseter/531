@@ -91,4 +91,4 @@ jobs:
         run: tofu plan -out='${{ env.TOFU_PLAN_FILE }}'
 
       - name: OpenTofu apply
-        run: tofu apply '${{ env.TOFU_PLAN_FILE }}' -auto-approve
+        run: tofu apply -auto-approve '${{ env.TOFU_PLAN_FILE }}'
