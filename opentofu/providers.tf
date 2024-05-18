@@ -13,6 +13,7 @@ terraform {
 
   cloud {
     organization = "bakseter"
+    hostname     = "app.terraform.io"
 
     workspaces {
       name = "531-prod"

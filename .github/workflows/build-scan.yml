@@ -1,4 +1,4 @@
-name: Build backend & scan image with Trivy
+name: Build backend & Trivy scan
 
 on:
   pull_request:
@@ -7,8 +7,8 @@ on:
     - cron: '3 4 * * 5'
 
 jobs:
-  docker-build-scan:
-    name: 'Build with Docker & scan with Trivy'
+  build-backend-trivy-scan:
+    name: 'Build backend & Trivy scan'
     runs-on: ubuntu-latest
     permissions:
       actions: read
