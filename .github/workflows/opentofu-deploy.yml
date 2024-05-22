@@ -86,8 +86,5 @@ jobs:
       - name: OpenTofu initialize
         run: tofu init
 
-      - name: OpenTofu plan
-        run: tofu plan
-
       - name: OpenTofu apply
         run: tofu apply -auto-approve
