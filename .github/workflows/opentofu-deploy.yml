@@ -71,7 +71,6 @@ jobs:
       contents: read
     env:
       TF_VAR_revision_suffix: ${{ github.sha }}
-      TOFU_PLAN_FILE: 'plan.json'
     defaults:
       run:
         working-directory: './opentofu'
@@ -88,7 +87,7 @@ jobs:
         run: tofu init
 
       - name: OpenTofu plan
-        run: tofu plan -out='${{ env.TOFU_PLAN_FILE }}'
+        run: tofu plan
 
       - name: OpenTofu apply
-        run: tofu apply -auto-approve '${{ env.TOFU_PLAN_FILE }}'
+        run: tofu apply -auto-approve
