@@ -2,7 +2,7 @@
 
 import { useId } from 'react';
 
-const RepsInputForm = () => {
+const ProfileInputForm = () => {
     const profile = 1;
     const id = useId();
 
@@ -21,4 +21,4 @@ const RepsInputForm = () => {
     );
 };
 
-export default RepsInputForm;
+export default ProfileInputForm;
