@@ -54,7 +54,7 @@ jobs:
 
       - name: Build backend with cache and push to registry
         if: steps.changed-files.outputs.any_changed == 'true'
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: 'backend'
           push: 'true'
