@@ -82,9 +82,7 @@ const getBaseWeightsForCycle = async ({ cycle }: { cycle: number }): Promise<Bas
         ),
     );
 
-    const baseWeightsModifiersRaw = response.filter(
-        (mod: BaseWeightsModifier | undefined) => mod !== undefined,
-    ) as Array<BaseWeightsModifier>;
+    const baseWeightsModifiersRaw = response.filter((mod: BaseWeightsModifier | undefined) => mod !== undefined);
 
     const baseWeightsModifiersFilledCycle: Array<BaseWeightsModifier> = [...new Array(cycle).keys()].map(
         (index) =>
