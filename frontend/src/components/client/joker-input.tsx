@@ -3,7 +3,7 @@
 import { useEffect, useState, useId } from 'react';
 import { setJoker, getJoker } from '@/actions/joker';
 import type { Week, Day } from '@/schema/workout';
-import Spinner from '@/components/server/spinner';
+import Spinner from '@/components/client/spinner';
 
 interface Props {
     cycle: number;

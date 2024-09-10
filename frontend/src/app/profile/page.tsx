@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { auth } from '@/api/auth';
 import BaseWeightsForm from '@/components/server/base-weights-form';
-import Button from '@/components/server/button';
+import Button from '@/components/client/button';
 import ProfileInputForm from '@/components/client/profile-input-form';
 
 const ProfilePage = async () => {

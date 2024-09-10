@@ -37,7 +37,17 @@ const setDate = async ({
     if (status !== 200 && status !== 202) throw new Error(`something went wrong: ${status}`);
 };
 
-const getDate = async ({ cycle, week, day }: { cycle: number; week: Week; day: Day }): Promise<Date | undefined> => {
+// have to return date inside an object for some reason??? crashes with pure Date object event though React docs says otherwise:
+// https://react.dev/reference/rsc/use-server#serializable-parameters-and-return-values
+const getDate = async ({
+    cycle,
+    week,
+    day,
+}: {
+    cycle: number;
+    week: number;
+    day: number;
+}): Promise<{ date: Date } | undefined> => {
     const session = await auth();
     if (!session?.idToken) throw new Error('no session');
 
@@ -50,7 +60,7 @@ const getDate = async ({ cycle, week, day }: { cycle: number; week: Week; day: D
 
     if (response.status === 200) {
         const json = await response.json();
-        return record({ date: dateDecoder })(json).date;
+        return record({ date: dateDecoder })(json);
     }
 };
 
