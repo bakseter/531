@@ -5,7 +5,7 @@ import type { Week, Day } from '@/schema/workout';
 import type { BaseWeights } from '@/schema/base-weights';
 import JokerInput from '@/components/client/joker-input';
 import RepsInput from '@/components/client/reps-input';
-import Button from '@/components/server/button';
+import Button from '@/components/client/button';
 import {
     weekToSetsReps,
     percentageToText,

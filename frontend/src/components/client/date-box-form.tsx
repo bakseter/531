@@ -5,7 +5,7 @@ import { format, parse } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import { getDate, setDate } from '@/actions/date';
 import type { Week, Day } from '@/schema/workout';
-import Spinner from '@/components/server/spinner';
+import Spinner from '@/components/client/spinner';
 
 interface Props {
     cycle: number;
@@ -27,7 +27,8 @@ const DateBoxForm = ({ cycle, week, day }: Props) => {
 
             if (!date) return;
 
-            setExsistingDate(date);
+            // :)
+            setExsistingDate(date.date);
         };
         void fetchReps();
     }, [cycle, day, week]);
