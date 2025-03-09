@@ -4,7 +4,6 @@ import { Open_Sans, Roboto_Mono } from 'next/font/google'; // eslint-disable-lin
 import type { Metadata, Viewport } from 'next';
 import { auth } from '@/api/auth';
 import SessionProviderWrapper from '@/components/client/session-provider-wrapper';
-import Pinger from '@/components/client/pinger';
 
 const openSans = Open_Sans({
     subsets: ['latin'],
@@ -51,7 +50,6 @@ const Layout = async ({ children }: LayoutProps) => {
         <html lang="nb" className={`${openSans.variable} ${robotoMono.variable}`}>
             <body className="md:container md:mx-auto">
                 <SessionProviderWrapper session={session ?? undefined}>{children}</SessionProviderWrapper>
-                <Pinger />
             </body>
         </html>
     );

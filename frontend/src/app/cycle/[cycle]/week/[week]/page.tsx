@@ -1,21 +1,25 @@
-import type { Metadata, ResolvingMetadata } from 'next';
+import type { Metadata } from 'next';
 import Workout from '@/components/server/workout';
 import { days } from '@/utils/constants';
 import { intCoerciveDecoder } from '@/utils/helpers';
 
 interface Props {
-    params: {
+    params: Promise<{
         cycle: string;
         week: string;
-    };
+    }>;
 }
 
-const generateMetadata = ({ params: { week, cycle } }: Props, parent: ResolvingMetadata): Metadata => ({
-    title: `Cycle ${cycle} | Week ${week}`,
-    ...parent,
-});
+const generateMetadata = async (props: Props): Promise<Metadata> => {
+    const { cycle, week } = await props.params;
 
-const WeekPage = ({ params }: Props) => {
+    return {
+        title: `Cycle ${cycle} | Week ${week}`,
+    };
+};
+
+const WeekPage = async (props: Props) => {
+    const params = await props.params;
     const cycle = intCoerciveDecoder(params.cycle);
     const week = intCoerciveDecoder(params.week);
     if ((week !== 1 && week !== 2 && week !== 3) || !cycle) throw new Error('breh');

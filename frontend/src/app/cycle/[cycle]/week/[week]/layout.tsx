@@ -5,13 +5,19 @@ import { intCoerciveDecoder } from '@/utils/helpers';
 
 interface WeekLayoutProps {
     children: ReactNode;
-    params: {
+    params: Promise<{
         cycle: string;
         week: string;
-    };
+    }>;
 }
 
-const WeekLayout = ({ children, params: { cycle, week } }: WeekLayoutProps) => {
+const WeekLayout = async (props: WeekLayoutProps) => {
+    const params = await props.params;
+
+    const { cycle, week } = params;
+
+    const { children } = props;
+
     const weekPrefix = String.fromCodePoint(0x1f4c5); // 📆
 
     const currentCycle = cycle;

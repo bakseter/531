@@ -5,12 +5,18 @@ import { intCoerciveDecoder } from '@/utils/helpers';
 
 interface Props {
     children: ReactNode;
-    params: {
+    params: Promise<{
         cycle: string;
-    };
+    }>;
 }
 
-const CycleLayout = ({ children, params: { cycle } }: Props) => {
+const CycleLayout = async (props: Props) => {
+    const params = await props.params;
+
+    const { cycle } = params;
+
+    const { children } = props;
+
     const cyclePrefix = String.fromCodePoint(0x1f504); // 🔄
     const profileHeader = String.fromCodePoint(0x1f464); // 👤
 

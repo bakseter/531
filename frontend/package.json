@@ -1,5 +1,5 @@
 {
-    "name": "531",
+    "name": "five31",
     "version": "0.1.0",
     "private": true,
     "enginesStrict": true,
@@ -127,24 +127,24 @@
         "@vercel/analytics": "1.5.0",
         "date-fns": "4.1.0",
         "eslint": "8.57.1",
-        "next": "14.2.24",
+        "next": "15.2.1",
         "next-auth": "5.0.0-beta.25",
-        "react": "18.3.1",
-        "react-dom": "18.3.1",
+        "react": "19.0.0",
+        "react-dom": "19.0.0",
         "typescript-json-decoder": "1.0.11"
     },
     "devDependencies": {
         "@babel/core": "7.26.9",
         "@testing-library/react": "16.2.0",
         "@types/node": "22.13.9",
-        "@types/react": "18.3.18",
-        "@types/react-dom": "18.3.5",
+        "@types/react": "19.0.10",
+        "@types/react-dom": "19.0.4",
         "@typescript-eslint/eslint-plugin": "7.18.0",
         "@typescript-eslint/parser": "7.18.0",
         "@vitejs/plugin-react": "4.3.4",
         "autoprefixer": "10.4.20",
         "cypress": "14.1.0",
-        "eslint-config-next": "14.2.24",
+        "eslint-config-next": "15.2.1",
         "eslint-config-prettier": "10.0.1",
         "eslint-plugin-prettier": "5.2.3",
         "eslint-plugin-unicorn": "56.0.1",
@@ -156,5 +156,11 @@
         "vite-tsconfig-paths": "4.3.2",
         "vitest": "3.0.5",
         "webpack": "5.97.1"
+    },
+    "pnpm": {
+        "overrides": {
+            "@types/react": "19.0.10",
+            "@types/react-dom": "19.0.4"
+        }
     }
 }
