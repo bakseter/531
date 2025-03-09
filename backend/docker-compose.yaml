@@ -1,7 +1,7 @@
 services:
   backend:
     build: .
-    image: 'ghcr.io/bakseter/531/backend:${BACKEND_TAG:-latest}'
+    image: 'ghcr.io/bakseter/five31/backend:${BACKEND_TAG:-latest}'
     # Don't start backend before database is up.
     depends_on:
       database:
