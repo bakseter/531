@@ -15,7 +15,7 @@ export const {
         maxAge: 3600,
     },
     providers: [
-        process.env.VERCEL_ENV === 'production'
+        isProd
             ? Google
             : Credentials({
                   name: 'Credentials',
