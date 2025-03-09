@@ -3,7 +3,7 @@ import Google from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
 import { backendUrl } from '@/utils/constants';
 
-const isProd = (process.env.VERCEL_ENV ?? 'development') === 'production';
+const isProd = (process.env.NEXT_PUBLIC_ENVIRONMENT ?? 'development') === 'production';
 const testEmail = 'test@mctest.com';
 const testName = 'Test McTest';
 
